@@ -22,7 +22,9 @@ title: 绩效指标
 
 **最大回撤（Max Drawdown）**：净值从峰值到谷底的最大跌幅。
 
-$$ \text{MaxDD} = \max \left( \frac{\text{Peak} - \text{Trough}}{\text{Peak}} \right) $$
+```text
+MaxDD = max( (Peak − Trough) / Peak )
+```
 
 最大回撤衡量策略的「疼痛阈值」——回撤 50% 需要 **100%** 涨幅才能回本，这是复利的残酷性。
 
@@ -32,13 +34,17 @@ $$ \text{MaxDD} = \max \left( \frac{\text{Peak} - \text{Trough}}{\text{Peak}} \r
 
 **夏普比率（Sharpe Ratio）**：每承担一单位总风险获得的超额收益。
 
-$$ \text{Sharpe} = \frac{R_p - R_f}{\sigma_p} $$
+```text
+Sharpe = (Rp − Rf) / σp
+```
 
-其中 $R_p$ 为策略年化收益，$R_f$ 为无风险利率，$\sigma_p$ 为收益波动率。**经验区间**：> 2 优秀，1–2 良好，< 1 一般。夏普的盲区：它惩罚「向上的波动」，且对尾部风险不敏感。
+其中 Rp 为策略年化收益，Rf 为无风险利率，σp 为收益波动率。**经验区间**：> 2 优秀，1–2 良好，< 1 一般。夏普的盲区：它惩罚「向上的波动」，且对尾部风险不敏感。
 
 **卡玛比率（Calmar Ratio）**：每承担一单位最大回撤获得的年化收益。
 
-$$ \text{Calmar} = \frac{\text{年化收益}}{\text{最大回撤}} $$
+```text
+Calmar = 年化收益 / 最大回撤
+```
 
 **优势**：直接回答「最大痛苦换多少收益」，比夏普更贴合交易者心理。**经验区间**：> 3 优秀，1–3 良好，< 1 一般。
 

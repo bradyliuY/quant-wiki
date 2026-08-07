@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * 交互式计算器（GSAP 滚动驱动）
  * 通用框架：公式模式 + 滑块输入 + 结果渐变动画。
- * 支持 kelly / position / riskreward 三种模式。
+ * 支持 kelly / position / riskreward / volatility 四种模式。
  */
 const props = withDefaults(
   defineProps<{
@@ -19,6 +23,8 @@ const props = withDefaults(
 const mode = ref(props.mode)
 const p = ref<Record<string, number>>({ ...props.initial })
 const shown = ref(false)
+const rootRef = ref<HTMLElement | null>(null)
+let ctx: ReturnType<typeof gsap.context> | null = null
 
 function setDefaultParams() {
   const defaults: Record<string, Record<string, number>> = {
@@ -122,10 +128,31 @@ function fmt(k: string): string {
   }
   return labels[k] ?? k
 }
+
+// GSAP 滚动触发：整个计算器进入视口时渐显
+onMounted(() => {
+  if (!rootRef.value) return
+  ctx = gsap.context(() => {
+    gsap.from('.calc-body', {
+      opacity: 0,
+      y: 24,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: rootRef.value,
+        start: 'top 85%'
+      }
+    })
+  }, rootRef.value)
+})
+
+onBeforeUnmount(() => {
+  ctx?.revert()
+})
 </script>
 
 <template>
-  <div class="chart-container calc-explorer">
+  <div class="chart-container calc-explorer" ref="rootRef">
     <div class="demo-title">{{ title }}</div>
     <div class="calc-body">
       <div class="calc-inputs">

@@ -27,7 +27,9 @@ title: 仓位管理
 
 把「风险」而非「仓位」固定下来：每笔交易最多亏损账户的一定比例（通常 1–2%），再根据止损距离反推仓位。
 
-$$ 仓位金额 = \frac{账户资金 \times 单笔风险\%}{止损幅度\%} $$
+```text
+仓位金额 = 账户资金 × 单笔风险% / 止损幅度%
+```
 
 <CalcExplorer mode="position" title="仓位计算器" :initial="{ capital: 100000, riskPercent: 2, stopLossPercent: 7 }" />
 
@@ -37,7 +39,9 @@ $$ 仓位金额 = \frac{账户资金 \times 单笔风险\%}{止损幅度\%} $$
 
 在基础仓位之上，根据标的实际波动率缩放仓位，让每笔交易的「风险预算」大致相等。
 
-$$ 调整后仓位 = 基准仓位 \times \frac{标准波动率}{实际波动率} $$
+```text
+调整后仓位 = 基准仓位 × (标准波动率 / 实际波动率)
+```
 
 <CalcExplorer mode="volatility" title="波动率调整" :initial="{ basePosition: 15, stdVol: 30, curVol: 45 }" />
 

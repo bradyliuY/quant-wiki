@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * 策略信号流程图：入场 → 持仓 → 出场的步骤点亮动画。
- * GSAP 滚动触发。steps 为步骤数组，current 为当前高亮序号。
+ * GSAP 滚动触发，逐步骤点亮。steps 为步骤数组。
  */
 const props = withDefaults(
   defineProps<{
@@ -20,17 +24,34 @@ const props = withDefaults(
 
 const activeStep = ref(-1)
 const rootRef = ref<HTMLElement | null>(null)
+let ctx: ReturnType<typeof gsap.context> | null = null
 
 onMounted(() => {
-  let idx = 0
-  // 自动逐步骤点亮（无滚动环境也能演示）
-  const timer = setInterval(() => {
-    activeStep.value = idx % props.steps.length
-    idx++
-    if (idx > props.steps.length + 2) {
-      clearInterval(timer)
-    }
-  }, 900)
+  if (!rootRef.value) return
+  // 用 gsap context 隔离，ScrollTrigger 驱动步骤逐个点亮
+  ctx = gsap.context(() => {
+    const steps = gsap.utils.toArray<HTMLElement>('.flow-step')
+    steps.forEach((step, i) => {
+      gsap.from(step, {
+        opacity: 0.2,
+        x: -12,
+        duration: 0.4,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: step,
+          start: 'top 90%',
+          onEnter: () => {
+            activeStep.value = i
+            if (i > 0) activeStep.value = i
+          }
+        }
+      })
+    })
+  }, rootRef.value)
+})
+
+onBeforeUnmount(() => {
+  ctx?.revert()
 })
 </script>
 

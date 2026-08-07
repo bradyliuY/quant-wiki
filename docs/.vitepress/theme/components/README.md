@@ -53,7 +53,7 @@
 
 ## CalcExplorer — 交互式计算器
 
-用于**公式计算**（凯利/仓位/风报比/波动率）。
+用于**公式计算**（凯利/仓位/风报比/波动率）。**内含 GSAP 滚动渐显动画**，组件进入视口时淡入上移。
 
 ```vue
 <CalcExplorer mode="kelly" title="凯利公式" />
@@ -67,12 +67,16 @@
 
 ## SignalFlow — 策略信号流程图
 
+**内含 GSAP 滚动动画**，步骤随滚动逐个点亮。
+
 ```vue
 <SignalFlow :steps="[
   { label: '入场信号', detail: '价格上穿关键均线' },
   { label: '确认', detail: '成交量放大配合' }
 ]" />
 ```
+
+- `steps`：步骤数组，每项 `{ label, detail? }`
 
 ## PatternGrowth — 形态生长动画
 
