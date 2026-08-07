@@ -211,9 +211,20 @@ export default defineConfig({
   title: '量化交易知识库',
   description: '带动画的量化投资学习平台',
   lang: 'zh-CN',
+  // GitHub Pages 部署到子路径 /quant-wiki/；本地开发自动用根路径
+  base: process.env.BASE_URL || '/',
   cleanUrls: true,
   ignoreDeadLinks: true,
+  lastUpdated: true,
   themeConfig: {
+    outline: {
+      level: [2, 3],
+      label: '本页目录'
+    },
+    docFooter: {
+      prev: '上一篇',
+      next: '下一篇'
+    },
     nav: [
       { text: '首页', link: '/' },
       { text: '新手指南', link: '/getting-started/' },
