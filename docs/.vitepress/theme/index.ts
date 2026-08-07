@@ -20,6 +20,8 @@ import AssetMap from './components/AssetMap.vue'
 import AssetPicker from './components/AssetPicker.vue'
 import StrategyFit from './components/StrategyFit.vue'
 import IndicatorPicker from './components/IndicatorPicker.vue'
+import PlainTalk from './components/PlainTalk.vue'
+import CaseWalk from './components/CaseWalk.vue'
 
 export default {
   extends: DefaultTheme,
@@ -41,5 +43,7 @@ export default {
     app.component('AssetPicker', AssetPicker)
     app.component('StrategyFit', StrategyFit)
     app.component('IndicatorPicker', IndicatorPicker)
+    app.component('PlainTalk', PlainTalk)
+    app.component('CaseWalk', CaseWalk)
   }
 } satisfies Theme

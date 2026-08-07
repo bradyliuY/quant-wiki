@@ -138,6 +138,40 @@
 <IndicatorPicker title="场景 → 指标选择地图" />
 ```
 
+## PlainTalk — 大白话解释块
+
+用于**所有概念页**，放在页面标题 / 一句话总结之后，先用生活化类比把概念讲成"人话"，再进入公式细节。金色点缀卡片，无动画。
+
+```vue
+<PlainTalk>RSI 就像把最近 14 天的涨跌放到天秤上比力气……</PlainTalk>
+<PlainTalk title="用大白话说">……</PlainTalk>
+```
+
+- 默认插槽：正文（支持 `<b>/<code>/<br/>` 等行内标签）
+- `title`：可选，默认"用大白话说"
+
+## CaseWalk — 一笔交易走读
+
+用于**策略页**，用纵向时间线走读一笔完整交易（观察→信号→入场→持仓/止损→止盈→复盘），比规则清单更好记忆。**内含 GSAP 滚动渐显动画**。
+
+```vue
+<CaseWalk
+  title="一笔布林回归交易的走读"
+  result="止损 -1.5% 离场：本次最大教训是……"
+  :steps="[
+    { label: '观察市场', detail: '带宽走平，进入震荡', type: 'setup' },
+    { label: '出现信号', detail: '触下轨 + RSI 超卖', type: 'signal' },
+    { label: '执行入场', detail: '阳线收回带内，¥35.20 入场', type: 'entry' },
+    { label: '持仓管理', detail: '次日跌破止损位，坚决离场', type: 'stop' },
+    { label: '复盘总结', detail: '震荡判定失效，误判环境', type: 'review' }
+  ]"
+/>
+```
+
+- `steps`：步骤数组，每项 `{ label, detail?, type? }`
+- `type`：`setup`(观察) | `signal`(信号) | `entry`(入场) | `manage`(持仓) | `stop`(止损) | `exit`(止盈) | `review`(复盘)，决定标签/节点颜色
+- `result`：可选，末尾结果小结（虚线框）
+
 ## 通用交互：图表放大
 
 所有图表类组件（`KLinePlayback` / `IndicatorDemo` / `ComparePanel` / `PatternGrowth`）自带**右上角放大按钮**：
