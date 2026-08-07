@@ -221,13 +221,14 @@ export function genDemoData(n = 120, seed = 42): OHLC[] {
   const base = Date.now() / 1000
   const day = 86400
   for (let i = 0; i < n; i++) {
-    const trend = i * 0.08
-    const wave = Math.sin(i / 9) * 3
-    const noise = (rand() - 0.5) * 2
+    // 均值回归 + 波段 + 单根实体：让 K 线实体清晰可辨
+    const drift = (100 - price) * 0.06       // 温和拉回均值，控制价格范围
+    const wave = Math.sin(i / 6) * 2.2        // 波段推动
+    const gap = (rand() - 0.5) * 7            // 单根涨跌 → 明显实体
     const open = price
-    const close = price + trend * 0.3 + wave * 0.3 + noise
-    const high = Math.max(open, close) + rand() * 1.5
-    const low = Math.min(open, close) - rand() * 1.5
+    const close = open + drift + wave * 0.35 + gap
+    const high = Math.max(open, close) + rand() * 1.8
+    const low = Math.min(open, close) - rand() * 1.8
     const volume = Math.round(100000 + rand() * 900000)
     out.push({
       time: base - (n - i) * day,

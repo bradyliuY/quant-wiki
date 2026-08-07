@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
-import { createChart, CandlestickSeries, LineSeries, ColorType, type IChartApi, type ISeriesApi } from 'lightweight-charts'
+import { createChart, CandlestickSeries, LineSeries, ColorType, createSeriesMarkers, type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type Time } from 'lightweight-charts'
 import { genDemoData, type OHLC } from '../lib/indicators'
 import { createReplay } from '../lib/charts'
 
@@ -28,6 +28,7 @@ const statusRef = ref('')
 let chart: IChartApi | null = null
 let candleSeries: ISeriesApi<'Candlestick'> | null = null
 let lineSeries: ISeriesApi<'Line'>[] = []
+let markersPlugin: ISeriesMarkersPluginApi<Time> | null = null
 let equityChart: IChartApi | null = null
 let equityLine: ISeriesApi<'Line'> | null = null
 let replay: ReturnType<typeof createReplay> | null = null
@@ -56,18 +57,19 @@ function setFrame(start: number, end: number) {
       value: v ?? 0
     })).filter((p) => allData.value[allData.value.findIndex((d) => d.time === (p.time as unknown as number))]))
   })
-  // 标注
-  const visibleMarkers = props.markers
-    .filter((m) => allData.value.findIndex((d) => d.time === m.time) < end)
-    .map((m) => ({
-      time: m.time as unknown as string,
-      position: m.side === 'buy' ? ('belowBar' as const) : ('aboveBar' as const),
-      color: m.side === 'buy' ? '#26a69a' : '#ef5350',
-      shape: m.side === 'buy' ? ('arrowUp' as const) : ('arrowDown' as const),
-      text: m.side === 'buy' ? '买入' : '卖出'
-    }))
-  // @ts-expect-error markers 类型
-  candleSeries.setMarkers(visibleMarkers)
+  // 标注（v5: 通过 createSeriesMarkers 插件更新）
+  if (markersPlugin) {
+    const visibleMarkers = props.markers
+      .filter((m) => allData.value.findIndex((d) => d.time === m.time) < end)
+      .map((m) => ({
+        time: m.time as Time,
+        position: m.side === 'buy' ? ('belowBar' as const) : ('aboveBar' as const),
+        color: m.side === 'buy' ? '#26a69a' : '#ef5350',
+        shape: m.side === 'buy' ? ('arrowUp' as const) : ('arrowDown' as const),
+        text: m.side === 'buy' ? '买入' : '卖出'
+      }))
+    markersPlugin.setMarkers(visibleMarkers)
+  }
 
   // 收益曲线
   if (useEquity.value && equityChart && equityLine) {
@@ -130,6 +132,9 @@ onMounted(() => {
     const s = chart!.addSeries(LineSeries, { color: line.color, lineWidth: 2 })
     lineSeries.push(s)
   })
+  // v5: 买卖点标注用 createSeriesMarkers 插件
+  markersPlugin = createSeriesMarkers(candleSeries, [], {})
+  markersPlugin.setMarkers([])
   // 收益曲线图
   if (equityRef.value) {
     equityChart = createChart(equityRef.value, {
