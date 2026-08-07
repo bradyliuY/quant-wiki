@@ -55,17 +55,17 @@ title: 多因子模型
 
 ## 适合/不适合的市场
 
-- ✅ 适合：标的数量多、数据完整的市场（A 股、美股全市场）。
-- ✅ 适合：长期配置型资金，能承受因子回撤期的波动。
-- ❌ 不适合：标的稀少的小市场，因子暴露无法充分分散。
-- ❌ 不适合：短期交易者——因子溢价需要以月/季度为单位兑现。
+- <span class="qw-ok">✓</span> 适合：标的数量多、数据完整的市场（A 股、美股全市场）。
+- <span class="qw-ok">✓</span> 适合：长期配置型资金，能承受因子回撤期的波动。
+- <span class="qw-no">✕</span> 不适合：标的稀少的小市场，因子暴露无法充分分散。
+- <span class="qw-no">✕</span> 不适合：短期交易者——因子溢价需要以月/季度为单位兑现。
 
 ## 常见误区
 
-- ❌ 叠加过多因子：因子之间高度相关，看似多元实则重复暴露。
-- ✅ 用 [相关性分析](../../methodology/risk-management/portfolio-risk) 检查因子冗余，保留低相关因子的组合。
-- ❌ 忽视 [过拟合](../../methodology/backtesting/common-pitfalls)：用历史数据反复调权重得到的"最优"参数，未来大概率失效。
-- ✅ 做 [样本外检验](../../methodology/backtesting/walk-forward)：因子模型最容易自欺，必须用滚动样本外验证。
+- <span class="qw-no">✕</span> 叠加过多因子：因子之间高度相关，看似多元实则重复暴露。
+- <span class="qw-ok">✓</span> 用 [相关性分析](../../methodology/risk-management/portfolio-risk) 检查因子冗余，保留低相关因子的组合。
+- <span class="qw-no">✕</span> 忽视 [过拟合](../../methodology/backtesting/common-pitfalls)：用历史数据反复调权重得到的"最优"参数，未来大概率失效。
+- <span class="qw-ok">✓</span> 做 [样本外检验](../../methodology/backtesting/walk-forward)：因子模型最容易自欺，必须用滚动样本外验证。
 
 ## 相关
 

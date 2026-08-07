@@ -1,4 +1,4 @@
-# 🎯 策略库
+# 策略库
 
 按策略族分类的完整量化策略库，每个策略配行情回放动画。
 
@@ -12,7 +12,7 @@
 | [形态交易](./pattern-trading/) | 形态突破 | [双底](./pattern-trading/double-bottom-trade) · [三角](./pattern-trading/triangle-breakout) · [头肩](./pattern-trading/head-shoulders-trade) · [旗形](./pattern-trading/flag-consolidation) |
 | [量化进阶](./quantitative/) | 系统工程 | [多因子](./quantitative/factor-model) · [网格](./quantitative/grid-trading) · [风险平价](./quantitative/risk-parity) |
 
-## 🤔 怎么选策略？
+## 怎么选策略？
 
 ```
 你的核心假设是什么？
