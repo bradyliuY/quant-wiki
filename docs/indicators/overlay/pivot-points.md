@@ -66,4 +66,4 @@ R3 = H + 2(P − L)   S3 = L − 2(H − P)
 
 - [成交量分布](../volume/volume-profile)：另一种支撑阻力来源
 - [布林带](../volatility/bollinger-bands)：动态通道补充
-- [日内策略](../../strategies/trend-following/pivot-scalping)
+- [日内策略](../../strategies/trend-following/channel-breakout)

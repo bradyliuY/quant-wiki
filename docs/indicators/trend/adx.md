@@ -65,4 +65,4 @@ ADX 需要专门的指标窗格计算，此处用 K 线示意"趋势段 vs 震�
 
 - [ATR](../volatility/atr)：ADX 计算中的基础量
 - [移动平均线](./ma)：ADX 确认趋势后配合均线入场
-- [趋势跟踪策略](../../strategies/trend-following/trend-filter)
+- [趋势跟踪策略](../../strategies/trend-following/ma-crossover)

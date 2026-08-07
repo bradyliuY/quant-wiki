@@ -59,4 +59,4 @@ MID   = EMA(收盘价, 20)
 
 - [布林带](./bollinger-bands)：标准差通道，双挤压组合
 - [ATR](./atr)：通道带宽的来源
-- [趋势跟踪策略](../../strategies/trend-following/volatility-breakout)
+- [趋势跟踪策略](../../strategies/trend-following/channel-breakout)

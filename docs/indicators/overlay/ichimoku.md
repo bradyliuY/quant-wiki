@@ -67,4 +67,4 @@ title: 一目均衡表
 - [移动平均线](../trend/ma)：转换线与基准线本质是均线
 - [ADX](../trend/adx)：云层厚度与趋势强度互相印证
 - [枢轴点](./pivot-points)：另一种支撑阻力框架
-- [趋势跟踪策略](../../strategies/trend-following/ichimoku-system)
+- [趋势跟踪策略](../../strategies/trend-following/ma-crossover)

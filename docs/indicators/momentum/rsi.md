@@ -61,4 +61,4 @@ RSI = 100 − 100 / (1 + RS)
 - [威廉指标](./williams-r)：同为 0-100 摆动指标
 - [随机指标 KD](./stochastic)：RSI 的"同班同学"
 - [MFI](../volume/mfi)：成交量加权版 RSI
-- [动量策略](../../strategies/momentum/rsi-reversal)
+- [RSI 反转策略](../../strategies/mean-reversion/rsi-reversal)

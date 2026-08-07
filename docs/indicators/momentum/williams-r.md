@@ -60,4 +60,4 @@ W%R = (HHₙ − C) / (HHₙ − LLₙ) × 100    // 常见取 −100 到 0，�
 - [随机指标 KD](./stochastic)：数学镜像指标
 - [RSI](./rsi)：同为摆动指标
 - [CCI](./cci)：另一类统计偏离指标
-- [均值回归策略](../../strategies/mean-reversion/wr-reversal)
+- [均值回归策略](../../strategies/mean-reversion/rsi-reversal)

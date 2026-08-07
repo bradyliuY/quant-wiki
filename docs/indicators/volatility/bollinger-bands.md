@@ -62,4 +62,4 @@ MID = SMA(收盘价, 20)
 - [肯特纳通道](./keltner-channels)：ATR 版通道，布林带的表亲
 - [ATR](./atr)：波动率度量
 - [RSI](../momentum/rsi)：触轨配合超买超卖
-- [均值回归策略](../../strategies/mean-reversion/bollinger-reversion)
+- [均值回归策略](../../strategies/mean-reversion/bollinger-bounce)

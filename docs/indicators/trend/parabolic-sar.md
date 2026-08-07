@@ -61,4 +61,4 @@ EP：当前趋势的极值（上升趋势为最高价，下降趋势为最低价
 
 - [ADX](./adx)：确认趋势强度后 SAR 才好用
 - [ATR](../volatility/atr)：另一个设置移动止损的方法
-- [趋势跟踪策略](../../strategies/trend-following/trailing-stop)
+- [趋势跟踪策略](../../strategies/trend-following/channel-breakout)

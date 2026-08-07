@@ -62,4 +62,4 @@ OBV 把每日成交量按涨跌方向累加（涨加跌减），形成"量能资
 - [MFI](./mfi)：量价结合的 RSI
 - [成交量分布](./volume-profile)：从价格维度看量能
 - [RSI](../momentum/rsi)：背离信号互相验证
-- [动量策略](../../strategies/momentum/volume-confirm)
+- [动量策略](../../strategies/momentum/rsi-momentum)

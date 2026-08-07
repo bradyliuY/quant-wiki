@@ -61,4 +61,4 @@ CCI = (TP − MA) / (0.015 × MD)
 - [威廉指标](./williams-r)：同为统计偏离类摆动指标
 - [随机指标 KD](./stochastic)：短波段配合使用
 - [ADX](../trend/adx)：判断行情性质，决定 CCI 用法
-- [均值回归策略](../../strategies/mean-reversion/cci-band)
+- [均值回归策略](../../strategies/mean-reversion/bollinger-bounce)

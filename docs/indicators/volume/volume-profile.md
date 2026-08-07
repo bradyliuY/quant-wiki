@@ -64,4 +64,4 @@ POC  = 成交量最大的价格档
 - [OBV](./obv)：时间维度的量能指标
 - [MFI](./mfi)：量价结合指标
 - [枢轴点](../overlay/pivot-points)：日内关键位的另一种算法
-- [支撑阻力策略](../../strategies/trend-following/support-resistance)
+- [支撑阻力策略](../../strategies/trend-following/channel-breakout)

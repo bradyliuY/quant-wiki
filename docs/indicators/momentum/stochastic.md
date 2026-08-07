@@ -62,4 +62,4 @@ J   = 3K − 2D                             // 更敏感的辅助线
 - [RSI](./rsi)：同为摆动指标，可互相验证
 - [威廉指标](./williams-r)：结构几乎相同
 - [布林带](../volatility/bollinger-bands)：短线通道配合 KD 使用
-- [均值回归策略](../../strategies/mean-reversion/kd-oscillator)
+- [均值回归策略](../../strategies/mean-reversion/stochastic-strategy)

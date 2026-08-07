@@ -62,4 +62,4 @@ MACD 柱 = 2 × (DIF − DEA)        // 国内软件常乘 2
 - [移动平均线](./ma)：MACD 的基础
 - [RSI](../momentum/rsi)：背离信号的配合验证
 - [ADX](./adx)：判断趋势是否有"力气"
-- [趋势跟踪策略](../../strategies/trend-following/macd-crossover)
+- [趋势跟踪策略](../../strategies/trend-following/macd-strategy)

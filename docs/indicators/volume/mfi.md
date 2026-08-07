@@ -63,4 +63,4 @@ MFI = 100 − 100 / (1 + MFR)
 - [RSI](../momentum/rsi)：无成交量版的 MFI
 - [OBV](./obv)：资金流向指标
 - [成交量分布](./volume-profile)：从价位看资金堆
-- [动量策略](../../strategies/momentum/mfi-divergence)
+- [动量策略](../../strategies/momentum/strength-ranking)
