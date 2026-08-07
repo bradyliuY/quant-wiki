@@ -1,5 +1,6 @@
 ---
 title: 仓位管理
+difficulty: 进阶
 ---
 
 # 仓位管理

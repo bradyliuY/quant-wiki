@@ -1,5 +1,6 @@
 ---
 title: 股票
+difficulty: 入门
 ---
 
 # 股票

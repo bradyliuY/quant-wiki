@@ -1,5 +1,6 @@
 ---
 title: 移动平均线 MA
+difficulty: 入门
 ---
 
 # 移动平均线（MA / EMA / SMA / WMA）
@@ -44,7 +45,7 @@ WMA(n) = (n×C + (n−1)×C₋₁ + ... + 1×C₋₍ₙ₋₁₎) / (n + (n−1)
 
 对比 SMA 与 EMA：同一段行情，EMA 更贴价格、拐点更快，但假信号也更多。
 
-<ComparePanel leftLabel="SMA 5/20" rightLabel="EMA 5/20" leftMode="sma" leftPeriods="[5,20]" rightMode="ema" rightPeriods="[5,20]" title="SMA vs EMA 对比" />
+<ComparePanel leftLabel="SMA 5/20" rightLabel="EMA 5/20" leftMode="sma" :leftPeriods="[5,20]" rightMode="ema" :rightPeriods="[5,20]" title="SMA vs EMA 对比" />
 
 ## 计算演示：手把手算 MA
 

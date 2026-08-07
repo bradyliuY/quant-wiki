@@ -1,5 +1,6 @@
 ---
 title: 时间框架
+difficulty: 入门
 ---
 
 # 时间框架
@@ -86,7 +87,7 @@ title: 时间框架
 <ComparePanel
   title="同一段行情 · 日线 vs 周线视角"
   leftLabel="日线（细节多）" rightLabel="周线（方向清晰）"
-  leftMode="sma" leftPeriods="[5,20]" rightMode="sma" rightPeriods="[5,20]"
+  leftMode="sma" :leftPeriods="[5,20]" rightMode="sma" :rightPeriods="[5,20]"
 />
 
 对比左右两张图：同样的数据，周期放大后噪声减少、趋势更清晰。

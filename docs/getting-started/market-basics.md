@@ -1,5 +1,6 @@
 ---
 title: 市场基础
+difficulty: 入门
 ---
 
 # 市场基础

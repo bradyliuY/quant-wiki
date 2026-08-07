@@ -1,5 +1,6 @@
 ---
 title: MACD 异同移动平均线
+difficulty: 进阶
 ---
 
 # MACD（指数平滑异同移动平均线）

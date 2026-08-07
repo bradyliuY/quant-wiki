@@ -1,5 +1,6 @@
 ---
 title: RSI 相对强弱指标
+difficulty: 进阶
 ---
 
 # RSI（相对强弱指标）

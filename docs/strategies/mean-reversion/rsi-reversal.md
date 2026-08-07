@@ -1,5 +1,6 @@
 ---
 title: RSI 反转策略
+difficulty: 进阶
 ---
 
 # RSI 反转策略

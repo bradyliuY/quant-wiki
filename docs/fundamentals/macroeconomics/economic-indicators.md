@@ -1,5 +1,6 @@
 ---
 title: 经济指标
+difficulty: 进阶
 ---
 
 # 经济指标

@@ -66,4 +66,4 @@ title: 指标大全
 
 <IndicatorDemo indicator="macd" title="MACD 指标动态演示" />
 
-<ComparePanel leftLabel="SMA 5/20" rightLabel="EMA 5/20" leftMode="sma" leftPeriods="[5,20]" rightMode="ema" rightPeriods="[5,20]" title="SMA vs EMA 对比" />
+<ComparePanel leftLabel="SMA 5/20" rightLabel="EMA 5/20" leftMode="sma" :leftPeriods="[5,20]" rightMode="ema" :rightPeriods="[5,20]" title="SMA vs EMA 对比" />

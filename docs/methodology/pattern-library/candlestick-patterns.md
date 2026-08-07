@@ -1,5 +1,6 @@
 ---
 title: K 线形态
+difficulty: 入门
 ---
 
 # K 线形态

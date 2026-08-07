@@ -1,5 +1,6 @@
 ---
 title: 纪律执行
+difficulty: 进阶
 ---
 
 # 纪律执行

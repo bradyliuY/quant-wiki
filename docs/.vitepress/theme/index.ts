@@ -1,4 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
+import { h } from 'vue'
 import type { Theme } from 'vitepress'
 import './custom.css'
 import setupSidebarActive from './sidebar-active'
@@ -22,6 +23,7 @@ import StrategyFit from './components/StrategyFit.vue'
 import IndicatorPicker from './components/IndicatorPicker.vue'
 import PlainTalk from './components/PlainTalk.vue'
 import CaseWalk from './components/CaseWalk.vue'
+import DifficultyBadge from './components/DifficultyBadge.vue'
 
 export default {
   extends: DefaultTheme,
@@ -45,5 +47,9 @@ export default {
     app.component('IndicatorPicker', IndicatorPicker)
     app.component('PlainTalk', PlainTalk)
     app.component('CaseWalk', CaseWalk)
-  }
+  },
+  // 难度徽章：注入 doc-before 插槽，读 frontmatter.difficulty 自动渲染
+  Layout: () => h(DefaultTheme.Layout, null, {
+    'doc-before': () => h(DifficultyBadge)
+  })
 } satisfies Theme

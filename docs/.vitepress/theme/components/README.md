@@ -44,12 +44,12 @@
 <ComparePanel
   title="SMA vs EMA"
   leftLabel="SMA 5/20" rightLabel="EMA 5/20"
-  leftMode="sma" leftPeriods="[5,20]" rightMode="ema" rightPeriods="[5,20]"
+  leftMode="sma" :leftPeriods="[5,20]" rightMode="ema" :rightPeriods="[5,20]"
 />
 ```
 
 - `leftMode/rightMode`：`sma` | `ema` | `none`
-- `leftPeriods/rightPeriods`：数组，传字符串形式 `"[5,20]"`
+- `leftPeriods/rightPeriods`：数组，必须用 `:` 动态绑定传数组字面量 `:leftPeriods="[5,20]"`（不要写成 `leftPeriods="[5,20]"`，那会被编译成字符串，触发 `periods.forEach is not a function`）
 
 ## CalcExplorer — 交互式计算器
 
@@ -171,6 +171,21 @@
 - `steps`：步骤数组，每项 `{ label, detail?, type? }`
 - `type`：`setup`(观察) | `signal`(信号) | `entry`(入场) | `manage`(持仓) | `stop`(止损) | `exit`(止盈) | `review`(复盘)，决定标签/节点颜色
 - `result`：可选，末尾结果小结（虚线框）
+
+## DifficultyBadge — 页面难度徽章
+
+用于**所有内容页**，自动在文档标题上方渲染"入门 / 进阶 / 挑战"难度徽章。**无需在正文写标签**，只需在页面 frontmatter 加一行：
+
+```yaml
+---
+title: RSI 相对强弱指标
+difficulty: 进阶
+---
+```
+
+- `difficulty` 取值：`入门` | `进阶` | `挑战`
+- 实现：主题 `Layout` 的 `doc-before` 插槽注入，读 frontmatter 自动渲染
+- 颜色：入门=绿、进阶=蓝、挑战=金
 
 ## 通用交互：图表放大
 

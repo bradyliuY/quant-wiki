@@ -1,5 +1,6 @@
 ---
 title: ETF
+difficulty: 入门
 ---
 
 # ETF

@@ -1,5 +1,6 @@
 ---
 title: 布林带
+difficulty: 进阶
 ---
 
 # 布林带（Bollinger Bands）
