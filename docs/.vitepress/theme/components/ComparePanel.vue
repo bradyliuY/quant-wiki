@@ -114,11 +114,11 @@ watch(() => props.data, (nd) => {
     <div class="compare-grid">
       <div class="compare-item">
         <div class="compare-label">{{ leftLabel }}</div>
-        <div ref="leftRef" style="width:100%"></div>
+        <div ref="leftRef" :style="{ height: height + 'px', width: '100%' }"></div>
       </div>
       <div class="compare-item">
         <div class="compare-label">{{ rightLabel }}</div>
-        <div ref="rightRef" style="width:100%"></div>
+        <div ref="rightRef" :style="{ height: height + 'px', width: '100%' }"></div>
       </div>
     </div>
   </div>
