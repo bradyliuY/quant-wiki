@@ -16,12 +16,17 @@
   :markers="[{ time: 1720000000, side: 'buy' }, { time: 1722000000, side: 'sell' }]"
   :lines="[{ name: 'MA5', color: '#1e5fd0', values: [...null 或数值数组...] }]"
 />
+
+<!-- 策略模式：自动叠加指标线与买卖点，无需手写 lines/markers -->
+<KLinePlayback strategy="bollinger" title="布林带回归行情回放" />
 ```
 
 - `data`：可选，`{ time, open, high, low, close, volume }[]`。省略则用内置演示数据。
 - `markers`：买卖点标注，`{ time, side: 'buy'|'sell' }[]`
 - `lines`：叠加指标线 `{ name, color, values }[]`，values 与 data 等长，null 表示缺省
+- `strategy`：可选，`'bollinger'` — 自动叠加布林带（上/中/下轨）+ 触下轨收回买入、上穿中轨卖出标注；与 `lines`/`markers` 二选一
 - `height`、`title`：可选
+- **收益曲线**：默认隐藏，点"显示收益"在下方追加 90px 净值曲线（懒创建，不会在隐藏时初始化空图表）
 
 ## IndicatorDemo — 指标动态演示
 

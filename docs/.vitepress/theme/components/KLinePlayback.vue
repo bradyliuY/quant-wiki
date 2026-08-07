@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { createChart, CandlestickSeries, LineSeries, ColorType, createSeriesMarkers, type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type Time } from 'lightweight-charts'
-import { genDemoData, type OHLC } from '../lib/indicators'
+import { genDemoData, calcBollinger, type OHLC } from '../lib/indicators'
 import { createReplay } from '../lib/charts'
 import { toggleExpand } from '../lib/expand'
 
@@ -17,10 +17,12 @@ const props = withDefaults(
     markers?: { time: number; side: 'buy' | 'sell' }[]
     /** 指标线：{ name, color, values: (number|null)[] } */
     lines?: { name: string; color: string; values: (number | null)[] }[]
+    /** 策略模式：自动生成指标线 + 买卖点叠加（缺省走 lines/markers） */
+    strategy?: 'bollinger'
     height?: number
     title?: string
   }>(),
-  { data: undefined, markers: () => [], lines: () => [], height: 340, title: 'K 线回放' }
+  { data: undefined, markers: () => [], lines: () => [], strategy: undefined, height: 340, title: 'K 线回放' }
 )
 
 const containerRef = ref<HTMLElement | null>(null)
@@ -41,8 +43,48 @@ const useEquity = ref(false)
 const playing = ref(false)
 const progress = ref(0)
 const speed = ref(1)
+let currentEnd = 0
+
+/** 策略叠加指标线：strategy 模式下自动从内置数据计算，否则用传入的 lines */
+const effectiveLines = computed(() => {
+  if (props.strategy === 'bollinger') {
+    const closes = allData.value.map((d) => d.close)
+    const { upper, mid, lower } = calcBollinger(closes, 20, 2)
+    return [
+      { name: '上轨', color: '#ef5350', values: upper },
+      { name: '中轨', color: '#f2b04b', values: mid },
+      { name: '下轨', color: '#26a69a', values: lower }
+    ]
+  }
+  return props.lines
+})
+const effectiveMarkers = computed(() => {
+  if (props.strategy === 'bollinger') return buildBollingerMarkers(allData.value)
+  return props.markers
+})
+
+/** 布林回归买卖点：低点触下轨后收回带内 → 买入；买入后收盘上穿中轨 → 卖出 */
+function buildBollingerMarkers(data: OHLC[]): { time: number; side: 'buy' | 'sell' }[] {
+  const closes = data.map((d) => d.close)
+  const { lower, mid } = calcBollinger(closes, 20, 2)
+  const markers: { time: number; side: 'buy' | 'sell' }[] = []
+  let lastBuy = -99
+  let pendingBuy = -1
+  for (let i = 1; i < data.length; i++) {
+    if (lower[i - 1] != null && lower[i] != null && data[i - 1].low < (lower[i - 1] as number) && closes[i] > (lower[i] as number) && i - lastBuy >= 10) {
+      markers.push({ time: data[i].time, side: 'buy' })
+      pendingBuy = i
+      lastBuy = i
+    } else if (pendingBuy >= 0 && mid[i] != null && closes[i] >= (mid[i] as number)) {
+      markers.push({ time: data[i].time, side: 'sell' })
+      pendingBuy = -1
+    }
+  }
+  return markers
+}
 
 function setFrame(start: number, end: number) {
+  currentEnd = end
   if (!chart || !candleSeries) return
   candleSeries.setData(allData.value.slice(0, end).map((d) => ({
     time: d.time as unknown as string,
@@ -51,18 +93,18 @@ function setFrame(start: number, end: number) {
     low: d.low,
     close: d.close
   })))
-  // 指标线
+  // 指标线（对齐 allData 下标，null 跳过不画）
   lineSeries.forEach((s, idx) => {
-    const line = props.lines[idx]
+    const line = effectiveLines.value[idx]
     if (!line) return
-    s.setData(line.values.slice(0, end).map((v, i) => ({
-      time: allData.value[i].time as unknown as string,
-      value: v ?? 0
-    })).filter((p) => allData.value[allData.value.findIndex((d) => d.time === (p.time as unknown as number))]))
+    s.setData(allData.value.slice(0, end).map((d, i) => {
+      const v = line.values[i]
+      return v == null ? null : { time: d.time as unknown as string, value: v }
+    }).filter((p): p is { time: string; value: number } => p !== null))
   })
   // 标注（v5: 通过 createSeriesMarkers 插件更新）
   if (markersPlugin) {
-    const visibleMarkers = props.markers
+    const visibleMarkers = effectiveMarkers.value
       .filter((m) => allData.value.findIndex((d) => d.time === m.time) < end)
       .map((m) => ({
         time: m.time as Time,
@@ -81,15 +123,38 @@ function setFrame(start: number, end: number) {
   progress.value = end / allData.value.length
 }
 
+function ensureEquityChart() {
+  if (equityChart || !equityRef.value) return
+  equityChart = createChart(equityRef.value, {
+    height: 90,
+    layout: { background: { type: ColorType.Solid, color: 'transparent' }, textColor: '#999' },
+    grid: { vertLines: { color: 'rgba(0,0,0,0.05)' }, horzLines: { color: 'rgba(0,0,0,0.05)' } },
+    autoSize: true,
+    timeScale: { visible: false }
+  })
+  equityLine = equityChart.addSeries(LineSeries, { color: '#1e5fd0', lineWidth: 2 })
+}
+
 function updateEquity(end: number) {
+  ensureEquityChart()
   if (!equityChart || !equityLine) return
   const startPrice = allData.value[0].close
-  const points = allData.value.slice(0, end).map((d, i) => ({
+  const points = allData.value.slice(0, end).map((d) => ({
     time: d.time as unknown as string,
     value: Number((((d.close - startPrice) / startPrice) * 100).toFixed(2))
   }))
   equityLine.setData(points)
 }
+
+// 收益图懒创建：勾选"显示收益"时才初始化图表（v-if 容器挂载后 nextTick 创建）
+watch(useEquity, (on) => {
+  if (on) nextTick(() => updateEquity(currentEnd || allData.value.length))
+  else {
+    equityChart?.remove()
+    equityChart = null
+    equityLine = null
+  }
+})
 
 function togglePlay() {
   if (!replay) return
@@ -131,24 +196,14 @@ onMounted(() => {
     upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
     wickUpColor: '#26a69a', wickDownColor: '#ef5350'
   })
-  props.lines.forEach((line) => {
+  effectiveLines.value.forEach((line) => {
     const s = chart!.addSeries(LineSeries, { color: line.color, lineWidth: 2 })
     lineSeries.push(s)
   })
   // v5: 买卖点标注用 createSeriesMarkers 插件
   markersPlugin = createSeriesMarkers(candleSeries, [], {})
   markersPlugin.setMarkers([])
-  // 收益曲线图
-  if (equityRef.value) {
-    equityChart = createChart(equityRef.value, {
-      height: 90,
-      layout: { background: { type: ColorType.Solid, color: 'transparent' }, textColor: '#999' },
-      grid: { vertLines: { color: 'rgba(0,0,0,0.05)' }, horzLines: { color: 'rgba(0,0,0,0.05)' } },
-      autoSize: true,
-      timeScale: { visible: false }
-    })
-    equityLine = equityChart.addSeries(LineSeries, { color: '#1e5fd0', lineWidth: 2 })
-  }
+  // 收益曲线图懒创建：见 watch(useEquity)，避免在 v-if=false 时对空容器初始化
   replay = createReplay(setFrame, allData.value.length, 40)
   replay.play()
   playing.value = true
@@ -179,7 +234,7 @@ watch(
     </button>
     <div v-if="title" class="demo-title">{{ title }}</div>
     <div ref="containerRef" :style="{ height: height + 'px', width: '100%' }"></div>
-    <div v-if="useEquity" ref="equityRef" style="width: 100%"></div>
+    <div v-if="useEquity" ref="equityRef" style="width: 100%; height: 90px"></div>
     <div class="demo-controls">
       <button @click="togglePlay">{{ playing ? '⏸ 暂停' : '▶ 播放' }}</button>
       <button @click="reset">↺ 重置</button>
