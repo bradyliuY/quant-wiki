@@ -36,8 +36,37 @@ title: 止损策略
 
 <KLinePlayback
   title="止损演示"
-  :markers="[{ time: 1722000000, side: 'buy' }, { time: 1725200000, side: 'sell' }]"
-  :lines="[{ name: 'MA20', color: '#1e5fd0', values: [] }]"
+  :markers="[{ time: 1730777600, side: 'buy' }, { time: 1732332800, side: 'sell' }]"
+  :data="[
+    { time: 1730000000, open: 30.0, high: 30.6, low: 29.8, close: 30.4, volume: 80000 },
+    { time: 1730086400, open: 30.4, high: 31.0, low: 30.2, close: 30.8, volume: 90000 },
+    { time: 1730172800, open: 30.8, high: 31.4, low: 30.6, close: 31.2, volume: 95000 },
+    { time: 1730259200, open: 31.2, high: 31.8, low: 31.0, close: 31.6, volume: 100000 },
+    { time: 1730345600, open: 31.6, high: 32.2, low: 31.4, close: 32.0, volume: 110000 },
+    { time: 1730432000, open: 32.0, high: 32.6, low: 31.8, close: 32.4, volume: 115000 },
+    { time: 1730518400, open: 32.4, high: 33.0, low: 32.2, close: 32.8, volume: 120000 },
+    { time: 1730604800, open: 32.8, high: 33.4, low: 32.6, close: 33.2, volume: 125000 },
+    { time: 1730691200, open: 33.2, high: 33.8, low: 33.0, close: 33.6, volume: 130000 },
+    { time: 1730777600, open: 33.6, high: 34.2, low: 33.4, close: 34.0, volume: 135000 },
+    { time: 1730864000, open: 34.0, high: 34.3, low: 33.7, close: 34.1, volume: 90000 },
+    { time: 1730950400, open: 34.1, high: 34.4, low: 33.8, close: 34.2, volume: 88000 },
+    { time: 1731036800, open: 34.2, high: 34.5, low: 33.9, close: 34.3, volume: 86000 },
+    { time: 1731123200, open: 34.3, high: 34.6, low: 34.0, close: 34.4, volume: 84000 },
+    { time: 1731209600, open: 34.4, high: 34.7, low: 34.1, close: 34.5, volume: 82000 },
+    { time: 1731296000, open: 34.5, high: 34.8, low: 34.2, close: 34.6, volume: 80000 },
+    { time: 1731382400, open: 34.6, high: 34.9, low: 34.3, close: 34.7, volume: 78000 },
+    { time: 1731468800, open: 34.7, high: 35.0, low: 34.4, close: 34.8, volume: 76000 },
+    { time: 1731555200, open: 34.8, high: 35.1, low: 34.5, close: 34.9, volume: 74000 },
+    { time: 1731641600, open: 34.9, high: 35.2, low: 34.6, close: 35.0, volume: 72000 },
+    { time: 1731728000, open: 35.0, high: 35.1, low: 34.4, close: 34.6, volume: 95000 },
+    { time: 1731814400, open: 34.6, high: 34.8, low: 34.0, close: 34.2, volume: 120000 },
+    { time: 1731900800, open: 34.2, high: 34.4, low: 33.6, close: 33.8, volume: 150000 },
+    { time: 1731987200, open: 33.8, high: 34.0, low: 33.2, close: 33.4, volume: 185000 },
+    { time: 1732073600, open: 33.4, high: 33.6, low: 32.8, close: 33.0, volume: 220000 },
+    { time: 1732160000, open: 33.0, high: 33.2, low: 32.4, close: 32.6, volume: 260000 },
+    { time: 1732246400, open: 32.6, high: 32.8, low: 32.0, close: 32.2, volume: 300000 },
+    { time: 1732332800, open: 32.2, high: 32.4, low: 31.6, close: 31.8, volume: 340000 }
+  ]"
 />
 
 ### 3. 时间止损

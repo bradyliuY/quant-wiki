@@ -12,8 +12,39 @@ K 线形态是最短周期的形态语言，由 1 到 3 根 K 线的形态结构
 
 <KLinePlayback
   title="K 线反转信号回放"
-  :markers="[{ time: 1723200000, side: 'buy' }, { time: 1725600000, side: 'sell' }]"
-  :lines="[{ name: 'MA20', color: '#1e5fd0', values: [] }]"
+  :markers="[{ time: 1721296000, side: 'buy' }, { time: 1722419200, side: 'sell' }]"
+  :data="[
+    { time: 1720000000, open: 38.0, high: 38.5, low: 37.6, close: 38.1, volume: 90000 },
+    { time: 1720086400, open: 38.1, high: 38.3, low: 37.4, close: 37.7, volume: 95000 },
+    { time: 1720172800, open: 37.7, high: 37.9, low: 36.9, close: 37.2, volume: 88000 },
+    { time: 1720259200, open: 37.2, high: 37.5, low: 36.4, close: 36.7, volume: 92000 },
+    { time: 1720345600, open: 36.7, high: 36.9, low: 35.8, close: 36.1, volume: 101000 },
+    { time: 1720432000, open: 36.1, high: 36.4, low: 35.2, close: 35.5, volume: 97000 },
+    { time: 1720518400, open: 35.5, high: 35.8, low: 34.6, close: 34.9, volume: 108000 },
+    { time: 1720604800, open: 34.9, high: 35.2, low: 34.0, close: 34.3, volume: 112000 },
+    { time: 1720691200, open: 34.3, high: 34.6, low: 33.2, close: 33.5, volume: 118000 },
+    { time: 1720777600, open: 33.5, high: 33.8, low: 32.4, close: 32.7, volume: 124000 },
+    { time: 1720864000, open: 32.7, high: 33.0, low: 31.6, close: 31.9, volume: 130000 },
+    { time: 1720950400, open: 31.9, high: 32.2, low: 30.8, close: 31.1, volume: 136000 },
+    { time: 1721036800, open: 31.1, high: 31.4, low: 30.0, close: 30.3, volume: 142000 },
+    { time: 1721123200, open: 30.3, high: 30.6, low: 29.2, close: 29.5, volume: 150000 },
+    { time: 1721209600, open: 29.5, high: 29.8, low: 28.4, close: 28.7, volume: 160000 },
+    { time: 1721296000, open: 28.7, high: 29.1, low: 26.8, close: 28.9, volume: 210000 },
+    { time: 1721382400, open: 28.9, high: 29.0, low: 28.3, close: 28.5, volume: 120000 },
+    { time: 1721468800, open: 28.5, high: 30.0, low: 28.4, close: 29.9, volume: 230000 },
+    { time: 1721555200, open: 29.9, high: 30.0, low: 28.6, close: 28.8, volume: 125000 },
+    { time: 1721641600, open: 28.8, high: 29.2, low: 28.7, close: 29.0, volume: 60000 },
+    { time: 1721728000, open: 29.0, high: 30.8, low: 28.9, close: 30.6, volume: 215000 },
+    { time: 1721814400, open: 30.6, high: 31.2, low: 30.4, close: 31.0, volume: 185000 },
+    { time: 1721900800, open: 31.0, high: 31.8, low: 30.8, close: 31.6, volume: 200000 },
+    { time: 1721987200, open: 31.6, high: 32.4, low: 31.3, close: 32.2, volume: 220000 },
+    { time: 1722073600, open: 32.2, high: 33.0, low: 32.0, close: 32.8, volume: 235000 },
+    { time: 1722160000, open: 32.8, high: 33.6, low: 32.6, close: 33.4, volume: 250000 },
+    { time: 1722246400, open: 33.4, high: 34.2, low: 33.2, close: 34.0, volume: 265000 },
+    { time: 1722332800, open: 34.0, high: 34.8, low: 33.8, close: 34.6, volume: 280000 },
+    { time: 1722419200, open: 34.6, high: 35.4, low: 34.4, close: 35.2, volume: 300000 },
+    { time: 1722505600, open: 35.2, high: 36.0, low: 35.0, close: 35.8, volume: 320000 }
+  ]"
 />
 
 ## 锤子线
