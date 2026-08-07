@@ -6,12 +6,13 @@
  *
  * 用法：
  * <CalcDemo indicator="sma" period="5" title="MA5 计算演示" />
+ * <CalcDemo indicator="macd" title="MACD 计算演示" />
  */
 import { ref, computed, watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
-    indicator?: 'sma' | 'ema' | 'rsi' | 'boll'
+    indicator?: 'sma' | 'ema' | 'rsi' | 'boll' | 'macd'
     period?: number
     title?: string
   }>(),
@@ -19,22 +20,38 @@ const props = withDefaults(
 )
 
 /** 示例收盘价序列（教学用合成数据，非真实行情） */
-const PRICES = [100, 101.5, 102.3, 101.8, 103.2, 104.5, 103.9, 105.1, 106.8, 105.9, 107.2, 108.5, 109.1, 108.4, 110.2]
-const DAYS = PRICES.length
-
-const cursor = ref(props.period) // 当前计算的最后一天索引
+// MACD 需要 ≥26 天数据，用长序列；其他指标用短序列便于演示
+const PRICES_SHORT = [100, 101.5, 102.3, 101.8, 103.2, 104.5, 103.9, 105.1, 106.8, 105.9, 107.2, 108.5, 109.1, 108.4, 110.2]
+const PRICES_LONG = (() => {
+  const arr: number[] = []
+  let p = 100
+  for (let i = 0; i < 45; i++) {
+    const wave = Math.sin(i / 5) * 2.5
+    const drift = (105 - p) * 0.04
+    const noise = ((i * 37) % 13) / 13 - 0.5 // 确定性伪随机
+    p = p + drift + wave * 0.4 + noise * 2
+    arr.push(Math.round(p * 10) / 10)
+  }
+  return arr
+})()
+const isMacd = computed(() => props.indicator === 'macd')
+const PRICES = computed(() => (isMacd.value ? PRICES_LONG : PRICES_SHORT))
+const DAYS = computed(() => PRICES.value.length)
+// MACD 从第 26 天开始（EMA26 需要种子），其他从 period 开始
+const startIdx = computed(() => (isMacd.value ? 26 : props.period))
+const cursor = ref(startIdx.value)
 const playing = ref(false)
 const speed = ref(1)
 let timer: ReturnType<typeof setInterval> | null = null
 
 // 窗口（用于 SMA / 布林带）：含 cursor 在内的最近 period 天
 const windowStart = computed(() => Math.max(0, cursor.value - props.period + 1))
-const windowData = computed(() => PRICES.slice(windowStart.value, cursor.value + 1))
+const windowData = computed(() => PRICES.value.slice(windowStart.value, cursor.value + 1))
 
 /** 计算 SMA */
 function calcSMA(idx: number): number {
   const start = Math.max(0, idx - props.period + 1)
-  const slice = PRICES.slice(start, idx + 1)
+  const slice = PRICES.value.slice(start, idx + 1)
   return slice.reduce((a, b) => a + b, 0) / slice.length
 }
 
@@ -42,9 +59,31 @@ function calcSMA(idx: number): number {
 function calcEMA(idx: number): number {
   const alpha = 2 / (props.period + 1)
   // 首个值用 SMA 做种子
-  let ema = PRICES.slice(0, props.period).reduce((a, b) => a + b, 0) / props.period
+  let ema = PRICES.value.slice(0, props.period).reduce((a, b) => a + b, 0) / props.period
   for (let i = props.period; i <= idx; i++) {
-    ema = alpha * PRICES[i] + (1 - alpha) * ema
+    ema = alpha * PRICES.value[i] + (1 - alpha) * ema
+  }
+  return ema
+}
+
+/** 计算指定周期的 EMA（MACD 用，周期参数独立） */
+function calcEMAperiod(idx: number, period: number): number {
+  const alpha = 2 / (period + 1)
+  // 种子：可用数据不足 period 时用全部可用数据；否则用前 period 个
+  const seedLen = Math.min(period, PRICES.value.length)
+  let ema = PRICES.value.slice(0, seedLen).reduce((a, b) => a + b, 0) / seedLen
+  for (let i = period; i <= idx; i++) {
+    ema = alpha * PRICES.value[i] + (1 - alpha) * ema
+  }
+  return ema
+}
+
+/** 对任意序列计算 EMA（MACD 的 DEA 用） */
+function calcEMAonSeries(series: number[], period: number): number {
+  const alpha = 2 / (period + 1)
+  let ema = series[0]
+  for (let i = 1; i < series.length; i++) {
+    ema = alpha * series[i] + (1 - alpha) * ema
   }
   return ema
 }
@@ -52,7 +91,7 @@ function calcEMA(idx: number): number {
 /** 计算 RSI(14) 的涨跌均值 */
 function calcRSI(idx: number): number {
   if (idx < 2) return 50
-  const slice = PRICES.slice(0, idx + 1)
+  const slice = PRICES.value.slice(0, idx + 1)
   let gains = 0
   let losses = 0
   for (let i = 1; i < slice.length; i++) {
@@ -69,7 +108,7 @@ function calcRSI(idx: number): number {
 
 /** 布林带：中轨 + 上下轨 */
 function calcBoll(idx: number) {
-  const slice = PRICES.slice(windowStart.value, idx + 1)
+  const slice = PRICES.value.slice(windowStart.value, idx + 1)
   const mean = slice.reduce((a, b) => a + b, 0) / slice.length
   const variance = slice.reduce((a, b) => a + (b - mean) ** 2, 0) / slice.length
   const sd = Math.sqrt(variance)
@@ -80,7 +119,7 @@ function calcBoll(idx: number) {
 const result = computed(() => {
   const idx = cursor.value
   const start = Math.max(0, idx - props.period + 1)
-  const slice = PRICES.slice(start, idx + 1)
+  const slice = PRICES.value.slice(start, idx + 1)
   const sum = slice.reduce((a, b) => a + b, 0)
 
   switch (props.indicator) {
@@ -117,13 +156,31 @@ const result = computed(() => {
         value: b.mid
       }
     }
+    case 'macd': {
+      const ema12 = calcEMAperiod(idx, 12)
+      const ema26 = calcEMAperiod(idx, 26)
+      const dif = ema12 - ema26
+      // DEA = EMA(DIF, 9)：用 DIF 序列的 EMA
+      const difSeries: number[] = []
+      for (let i = 0; i <= idx; i++) {
+        difSeries.push(calcEMAperiod(i, 12) - calcEMAperiod(i, 26))
+      }
+      const dea = calcEMAonSeries(difSeries, 9)
+      const bar = 2 * (dif - dea)
+      return {
+        formula: `DIF = EMA12 − EMA26，DEA = EMA(DIF,9)，柱 = 2×(DIF−DEA)`,
+        detail: `第 ${idx + 1} 天：EMA12=${ema12.toFixed(2)}，EMA26=${ema26.toFixed(2)}，DIF=${dif.toFixed(2)}，DEA=${dea.toFixed(2)}`,
+        value: dif,
+        extra: { dea: dea.toFixed(2), bar: bar.toFixed(2) }
+      }
+    }
   }
 })
 
-const progress = computed(() => (cursor.value - props.period) / (DAYS - props.period))
+const progress = computed(() => (cursor.value - startIdx.value) / (DAYS.value - startIdx.value))
 
 function step() {
-  if (cursor.value < DAYS - 1) cursor.value++
+  if (cursor.value < DAYS.value - 1) cursor.value++
   else stop()
 }
 
@@ -132,7 +189,7 @@ function togglePlay() {
   else {
     playing.value = true
     timer = setInterval(() => {
-      if (cursor.value >= DAYS - 1) stop()
+      if (cursor.value >= DAYS.value - 1) stop()
       else cursor.value++
     }, 900 / speed.value)
   }
@@ -146,7 +203,7 @@ function stop() {
 
 function reset() {
   stop()
-  cursor.value = props.period
+  cursor.value = startIdx.value
 }
 
 watch(() => props.indicator, reset)
@@ -189,6 +246,10 @@ watch(() => props.period, reset)
     <div class="calc-process">
       <div class="calc-formula">{{ result.formula }}</div>
       <div class="calc-detail">{{ result.detail }}</div>
+      <div v-if="indicator === 'macd' && (result as any).extra" class="calc-extra">
+        <span class="extra-item">DEA <b>{{ (result as any).extra.dea }}</b></span>
+        <span class="extra-item">MACD 柱 <b>{{ (result as any).extra.bar }}</b></span>
+      </div>
       <div class="calc-result">
         <span class="result-label">{{ indicator.toUpperCase() }} 当前值</span>
         <span class="result-value">{{ result.value.toFixed(2) }}</span>
@@ -205,7 +266,7 @@ watch(() => props.period, reset)
         min="0"
         max="100"
         :value="progress * 100"
-        @input="(e) => { const v = Number((e.target as HTMLInputElement).value); cursor.value = Math.round(props.period + (DAYS - props.period) * v / 100) }"
+        @input="(e) => { const v = Number((e.target as HTMLInputElement).value); cursor.value = Math.round(startIdx.value + (DAYS.value - startIdx.value) * v / 100) }"
         style="flex: 1"
       />
       <select :value="speed" @change="(e) => { speed.value = Number((e.target as HTMLSelectElement).value) }">
@@ -302,6 +363,14 @@ watch(() => props.period, reset)
   color: var(--vp-c-text-2);
   margin-bottom: 10px;
 }
+.calc-extra {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+.extra-item b { color: var(--vp-c-brand-1); font-variant-numeric: tabular-nums; }
 .calc-result {
   display: flex;
   align-items: baseline;
