@@ -2,6 +2,7 @@ import { defineConfig, type DefaultTheme } from 'vitepress'
 
 const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
   { text: '指标大全', link: '/indicators/' },
+  { text: '指标总览与选择', link: '/indicators/overview' },
   {
     text: '趋势指标',
     collapsed: false,
@@ -96,6 +97,7 @@ const methodologySidebar: DefaultTheme.SidebarItem[] = [
 
 const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   { text: '策略库', link: '/strategies/' },
+  { text: '策略总览', link: '/strategies/overview' },
   {
     text: '趋势跟踪',
     collapsed: false,
@@ -152,6 +154,7 @@ const fundamentalsSidebar: DefaultTheme.SidebarItem[] = [
     text: '资产类别',
     collapsed: false,
     items: [
+      { text: '资产类别总览', link: '/fundamentals/asset-classes/overview' },
       { text: '股票', link: '/fundamentals/asset-classes/stocks' },
       { text: 'ETF', link: '/fundamentals/asset-classes/etf' },
       { text: '期货', link: '/fundamentals/asset-classes/futures' },

@@ -106,6 +106,38 @@
 
 - `initial`：`{ trend(≤30), momentum(≤25), pattern(≤20), sr(≤15), sentiment(≤10) }`
 
+## AssetMap — 资产定位图
+
+用于**资产类别总览页**。SVG 散点，双模式切换（流动性×波动性 / 杠杆×风险），hover 显示 tooltip。
+
+```vue
+<AssetMap title="资产类别定位图" />
+```
+
+## AssetPicker — 品种选择地图
+
+用于**资产类别总览页**。四问向导（交易时间/杠杆/波动/资金），实时匹配度评分条 + 排行榜。
+
+```vue
+<AssetPicker title="品种选择地图" />
+```
+
+## StrategyFit — 策略×行情匹配矩阵
+
+用于**策略总览页**。行=策略族，列=行情，点击单元格看"为什么"，点击行/列头筛选。
+
+```vue
+<StrategyFit title="策略 × 行情 匹配矩阵" />
+```
+
+## IndicatorPicker — 场景→指标选择地图
+
+用于**指标总览页**。左侧需求按钮，右侧推荐指标卡片（点击跳转指标页）。
+
+```vue
+<IndicatorPicker title="场景 → 指标选择地图" />
+```
+
 ## 注意
 
 1. 组件在 **客户端渲染**，SSR 只输出容器骨架——这是正常的。
