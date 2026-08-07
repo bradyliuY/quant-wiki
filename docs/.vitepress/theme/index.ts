@@ -10,6 +10,7 @@ import CalcExplorer from './components/CalcExplorer.vue'
 import SignalFlow from './components/SignalFlow.vue'
 import PatternGrowth from './components/PatternGrowth.vue'
 import ScoreMatrix from './components/ScoreMatrix.vue'
+import CalcDemo from './components/CalcDemo.vue'
 
 export default {
   extends: DefaultTheme,
@@ -21,5 +22,6 @@ export default {
     app.component('SignalFlow', SignalFlow)
     app.component('PatternGrowth', PatternGrowth)
     app.component('ScoreMatrix', ScoreMatrix)
+    app.component('CalcDemo', CalcDemo)
   }
 } satisfies Theme
