@@ -19,10 +19,12 @@ const props = withDefaults(
     lines?: { name: string; color: string; values: (number | null)[] }[]
     /** 策略模式：自动生成指标线 + 买卖点叠加（缺省走 lines/markers） */
     strategy?: 'bollinger' | 'ma-cross' | 'channel' | 'turtle' | 'macd' | 'rsi-reversal' | 'rsi-momentum' | 'kdj' | 'grid'
+    /** 渲染形态：line 用于净值/价差等单值序列（组合/配对页），candle 用 K 线 */
+    variant?: 'candle' | 'line'
     height?: number
     title?: string
   }>(),
-  { data: undefined, markers: () => [], lines: () => [], strategy: undefined, height: 340, title: 'K 线回放' }
+  { data: undefined, markers: () => [], lines: () => [], strategy: undefined, variant: 'candle', height: 340, title: 'K 线回放' }
 )
 
 const containerRef = ref<HTMLElement | null>(null)
@@ -31,7 +33,7 @@ const statusRef = ref('')
 const rootRef = ref<HTMLElement | null>(null)
 const expanded = ref(false)
 let chart: IChartApi | null = null
-let candleSeries: ISeriesApi<'Candlestick'> | null = null
+let mainSeries: ISeriesApi<'Candlestick'> | ISeriesApi<'Line'> | null = null
 let lineSeries: ISeriesApi<'Line'>[] = []
 let markersPlugin: ISeriesMarkersPluginApi<Time> | null = null
 let equityChart: IChartApi | null = null
@@ -223,14 +225,21 @@ function buildStrategy(data: OHLC[]): { lines: StratLine[]; markers: StratMarker
 
 function setFrame(start: number, end: number) {
   currentEnd = end
-  if (!chart || !candleSeries) return
-  candleSeries.setData(allData.value.slice(0, end).map((d) => ({
-    time: d.time as unknown as string,
-    open: d.open,
-    high: d.high,
-    low: d.low,
-    close: d.close
-  })))
+  if (!chart || !mainSeries) return
+  if (props.variant === 'line') {
+    ;(mainSeries as ISeriesApi<'Line'>).setData(allData.value.slice(0, end).map((d) => ({
+      time: d.time as unknown as string,
+      value: d.close
+    })))
+  } else {
+    ;(mainSeries as ISeriesApi<'Candlestick'>).setData(allData.value.slice(0, end).map((d) => ({
+      time: d.time as unknown as string,
+      open: d.open,
+      high: d.high,
+      low: d.low,
+      close: d.close
+    })))
+  }
   // 指标线（对齐 allData 下标，null 跳过不画）
   lineSeries.forEach((s, idx) => {
     const line = effectiveLines.value[idx]
@@ -330,16 +339,18 @@ onMounted(() => {
     autoSize: true,
     timeScale: { rightOffset: 4 }
   })
-  candleSeries = chart.addSeries(CandlestickSeries, {
-    upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
-    wickUpColor: '#26a69a', wickDownColor: '#ef5350'
-  })
+  mainSeries = props.variant === 'line'
+    ? chart.addSeries(LineSeries, { color: '#1e5fd0', lineWidth: 2 })
+    : chart.addSeries(CandlestickSeries, {
+        upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
+        wickUpColor: '#26a69a', wickDownColor: '#ef5350'
+      })
   effectiveLines.value.forEach((line) => {
     const s = chart!.addSeries(LineSeries, { color: line.color, lineWidth: 2, paneIndex: line.pane ?? 0 })
     lineSeries.push(s)
   })
   // v5: 买卖点标注用 createSeriesMarkers 插件
-  markersPlugin = createSeriesMarkers(candleSeries, [], {})
+  markersPlugin = createSeriesMarkers(mainSeries as ISeriesApi<'Line'>, [], {})
   markersPlugin.setMarkers([])
   // 收益曲线图懒创建：见 watch(useEquity)，避免在 v-if=false 时对空容器初始化
   replay = createReplay(setFrame, allData.value.length, 40)
