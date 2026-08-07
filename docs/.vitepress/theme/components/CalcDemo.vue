@@ -1,23 +1,28 @@
 <script setup lang="ts">
 /**
  * 指标计算演示组件
- * 用一段示例价格序列，通过滑动窗口逐步展示 SMA / EMA / RSI / 布林带 的计算过程。
+ * 用一段示例价格序列，通过滑动窗口逐步展示 SMA / EMA / RSI / 布林带 / MACD / CCI / KDJ / W%R / ATR / MFI / OBV 的计算过程。
  * 教学用途：读者可跟随每一步，验证结果。
+ * OHLC 系列模式（cci/kdj/wr/atr/mfi/obv）使用内置 BARS（H+L=2C，TP=C），单元格下方显示 H/L 或成交量。
  *
  * 用法：
  * <CalcDemo indicator="sma" period="5" title="MA5 计算演示" />
  * <CalcDemo indicator="macd" title="MACD 计算演示" />
+ * <CalcDemo indicator="mfi" period="5" title="MFI 计算演示" />
  */
 import { ref, computed, watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
-    indicator?: 'sma' | 'ema' | 'rsi' | 'boll' | 'macd'
+    indicator?: 'sma' | 'ema' | 'rsi' | 'boll' | 'macd' | 'cci' | 'kdj' | 'wr' | 'atr' | 'mfi' | 'obv'
     period?: number
     title?: string
   }>(),
   { indicator: 'sma', period: 5, title: '指标计算演示' }
 )
+
+/** 周期归一化为数字：Vue 类型声明不生成运行时 Number 类型，period="5" 会以字符串进入，导致 "5"+1=51、slice(1,51) 等错误 */
+const periodN = computed(() => Math.max(1, Number(props.period) || 5))
 
 /** 示例收盘价序列（教学用合成数据，非真实行情） */
 // MACD 需要 ≥26 天数据，用长序列；其他指标用短序列便于演示
@@ -34,33 +39,59 @@ const PRICES_LONG = (() => {
   }
   return arr
 })()
+/** 示例 OHLCV 序列（教学用合成数据，非真实行情）：H+L=2C 使 TP=C，便于手算核对 */
+const BARS = [
+  { h: 104, l: 98, c: 101, v: 40 },
+  { h: 105, l: 101, c: 103, v: 50 },
+  { h: 106, l: 102, c: 104, v: 60 },
+  { h: 104, l: 98, c: 101, v: 35 },
+  { h: 107, l: 103, c: 105, v: 80 },
+  { h: 108, l: 104, c: 106, v: 90 },
+  { h: 110, l: 106, c: 108, v: 110 },
+  { h: 107, l: 103, c: 105, v: 60 },
+  { h: 111, l: 107, c: 109, v: 120 },
+  { h: 112, l: 108, c: 110, v: 130 },
+  { h: 109, l: 105, c: 107, v: 70 },
+  { h: 113, l: 109, c: 111, v: 140 },
+  { h: 114, l: 110, c: 112, v: 150 },
+  { h: 110, l: 106, c: 108, v: 80 },
+  { h: 115, l: 111, c: 113, v: 160 }
+]
 const isMacd = computed(() => props.indicator === 'macd')
-const PRICES = computed(() => (isMacd.value ? PRICES_LONG : PRICES_SHORT))
+const isOhlc = computed(() => ['cci', 'kdj', 'wr', 'atr', 'mfi', 'obv'].includes(props.indicator))
+const PRICES = computed(() => {
+  if (isOhlc.value) return BARS.map((b) => b.c)
+  return isMacd.value ? PRICES_LONG : PRICES_SHORT
+})
 const DAYS = computed(() => PRICES.value.length)
-// MACD 从第 26 天开始（EMA26 需要种子），其他从 period 开始
-const startIdx = computed(() => (isMacd.value ? 26 : props.period))
+// MACD 从第 26 天开始（EMA26 需要种子）；OBV 从第 2 天开始（需前收盘）；其余从 period 开始
+const startIdx = computed(() => {
+  if (isMacd.value) return 26
+  if (props.indicator === 'obv') return 1
+  return periodN.value
+})
 const cursor = ref(startIdx.value)
 const playing = ref(false)
 const speed = ref(1)
 let timer: ReturnType<typeof setInterval> | null = null
 
 // 窗口（用于 SMA / 布林带）：含 cursor 在内的最近 period 天
-const windowStart = computed(() => Math.max(0, cursor.value - props.period + 1))
+const windowStart = computed(() => Math.max(0, cursor.value - periodN.value + 1))
 const windowData = computed(() => PRICES.value.slice(windowStart.value, cursor.value + 1))
 
 /** 计算 SMA */
 function calcSMA(idx: number): number {
-  const start = Math.max(0, idx - props.period + 1)
+  const start = Math.max(0, idx - periodN.value + 1)
   const slice = PRICES.value.slice(start, idx + 1)
   return slice.reduce((a, b) => a + b, 0) / slice.length
 }
 
 /** 计算 EMA（指数平滑） */
 function calcEMA(idx: number): number {
-  const alpha = 2 / (props.period + 1)
+  const alpha = 2 / (periodN.value + 1)
   // 首个值用 SMA 做种子
-  let ema = PRICES.value.slice(0, props.period).reduce((a, b) => a + b, 0) / props.period
-  for (let i = props.period; i <= idx; i++) {
+  let ema = PRICES.value.slice(0, periodN.value).reduce((a, b) => a + b, 0) / periodN.value
+  for (let i = periodN.value; i <= idx; i++) {
     ema = alpha * PRICES.value[i] + (1 - alpha) * ema
   }
   return ema
@@ -115,10 +146,97 @@ function calcBoll(idx: number) {
   return { mid: mean, upper: mean + 2 * sd, lower: mean - 2 * sd }
 }
 
+/** CCI：典型价格 TP、均值 MA、平均绝对偏差 MD、CCI 值 */
+function calcCCI(idx: number) {
+  const s = Math.max(0, idx - periodN.value + 1)
+  const bars = BARS.slice(s, idx + 1)
+  const tps = bars.map((b) => (b.h + b.l + b.c) / 3)
+  const ma = tps.reduce((a, b) => a + b, 0) / tps.length
+  const md = tps.reduce((a, t) => a + Math.abs(t - ma), 0) / tps.length
+  const cci = (tps[tps.length - 1] - ma) / (0.015 * md)
+  return { tps, ma, md, cci }
+}
+
+/** KDJ：窗口 HH/LL → RSV，K/D 从 50 起步递推 */
+function calcKDJ(idx: number) {
+  const s = Math.max(0, idx - periodN.value + 1)
+  const bars = BARS.slice(s, idx + 1)
+  const hh = Math.max(...bars.map((b) => b.h))
+  const ll = Math.min(...bars.map((b) => b.l))
+  const c = BARS[idx].c
+  const rsv = hh === ll ? 50 : ((c - ll) / (hh - ll)) * 100
+  let K = 50
+  let D = 50
+  for (let i = 0; i <= idx; i++) {
+    const ws = Math.max(0, i - periodN.value + 1)
+    const wb = BARS.slice(ws, i + 1)
+    const h2 = Math.max(...wb.map((b) => b.h))
+    const l2 = Math.min(...wb.map((b) => b.l))
+    const r2 = h2 === l2 ? 50 : ((BARS[i].c - l2) / (h2 - l2)) * 100
+    K = (2 / 3) * K + (1 / 3) * r2
+    D = (2 / 3) * D + (1 / 3) * K
+  }
+  const J = 3 * K - 2 * D
+  return { hh, ll, c, rsv, K, D, J }
+}
+
+/** 威廉 %R：取负值 −100~0（越接近 0 越超买，−80 以下超卖） */
+function calcWR(idx: number) {
+  const s = Math.max(0, idx - periodN.value + 1)
+  const bars = BARS.slice(s, idx + 1)
+  const hh = Math.max(...bars.map((b) => b.h))
+  const ll = Math.min(...bars.map((b) => b.l))
+  const c = BARS[idx].c
+  const wr = hh === ll ? 0 : -((hh - c) / (hh - ll)) * 100
+  return { hh, ll, c, wr }
+}
+
+/** ATR：逐日 TR，再取窗口内平均 */
+function calcATR(idx: number) {
+  const trs: number[] = []
+  for (let i = 1; i <= idx; i++) {
+    const b = BARS[i]
+    const prev = BARS[i - 1]
+    trs.push(Math.max(b.h - b.l, Math.abs(b.h - prev.c), Math.abs(b.l - prev.c)))
+  }
+  const windowTrs = trs.slice(Math.max(0, trs.length - periodN.value))
+  const atr = windowTrs.reduce((a, b) => a + b, 0) / windowTrs.length
+  return { trs: windowTrs, atr }
+}
+
+/** MFI：MF = TP×V，窗口内正/负资金流，MFI = 100 − 100/(1+MFR) */
+function calcMFI(idx: number) {
+  const s = Math.max(0, idx - periodN.value + 1)
+  let pos = 0
+  let neg = 0
+  for (let i = s; i <= idx; i++) {
+    const b = BARS[i]
+    const tp = (b.h + b.l + b.c) / 3
+    const mf = tp * b.v
+    const up = i === s ? b.c >= (s > 0 ? BARS[s - 1].c : b.c) : b.c >= BARS[i - 1].c
+    if (up) pos += mf
+    else neg += mf
+  }
+  const mfr = neg === 0 ? Infinity : pos / neg
+  const mfi = neg === 0 ? 100 : 100 - 100 / (1 + mfr)
+  return { pos, neg, mfr, mfi }
+}
+
+/** OBV：涨加跌减的累计成交量（首日作正向起点） */
+function calcOBV(idx: number): number {
+  let obv = BARS[0].v
+  for (let i = 1; i <= idx; i++) {
+    const b = BARS[i]
+    if (b.c > BARS[i - 1].c) obv += b.v
+    else if (b.c < BARS[i - 1].c) obv -= b.v
+  }
+  return obv
+}
+
 /** 当前结果的展示 */
 const result = computed(() => {
   const idx = cursor.value
-  const start = Math.max(0, idx - props.period + 1)
+  const start = Math.max(0, idx - periodN.value + 1)
   const slice = PRICES.value.slice(start, idx + 1)
   const sum = slice.reduce((a, b) => a + b, 0)
 
@@ -126,17 +244,17 @@ const result = computed(() => {
     case 'sma': {
       const v = calcSMA(idx)
       return {
-        formula: `MA${props.period} = (${slice.map((n) => n.toFixed(1)).join(' + ')}) / ${slice.length}`,
+        formula: `MA${periodN.value} = (${slice.map((n) => n.toFixed(1)).join(' + ')}) / ${slice.length}`,
         detail: `窗口内 ${slice.length} 天收盘价之和 ${sum.toFixed(1)} ÷ ${slice.length} = ${v.toFixed(2)}`,
         value: v
       }
     }
     case 'ema': {
       const v = calcEMA(idx)
-      const alpha = 2 / (props.period + 1)
+      const alpha = 2 / (periodN.value + 1)
       return {
         formula: `EMA = α×C(t) + (1−α)×EMA(t−1)，α = 2/(n+1) = ${alpha.toFixed(4)}`,
-        detail: `第 ${idx + 1} 天 EMA = ${v.toFixed(2)}（从首 ${props.period} 天 SMA 种子递推）`,
+        detail: `第 ${idx + 1} 天 EMA = ${v.toFixed(2)}（从首 ${periodN.value} 天 SMA 种子递推）`,
         value: v
       }
     }
@@ -151,7 +269,7 @@ const result = computed(() => {
     case 'boll': {
       const b = calcBoll(idx)
       return {
-        formula: `中轨 = SMA${props.period}，上/下轨 = 中轨 ± 2×σ`,
+        formula: `中轨 = SMA${periodN.value}，上/下轨 = 中轨 ± 2×σ`,
         detail: `中轨 ${b.mid.toFixed(2)}，上轨 ${b.upper.toFixed(2)}，下轨 ${b.lower.toFixed(2)}`,
         value: b.mid
       }
@@ -174,10 +292,67 @@ const result = computed(() => {
         extra: { dea: dea.toFixed(2), bar: bar.toFixed(2) }
       }
     }
+    case 'cci': {
+      const { tps, ma, md, cci } = calcCCI(idx)
+      return {
+        formula: `CCI = (TP − MA) / (0.015 × MD)`,
+        detail: `窗口 TP：${tps.map((t) => t.toFixed(1)).join('、')}，MA=${ma.toFixed(2)}，MD=${md.toFixed(2)}`,
+        value: cci
+      }
+    }
+    case 'kdj': {
+      const { hh, ll, rsv, K, D, J } = calcKDJ(idx)
+      return {
+        formula: `RSV = (C−LL)/(HH−LL)×100；K=⅔K₋₁+⅓RSV；D=⅔D₋₁+⅓K；J=3K−2D`,
+        detail: `第 ${idx + 1} 天窗口 HH=${hh}、LL=${ll}，RSV=${rsv.toFixed(1)}`,
+        value: K,
+        extra: { k: K.toFixed(2), d: D.toFixed(2), j: J.toFixed(2) }
+      }
+    }
+    case 'wr': {
+      const { hh, ll, c, wr } = calcWR(idx)
+      return {
+        formula: `W%R = −(HH−C)/(HH−LL)×100（0 ~ −100，越接近 0 越超买）`,
+        detail: `第 ${idx + 1} 天窗口 HH=${hh}、LL=${ll}，收盘 C=${c}`,
+        value: wr
+      }
+    }
+    case 'atr': {
+      const { trs, atr } = calcATR(idx)
+      return {
+        formula: `TR = max(H−L, |H−C₋₁|, |L−C₋₁|)；ATR = 窗口内 TR 平均`,
+        detail: `第 ${idx + 1} 天窗口 TR：${trs.join('、')} → 平均 ${atr.toFixed(2)}`,
+        value: atr
+      }
+    }
+    case 'mfi': {
+      const { pos, neg, mfr, mfi } = calcMFI(idx)
+      return {
+        formula: `MF = TP×V；MFR = Σ+MF / Σ−MF；MFI = 100 − 100/(1+MFR)`,
+        detail: `窗口正向资金流 ${pos.toFixed(0)}，负向 ${neg.toFixed(0)}，MFR=${mfr.toFixed(2)}`,
+        value: mfi
+      }
+    }
+    case 'obv': {
+      const obv = calcOBV(idx)
+      return {
+        formula: `OBV = OBV₋₁ ± 成交量（收涨加、收跌减）`,
+        detail: `第 ${idx + 1} 天累计 OBV = ${obv}`,
+        value: obv
+      }
+    }
   }
 })
 
 const progress = computed(() => (cursor.value - startIdx.value) / (DAYS.value - startIdx.value))
+
+/** OHLC 模式价格格副行：累计 OBV / 成交量 / 高低价 */
+function cellSub(i: number): string {
+  if (props.indicator === 'obv') return `OBV ${calcOBV(i)}`
+  if (props.indicator === 'mfi') return `V${BARS[i].v}`
+  if (isOhlc.value) return `${BARS[i].h}/${BARS[i].l}`
+  return ''
+}
 
 function step() {
   if (cursor.value < DAYS.value - 1) cursor.value++
@@ -207,7 +382,7 @@ function reset() {
 }
 
 watch(() => props.indicator, reset)
-watch(() => props.period, reset)
+watch(() => periodN.value, reset)
 </script>
 
 <template>
@@ -231,10 +406,11 @@ watch(() => props.period, reset)
           }"
         >
           <div class="price-val">{{ p.toFixed(1) }}</div>
+          <div v-if="cellSub(i)" class="price-sub">{{ cellSub(i) }}</div>
           <div class="price-day">D{{ i + 1 }}</div>
         </div>
       </div>
-      <div v-if="windowData.length" class="window-bar">
+      <div v-if="windowData.length && indicator !== 'obv'" class="window-bar">
         <div class="window-label">当前计算窗口</div>
         <div class="window-values">
           <span v-for="(w, i) in windowData" :key="i" class="window-item">{{ w.toFixed(1) }}</span>
@@ -246,9 +422,16 @@ watch(() => props.period, reset)
     <div class="calc-process">
       <div class="calc-formula">{{ result.formula }}</div>
       <div class="calc-detail">{{ result.detail }}</div>
-      <div v-if="indicator === 'macd' && (result as any).extra" class="calc-extra">
-        <span class="extra-item">DEA <b>{{ (result as any).extra.dea }}</b></span>
-        <span class="extra-item">MACD 柱 <b>{{ (result as any).extra.bar }}</b></span>
+      <div v-if="(result as any).extra" class="calc-extra">
+        <template v-if="indicator === 'macd'">
+          <span class="extra-item">DEA <b>{{ (result as any).extra.dea }}</b></span>
+          <span class="extra-item">MACD 柱 <b>{{ (result as any).extra.bar }}</b></span>
+        </template>
+        <template v-else-if="indicator === 'kdj'">
+          <span class="extra-item">K <b>{{ (result as any).extra.k }}</b></span>
+          <span class="extra-item">D <b>{{ (result as any).extra.d }}</b></span>
+          <span class="extra-item">J <b>{{ (result as any).extra.j }}</b></span>
+        </template>
       </div>
       <div class="calc-result">
         <span class="result-label">{{ indicator.toUpperCase() }} 当前值</span>
@@ -314,6 +497,7 @@ watch(() => props.period, reset)
   transition: all 0.3s;
 }
 .price-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+.price-sub { color: #666; font-size: 11px; margin-top: 1px; font-variant-numeric: tabular-nums; }
 .price-day { color: #999; font-size: 11px; margin-top: 2px; }
 .price-cell.in-window {
   background: rgba(30, 95, 208, 0.08);
@@ -324,6 +508,7 @@ watch(() => props.period, reset)
   border-color: var(--vp-c-brand-1);
 }
 .price-cell.is-last .price-val { color: #fff; }
+.price-cell.is-last .price-sub { color: rgba(255, 255, 255, 0.75); }
 .price-cell.is-last .price-day { color: rgba(255,255,255,0.7); }
 
 .window-bar {

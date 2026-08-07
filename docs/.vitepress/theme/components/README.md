@@ -65,6 +65,29 @@
 - `mode`：`kelly` | `position` | `riskreward` | `volatility`
 - `initial`：初始参数对象，可选
 
+## CalcDemo — 指标逐步计算演示
+
+用于**指标页**。用示例价格序列 + 滑动窗口，一步步展示指标计算过程（播放/下一步/进度条/倍速），页面可附"演算核对"代码块与组件数字一一对应。
+
+```vue
+<CalcDemo indicator="sma" period="5" title="MA5 计算演示" />
+<CalcDemo indicator="ema" period="5" title="EMA5 计算演示" />
+<CalcDemo indicator="rsi" period="5" title="RSI 计算演示" />
+<CalcDemo indicator="boll" period="5" title="布林带计算演示" />
+<CalcDemo indicator="macd" title="MACD 计算演示" />
+<CalcDemo indicator="cci" period="5" title="CCI 计算演示" />
+<CalcDemo indicator="kdj" period="5" title="KDJ 计算演示" />
+<CalcDemo indicator="wr" period="5" title="威廉指标计算演示" />
+<CalcDemo indicator="atr" period="5" title="ATR 计算演示" />
+<CalcDemo indicator="mfi" period="5" title="MFI 计算演示" />
+<CalcDemo indicator="obv" title="OBV 计算演示" />
+```
+
+- `indicator`：`sma` | `ema` | `rsi` | `boll` | `macd` | `cci` | `kdj` | `wr` | `atr` | `mfi` | `obv`
+- `period`：滑动窗口周期（macd 固定 12/26/9、obv 无窗口，可不传；其余默认 5）
+- `title`：可选标题
+- **数据**：close 类模式用内置收盘价序列；`cci/kdj/wr/atr/mfi/obv` 用内置 OHLCV 序列 `BARS`（H+L=2C 使 TP=C），单元格下方显示高/低或成交量。**改 BARS 会连锁影响相关指标页的"演算核对"文字，须同步**。
+
 ## SignalFlow — 策略信号流程图
 
 **内含 GSAP 滚动动画**，步骤随滚动逐个点亮。
