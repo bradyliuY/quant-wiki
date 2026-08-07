@@ -19,12 +19,27 @@
 
 <!-- 策略模式：自动叠加指标线与买卖点，无需手写 lines/markers -->
 <KLinePlayback strategy="bollinger" title="布林带回归行情回放" />
+<KLinePlayback strategy="ma-cross" title="双均线交叉行情回放" />
+<KLinePlayback strategy="macd" title="MACD 交易系统回放" />
 ```
 
 - `data`：可选，`{ time, open, high, low, close, volume }[]`。省略则用内置演示数据。
 - `markers`：买卖点标注，`{ time, side: 'buy'|'sell' }[]`
 - `lines`：叠加指标线 `{ name, color, values }[]`，values 与 data 等长，null 表示缺省
-- `strategy`：可选，`'bollinger'` — 自动叠加布林带（上/中/下轨）+ 触下轨收回买入、上穿中轨卖出标注；与 `lines`/`markers` 二选一
+- `strategy`：可选，自动叠加指标线 + 买卖点（与 `lines`/`markers` 二选一）。已实现模式：
+
+| strategy | 叠加内容 | 买卖点规则 |
+|---|---|---|
+| `bollinger` | 布林带上/中/下轨 | 触下轨收回买入、上穿中轨卖出 |
+| `ma-cross` | MA5 + MA20 | MA5 金叉/死叉 MA20 |
+| `channel` | 20 日唐奇安上/下沿 | 突破上沿买、跌破下沿卖 |
+| `turtle` | 20 日新高通道 + 10 日新低通道 | 破 20 日高买、破 10 日低卖 |
+| `macd` | 子窗格 DIF + DEA | DIF 上/下穿 DEA |
+| `rsi-reversal` | 子窗格 RSI(14) | RSI 上穿 30 买、下穿 70 卖（专用 seed） |
+| `rsi-momentum` | 子窗格 RSI(14) | RSI 上穿 50 且价>MA20 买、下穿 50 卖 |
+| `kdj` | 子窗格 K + D | 超卖金叉买、超买死叉卖 |
+| `grid` | 5 条等分网格横线 | 买卖发生在各层触点，不标注 |
+
 - `height`、`title`：可选
 - **收益曲线**：默认隐藏，点"显示收益"在下方追加 90px 净值曲线（懒创建，不会在隐藏时初始化空图表）
 

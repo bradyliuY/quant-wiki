@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { createChart, CandlestickSeries, LineSeries, ColorType, createSeriesMarkers, type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type Time } from 'lightweight-charts'
-import { genDemoData, calcBollinger, type OHLC } from '../lib/indicators'
+import { genDemoData, calcSMA, calcRSI, calcMACD, calcKDJ, calcBollinger, type OHLC } from '../lib/indicators'
 import { createReplay } from '../lib/charts'
 import { toggleExpand } from '../lib/expand'
 
@@ -18,7 +18,7 @@ const props = withDefaults(
     /** 指标线：{ name, color, values: (number|null)[] } */
     lines?: { name: string; color: string; values: (number | null)[] }[]
     /** 策略模式：自动生成指标线 + 买卖点叠加（缺省走 lines/markers） */
-    strategy?: 'bollinger'
+    strategy?: 'bollinger' | 'ma-cross' | 'channel' | 'turtle' | 'macd' | 'rsi-reversal' | 'rsi-momentum' | 'kdj' | 'grid'
     height?: number
     title?: string
   }>(),
@@ -38,7 +38,13 @@ let equityChart: IChartApi | null = null
 let equityLine: ISeriesApi<'Line'> | null = null
 let replay: ReturnType<typeof createReplay> | null = null
 
-const allData = ref<OHLC[]>(props.data?.length ? props.data : genDemoData(120))
+type StratLine = { name: string; color: string; values: (number | null)[]; pane?: number }
+type StratMarker = { time: number; side: 'buy' | 'sell' }
+
+/** 个别策略用能体现其行情的 seed（如 RSI 反转需要 RSI 真跌破 30） */
+const STRATEGY_SEED: Record<string, number> = { 'rsi-reversal': 43 }
+
+const allData = ref<OHLC[]>(props.data?.length ? props.data : genDemoData(120, STRATEGY_SEED[props.strategy ?? ''] ?? 42))
 const useEquity = ref(false)
 const playing = ref(false)
 const progress = ref(0)
@@ -46,41 +52,173 @@ const speed = ref(1)
 let currentEnd = 0
 
 /** 策略叠加指标线：strategy 模式下自动从内置数据计算，否则用传入的 lines */
-const effectiveLines = computed(() => {
-  if (props.strategy === 'bollinger') {
-    const closes = allData.value.map((d) => d.close)
-    const { upper, mid, lower } = calcBollinger(closes, 20, 2)
-    return [
-      { name: '上轨', color: '#ef5350', values: upper },
-      { name: '中轨', color: '#f2b04b', values: mid },
-      { name: '下轨', color: '#26a69a', values: lower }
-    ]
-  }
+const effectiveLines = computed<StratLine[]>(() => {
+  if (props.strategy) return buildStrategy(allData.value).lines
   return props.lines
 })
-const effectiveMarkers = computed(() => {
-  if (props.strategy === 'bollinger') return buildBollingerMarkers(allData.value)
+const effectiveMarkers = computed<StratMarker[]>(() => {
+  if (props.strategy) return buildStrategy(allData.value).markers
   return props.markers
 })
+/** 是否需要指标子窗格（RSI/KDJ/MACD 在第二窗格），主图相应加高 */
+const hasSubPane = computed(() => effectiveLines.value.some((l) => l.pane === 1))
+const chartHeight = computed(() => props.height + (hasSubPane.value ? 130 : 0))
 
-/** 布林回归买卖点：低点触下轨后收回带内 → 买入；买入后收盘上穿中轨 → 卖出 */
-function buildBollingerMarkers(data: OHLC[]): { time: number; side: 'buy' | 'sell' }[] {
-  const closes = data.map((d) => d.close)
-  const { lower, mid } = calcBollinger(closes, 20, 2)
-  const markers: { time: number; side: 'buy' | 'sell' }[] = []
-  let lastBuy = -99
-  let pendingBuy = -1
+function crossAbove(a: (number | null)[], b: (number | null)[], i: number): boolean {
+  return i >= 1 && a[i] != null && b[i] != null && a[i - 1] != null && b[i - 1] != null && a[i - 1]! <= b[i - 1]! && a[i]! > b[i]!
+}
+function crossBelow(a: (number | null)[], b: (number | null)[], i: number): boolean {
+  return i >= 1 && a[i] != null && b[i] != null && a[i - 1] != null && b[i - 1] != null && a[i - 1]! >= b[i - 1]! && a[i]! < b[i]!
+}
+/** 唐奇安通道：period 日最高(high=true)/最低(high=false) */
+function donchian(data: OHLC[], period: number, high: boolean): (number | null)[] {
+  return data.map((_, i) => {
+    if (i < period - 1) return null
+    const slice = data.slice(i - period + 1, i + 1)
+    return high ? Math.max(...slice.map((d) => d.high)) : Math.min(...slice.map((d) => d.low))
+  })
+}
+/** 状态机：空仓且 buy(i) → 买入；持仓且 sell(i) → 卖出。保证买卖严格配对 */
+function runStrategy(data: OHLC[], buy: (i: number) => boolean, sell: (i: number) => boolean): StratMarker[] {
+  const markers: StratMarker[] = []
+  let holding = false
   for (let i = 1; i < data.length; i++) {
-    if (lower[i - 1] != null && lower[i] != null && data[i - 1].low < (lower[i - 1] as number) && closes[i] > (lower[i] as number) && i - lastBuy >= 10) {
-      markers.push({ time: data[i].time, side: 'buy' })
-      pendingBuy = i
-      lastBuy = i
-    } else if (pendingBuy >= 0 && mid[i] != null && closes[i] >= (mid[i] as number)) {
-      markers.push({ time: data[i].time, side: 'sell' })
-      pendingBuy = -1
-    }
+    if (!holding && buy(i)) { markers.push({ time: data[i].time, side: 'buy' }); holding = true }
+    else if (holding && sell(i)) { markers.push({ time: data[i].time, side: 'sell' }); holding = false }
   }
   return markers
+}
+
+function buildStrategy(data: OHLC[]): { lines: StratLine[]; markers: StratMarker[] } {
+  const closes = data.map((d) => d.close)
+  switch (props.strategy) {
+    case 'bollinger': {
+      const { upper, mid, lower } = calcBollinger(closes, 20, 2)
+      const markers: StratMarker[] = []
+      let lastBuy = -99
+      let holding = false
+      for (let i = 1; i < data.length; i++) {
+        if (!holding && lower[i - 1] != null && lower[i] != null && data[i - 1].low < (lower[i - 1] as number) && closes[i] > (lower[i] as number) && i - lastBuy >= 10) {
+          markers.push({ time: data[i].time, side: 'buy' }); lastBuy = i; holding = true
+        } else if (holding && mid[i] != null && closes[i] >= (mid[i] as number)) {
+          markers.push({ time: data[i].time, side: 'sell' }); holding = false
+        }
+      }
+      return {
+        lines: [
+          { name: '上轨', color: '#ef5350', values: upper },
+          { name: '中轨', color: '#f2b04b', values: mid },
+          { name: '下轨', color: '#26a69a', values: lower }
+        ],
+        markers
+      }
+    }
+    case 'ma-cross': {
+      const ma5 = calcSMA(closes, 5)
+      const ma20 = calcSMA(closes, 20)
+      return {
+        lines: [
+          { name: 'MA5', color: '#f2b04b', values: ma5 },
+          { name: 'MA20', color: '#1e5fd0', values: ma20 }
+        ],
+        markers: runStrategy(data, (i) => crossAbove(ma5, ma20, i), (i) => crossBelow(ma5, ma20, i))
+      }
+    }
+    case 'channel': {
+      const d20h = donchian(data, 20, true)
+      const d20l = donchian(data, 20, false)
+      return {
+        lines: [
+          { name: '20日高', color: '#ef5350', values: d20h },
+          { name: '20日低', color: '#26a69a', values: d20l }
+        ],
+        markers: runStrategy(
+          data,
+          (i) => d20h[i - 1] != null && closes[i] > (d20h[i - 1] as number) && closes[i - 1] <= (d20h[i - 1] as number),
+          (i) => d20l[i - 1] != null && closes[i] < (d20l[i - 1] as number) && closes[i - 1] >= (d20l[i - 1] as number)
+        )
+      }
+    }
+    case 'turtle': {
+      const e20h = donchian(data, 20, true)
+      const x10l = donchian(data, 10, false)
+      return {
+        lines: [
+          { name: '入场 20日高', color: '#ef5350', values: e20h },
+          { name: '离场 10日低', color: '#26a69a', values: x10l }
+        ],
+        markers: runStrategy(
+          data,
+          (i) => e20h[i - 1] != null && closes[i] > (e20h[i - 1] as number) && closes[i - 1] <= (e20h[i - 1] as number),
+          (i) => x10l[i - 1] != null && closes[i] < (x10l[i - 1] as number) && closes[i - 1] >= (x10l[i - 1] as number)
+        )
+      }
+    }
+    case 'macd': {
+      const { dif, dea } = calcMACD(closes)
+      return {
+        lines: [
+          { name: 'DIF', color: '#1e5fd0', values: dif, pane: 1 },
+          { name: 'DEA', color: '#f2b04b', values: dea, pane: 1 }
+        ],
+        markers: runStrategy(data, (i) => crossAbove(dif, dea, i), (i) => crossBelow(dif, dea, i))
+      }
+    }
+    case 'rsi-reversal': {
+      const r = calcRSI(closes)
+      return {
+        lines: [{ name: 'RSI(14)', color: '#ab47bc', values: r, pane: 1 }],
+        markers: runStrategy(
+          data,
+          (i) => r[i - 1] != null && r[i] != null && (r[i - 1] as number) < 30 && (r[i] as number) >= 30,
+          (i) => r[i - 1] != null && r[i] != null && (r[i - 1] as number) > 70 && (r[i] as number) <= 70
+        )
+      }
+    }
+    case 'rsi-momentum': {
+      const r = calcRSI(closes)
+      const ma20 = calcSMA(closes, 20)
+      return {
+        lines: [{ name: 'RSI(14)', color: '#ab47bc', values: r, pane: 1 }],
+        markers: runStrategy(
+          data,
+          (i) => r[i - 1] != null && r[i] != null && (r[i - 1] as number) < 50 && (r[i] as number) >= 50 && ma20[i] != null && closes[i] > (ma20[i] as number),
+          (i) => r[i - 1] != null && r[i] != null && (r[i - 1] as number) > 50 && (r[i] as number) <= 50
+        )
+      }
+    }
+    case 'kdj': {
+      const { k, d } = calcKDJ(data)
+      return {
+        lines: [
+          { name: 'K', color: '#1e5fd0', values: k, pane: 1 },
+          { name: 'D', color: '#f2b04b', values: d, pane: 1 }
+        ],
+        markers: runStrategy(
+          data,
+          (i) => crossAbove(k, d, i) && (k[i] as number) < 40,
+          (i) => crossBelow(k, d, i) && (k[i] as number) > 60
+        )
+      }
+    }
+    case 'grid': {
+      // 网格策略只画 5 条水平网格线（等分价格区间），买卖发生在各层触点，由文字说明
+      const lo = Math.min(...data.map((d) => d.low))
+      const hi = Math.max(...data.map((d) => d.high))
+      const lines: StratLine[] = []
+      for (let k = 0; k < 5; k++) {
+        const lv = lo + ((hi - lo) * (k + 1)) / 6
+        lines.push({
+          name: `网格${k + 1}`,
+          color: k % 2 ? 'rgba(158,158,158,0.6)' : 'rgba(117,117,117,0.6)',
+          values: closes.map(() => Number(lv.toFixed(2)))
+        })
+      }
+      return { lines, markers: [] }
+    }
+    default:
+      return { lines: props.lines, markers: props.markers }
+  }
 }
 
 function setFrame(start: number, end: number) {
@@ -197,7 +335,7 @@ onMounted(() => {
     wickUpColor: '#26a69a', wickDownColor: '#ef5350'
   })
   effectiveLines.value.forEach((line) => {
-    const s = chart!.addSeries(LineSeries, { color: line.color, lineWidth: 2 })
+    const s = chart!.addSeries(LineSeries, { color: line.color, lineWidth: 2, paneIndex: line.pane ?? 0 })
     lineSeries.push(s)
   })
   // v5: 买卖点标注用 createSeriesMarkers 插件
@@ -233,7 +371,7 @@ watch(
       <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>
     </button>
     <div v-if="title" class="demo-title">{{ title }}</div>
-    <div ref="containerRef" :style="{ height: height + 'px', width: '100%' }"></div>
+    <div ref="containerRef" :style="{ height: chartHeight + 'px', width: '100%' }"></div>
     <div v-if="useEquity" ref="equityRef" style="width: 100%; height: 90px"></div>
     <div class="demo-controls">
       <button @click="togglePlay">{{ playing ? '⏸ 暂停' : '▶ 播放' }}</button>
