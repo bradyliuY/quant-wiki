@@ -1,0 +1,52 @@
+:root {
+  --vp-font-family-base: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+
+  --vp-c-brand-1: #1e5fd0;
+  --vp-c-brand-2: #2b6fe0;
+  --vp-c-brand-3: #1a4fae;
+  --vp-c-brand-soft: rgba(30, 95, 208, 0.14);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #1e5fd0 30%, #2b9fe0);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* 自定义组件通用样式 */
+.chart-container {
+  width: 100%;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  margin: 16px 0;
+}
+
+.dark .chart-container {
+  background: #1e1e1e;
+}
+
+.demo-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid var(--vp-c-divider);
+  flex-wrap: wrap;
+}
+
+.demo-controls button {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  background: transparent;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--vp-c-text-1);
+}
+
+.demo-controls button:hover {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
