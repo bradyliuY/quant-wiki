@@ -100,21 +100,20 @@
   position: relative;
   z-index: 1;
 }
-/* 背景：浅色=白→浅蓝通透渐变 + 顶部一抹品牌辉光；
-   深色=深蓝渐变 + 顶部辉光。不用装饰性网格线 */
+/* 背景：hero 主体为页面底色，顶部一团品牌辉光向下衰减。
+   底部融入页面背景，与下方区块同色一体，不用装饰性网格线 */
 .VPHero::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(56, 132, 255, 0.10), transparent 62%),
-    linear-gradient(180deg, #fbfdff 0%, #eef3fb 100%);
+    radial-gradient(ellipse 85% 70% at 50% -25%, rgba(56, 132, 255, 0.13), transparent 65%);
   z-index: 0;
 }
 .dark .VPHero::before {
   background:
-    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(56, 132, 255, 0.24), transparent 62%),
-    linear-gradient(180deg, #164a9e 0%, #0c2f6e 55%, var(--vp-c-bg) 100%);
+    radial-gradient(ellipse 90% 80% at 50% 5%, rgba(28, 82, 179, 0.45), transparent 62%),
+    radial-gradient(ellipse 55% 40% at 50% 0%, rgba(56, 132, 255, 0.18), transparent 55%);
 }
 /* hero 文字：浅色=实心深蓝（对齐默认），深色=白 */
 .VPHero .name {
