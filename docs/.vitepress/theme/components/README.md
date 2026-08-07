@@ -35,13 +35,19 @@
 | `channel` | 20 日唐奇安上/下沿 | 突破上沿买、跌破下沿卖 |
 | `turtle` | 20 日新高通道 + 10 日新低通道 | 破 20 日高买、破 10 日低卖 |
 | `macd` | 子窗格 DIF + DEA | DIF 上/下穿 DEA |
-| `rsi-reversal` | 子窗格 RSI(14) | RSI 上穿 30 买、下穿 70 卖（专用 seed） |
-| `rsi-momentum` | 子窗格 RSI(14) | RSI 上穿 50 且价>MA20 买、下穿 50 卖 |
-| `kdj` | 子窗格 K + D | 超卖金叉买、超买死叉卖 |
+| `rsi-reversal` | 子窗格 RSI(14)，带 30/50/70 参考线 | RSI 上穿 30 买、下穿 70 卖（专用 seed） |
+| `rsi-momentum` | 子窗格 RSI(14)，带 30/50/70 参考线 | RSI 上穿 50 且价>MA20 买、下穿 50 卖 |
+| `kdj` | 子窗格 K + D，带 20/80 参考线 | 超卖金叉买、超买死叉卖 |
 | `grid` | 5 条等分网格横线 | 买卖发生在各层触点，不标注 |
+| `sar` | 主图抛物线 SAR（紫线） | 无自动标注，价格跌破/上穿 SAR 即转向提示 |
+| `ichimoku` | 转换线/基准线/先行带A/先行带B/迟行线 | 无自动标注 |
+| `pivot-points` | P / R1 / S1 三条水平枢轴线 | 无自动标注 |
+| `obv` | 子窗格 OBV | 无自动标注 |
+| `vwap` | 主图 VWAP 成交量重心 | 无自动标注 |
 
 - `height`、`title`：可选
 - `variant`：可选，`'candle'`（默认，K 线）｜`'line'`（平滑净值/价差曲线）。组合净值、配对价差等单值序列页应传 `variant="line"`，不要用蜡烛图假象
+- **图上图例**：自动在标题下方渲染图例栏——每条叠加线的**色块 + 名称**（取自 `lines[].name` 或 strategy 内置名），有买卖标注时额外显示 `▲买入` / `▼卖出`。无需手写，内容页不用管
 - **收益曲线**：默认隐藏，点"显示收益"在下方追加 90px 净值曲线（懒创建，不会在隐藏时初始化空图表）
 
 ## IndicatorDemo — 指标动态演示
@@ -54,8 +60,26 @@
 ```
 
 - `indicator`：`ma` | `ema` | `rsi` | `macd` | `boll` | `atr` | `kdj` | `none`
-- `maPeriods`：默认 `[5,10,20]`，ma/ema 时生效
+- `maPeriods`：默认 `[5,10,20]`，仅 `ma`/`ema`（及作为行情背景的 `none`）时在主图叠加均线
+- `showOverlay`：默认 `true`。控制主图 MA 叠加——**仅 `ma`/`ema`/`none` 时生效**；`rsi/macd/atr/kdj` 不再叠无关均线（主图只留 K 线，指标在下方窗格）。`boll` 的布林带本身就是指标，始终显示
+- **副图窗格**：`macd`（DIF/DEA/红绿柱）、`rsi`（RSI(14) 带 30/50/70 参考线）、`atr`（ATR(14)）、`kdj`（K/D/J 带 20/80 参考线）会自动加高 130px 给窗格留空间
+- **图上图例**：自动在标题下方渲染图例栏（色块 + 名称），内容页无需手写
 - `indicator` 为 `rsi/atr/kdj` 时页面底部有参数滑块
+
+### 图例颜色约定（内容页写"图例"表时保持一致）
+
+| 用途 | 颜色 |
+|---|---|
+| 均线 MA5 / DIF / K / 中轨 / OBV / P | `#1e5fd0` 蓝 |
+| MA10 / DEA / D | `#e69138` 橙 |
+| MA20 / J | `#7b1fa2` 紫 |
+| 布林上/下轨（半透明） | `rgba(30,95,208,0.5)` |
+| 卖出 / 压力 R1 / 基准线 | `#ef5350` 红 |
+| 买入 / 支撑 S1 / 先行带A / 下轨 | `#26a69a` 绿 |
+| SAR / 先行带B / RSI(策略窗格) | `#7b1fa2` 紫 |
+| 迟行线 / VWAP | `#e69138` 橙 |
+| 参考线（30/50/70、20/80） | 灰虚线 `rgba(128,128,128,0.7)` |
+| 买入/卖出标注 | `▲` 绿 `#26a69a` / `▼` 红 `#ef5350` |
 
 ## ComparePanel — 双图对比
 
@@ -270,4 +294,5 @@ difficulty: 进阶
 1. 组件在 **客户端渲染**，SSR 只输出容器骨架——这是正常的。
 2. **不要修改** `docs/.vitepress/theme/components/*.vue` 和 `docs/.vitepress/theme/lib/*.ts`。
 3. 如需新的 props 能力，记录在内容页 TODO，不要自行改动组件。
-4. 新增能力（如图表放大）须在此记录并同步 `theme/index.ts` 全局注册。
+4. 新增能力（如图表放大、图上图例）须在此记录并同步 `theme/index.ts` 全局注册。
+5. 2026-08：`lib/indicators.ts` 新增 `calcSAR` / `calcIchimoku` / `calcPivot` / `calcVWAP`，供 KLinePlayback 的 `sar` / `ichimoku` / `pivot-points` / `vwap` 策略使用；obv 复用既有 `calcOBV`。

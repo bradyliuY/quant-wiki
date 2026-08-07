@@ -469,6 +469,39 @@
   background: var(--vp-c-brand-soft);
 }
 
+/* ---- 图上图例：每条线的色块 + 名称（KLinePlayback / IndicatorDemo） ---- */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--vp-c-bg-soft);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.chart-legend-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+.chart-legend-glyph {
+  font-style: normal;
+  font-size: 11px;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
 /* ---- 图表放大（全屏覆盖层） ---- */
 /* 放大按钮：固定在图表右上角，hover 才显示（移动端常显） */
 .chart-expand-btn {

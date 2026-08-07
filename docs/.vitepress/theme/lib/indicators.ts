@@ -197,6 +197,132 @@ export function calcOBV(data: OHLC[]): (number | null)[] {
   return out
 }
 
+/** 抛物线 SAR（Wilder，加速因子 0.02→0.20），返回追踪止损价序列 */
+export function calcSAR(data: OHLC[], afStep = 0.02, afMax = 0.2): (number | null)[] {
+  const n = data.length
+  const out: (number | null)[] = data.map(() => null)
+  if (n < 3) return out
+  let up = data[1].close >= data[0].close
+  let af = afStep
+  let ep = up ? data[1].high : data[1].low
+  let sar = up ? data[0].low : data[0].high
+  out[0] = sar
+  for (let i = 1; i < n; i++) {
+    sar = sar + af * (ep - sar)
+    if (up) {
+      sar = Math.min(sar, data[i - 1].low, i >= 2 ? data[i - 2].low : data[i - 1].low)
+      if (data[i].low < sar) {
+        up = false
+        sar = ep
+        ep = data[i].low
+        af = afStep
+      } else if (data[i].high > ep) {
+        ep = data[i].high
+        af = Math.min(af + afStep, afMax)
+      }
+    } else {
+      sar = Math.max(sar, data[i - 1].high, i >= 2 ? data[i - 2].high : data[i - 1].high)
+      if (data[i].high > sar) {
+        up = true
+        sar = ep
+        ep = data[i].high
+        af = afStep
+      } else if (data[i].low < ep) {
+        ep = data[i].low
+        af = Math.min(af + afStep, afMax)
+      }
+    }
+    out[i] = sar
+  }
+  return out
+}
+
+/** 一目均衡表（9/26/52，平移 26）：返回五条线的序列（先行带/迟行线已按标准平移） */
+export function calcIchimoku(
+  data: OHLC[],
+  convPeriod = 9,
+  basePeriod = 26,
+  spanBPeriod = 52,
+  displacement = 26
+): {
+  conversion: (number | null)[]
+  base: (number | null)[]
+  leadingA: (number | null)[]
+  leadingB: (number | null)[]
+  lagging: (number | null)[]
+} {
+  const n = data.length
+  const midPoint = (i: number, period: number): number | null => {
+    if (i < period - 1) return null
+    let hi = -Infinity
+    let lo = Infinity
+    for (let j = i - period + 1; j <= i; j++) {
+      if (data[j].high > hi) hi = data[j].high
+      if (data[j].low < lo) lo = data[j].low
+    }
+    return (hi + lo) / 2
+  }
+  const conversion = data.map((_, i) => midPoint(i, convPeriod))
+  const base = data.map((_, i) => midPoint(i, basePeriod))
+  const leadingA = data.map((_, i) => {
+    const c = conversion[i]
+    const b = base[i]
+    return c === null || b === null ? null : (c + b) / 2
+  })
+  const leadingB = data.map((_, i) => midPoint(i, spanBPeriod))
+  const shiftFwd = (arr: (number | null)[]): (number | null)[] => {
+    const o: (number | null)[] = data.map(() => null)
+    for (let i = 0; i < n; i++) {
+      const t = i + displacement
+      if (t < n && arr[i] !== null) o[t] = arr[i]
+    }
+    return o
+  }
+  const shiftBack = (arr: (number | null)[]): (number | null)[] => {
+    const o: (number | null)[] = data.map(() => null)
+    for (let i = displacement; i < n; i++) o[i - displacement] = arr[i]
+    return o
+  }
+  return {
+    conversion,
+    base,
+    leadingA: shiftFwd(leadingA),
+    leadingB: shiftFwd(leadingB),
+    lagging: shiftBack(data.map((d) => d.close))
+  }
+}
+
+/** 经典法枢轴点（以前一根 K 线的 H/L/C 计算中枢与上下各档） */
+export function calcPivot(data: OHLC[]): {
+  p: number
+  r1: number
+  r2: number
+  s1: number
+  s2: number
+} {
+  const last = data[data.length - 1]
+  const h = last.high
+  const l = last.low
+  const c = last.close
+  const p = (h + l + c) / 3
+  return { p, r1: 2 * p - l, r2: p + (h - l), s1: 2 * p - h, s2: p - (h - l) }
+}
+
+/** VWAP：成交量加权平均价（累计典型价×量 ÷ 累计量），近似成交量重心 */
+export function calcVWAP(data: OHLC[]): (number | null)[] {
+  const out: (number | null)[] = data.map(() => null)
+  let cumPV = 0
+  let cumV = 0
+  for (let i = 0; i < data.length; i++) {
+    const tp = (data[i].high + data[i].low + data[i].close) / 3
+    const v = data[i].volume ?? 0
+    cumPV += tp * v
+    cumV += v
+    out[i] = cumV > 0 ? cumPV / cumV : null
+  }
+  return out
+}
+
 /** 将指标数组转为图表 series 数据（跳过 null） */
 export function toSeries(
   times: number[],

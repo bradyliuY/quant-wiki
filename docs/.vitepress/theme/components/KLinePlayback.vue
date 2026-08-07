@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
-import { createChart, CandlestickSeries, LineSeries, ColorType, createSeriesMarkers, type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type Time } from 'lightweight-charts'
-import { genDemoData, calcSMA, calcRSI, calcMACD, calcKDJ, calcBollinger, type OHLC } from '../lib/indicators'
+import { createChart, CandlestickSeries, LineSeries, ColorType, LineStyle, createSeriesMarkers, type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type Time } from 'lightweight-charts'
+import { genDemoData, calcSMA, calcRSI, calcMACD, calcKDJ, calcBollinger, calcOBV, calcSAR, calcIchimoku, calcPivot, calcVWAP, type OHLC } from '../lib/indicators'
 import { createReplay } from '../lib/charts'
 import { toggleExpand } from '../lib/expand'
 
@@ -18,7 +18,7 @@ const props = withDefaults(
     /** 指标线：{ name, color, values: (number|null)[] } */
     lines?: { name: string; color: string; values: (number | null)[] }[]
     /** 策略模式：自动生成指标线 + 买卖点叠加（缺省走 lines/markers） */
-    strategy?: 'bollinger' | 'ma-cross' | 'channel' | 'turtle' | 'macd' | 'rsi-reversal' | 'rsi-momentum' | 'kdj' | 'grid'
+    strategy?: 'bollinger' | 'ma-cross' | 'channel' | 'turtle' | 'macd' | 'rsi-reversal' | 'rsi-momentum' | 'kdj' | 'grid' | 'sar' | 'ichimoku' | 'pivot-points' | 'obv' | 'vwap'
     /** 渲染形态：line 用于净值/价差等单值序列（组合/配对页），candle 用 K 线 */
     variant?: 'candle' | 'line'
     height?: number
@@ -40,7 +40,7 @@ let equityChart: IChartApi | null = null
 let equityLine: ISeriesApi<'Line'> | null = null
 let replay: ReturnType<typeof createReplay> | null = null
 
-type StratLine = { name: string; color: string; values: (number | null)[]; pane?: number }
+type StratLine = { name: string; color: string; values: (number | null)[]; pane?: number; priceLines?: number[] }
 type StratMarker = { time: number; side: 'buy' | 'sell' }
 
 /** 个别策略用能体现其行情的 seed（如 RSI 反转需要 RSI 真跌破 30） */
@@ -65,6 +65,17 @@ const effectiveMarkers = computed<StratMarker[]>(() => {
 /** 是否需要指标子窗格（RSI/KDJ/MACD 在第二窗格），主图相应加高 */
 const hasSubPane = computed(() => effectiveLines.value.some((l) => l.pane === 1))
 const chartHeight = computed(() => props.height + (hasSubPane.value ? 130 : 0))
+
+type LegendItem = { label: string; color: string; glyph?: string }
+/** 图上图例：每条叠加线的色块+名称，以及买卖点标注的含义（有标注时才展示） */
+const legendItems = computed<LegendItem[]>(() => {
+  const items: LegendItem[] = effectiveLines.value.map((l) => ({ label: l.name, color: l.color }))
+  if (effectiveMarkers.value.length) {
+    items.push({ label: '买入', color: '#26a69a', glyph: '▲' })
+    items.push({ label: '卖出', color: '#ef5350', glyph: '▼' })
+  }
+  return items
+})
 
 function crossAbove(a: (number | null)[], b: (number | null)[], i: number): boolean {
   return i >= 1 && a[i] != null && b[i] != null && a[i - 1] != null && b[i - 1] != null && a[i - 1]! <= b[i - 1]! && a[i]! > b[i]!
@@ -169,7 +180,7 @@ function buildStrategy(data: OHLC[]): { lines: StratLine[]; markers: StratMarker
     case 'rsi-reversal': {
       const r = calcRSI(closes)
       return {
-        lines: [{ name: 'RSI(14)', color: '#ab47bc', values: r, pane: 1 }],
+        lines: [{ name: 'RSI(14)', color: '#ab47bc', values: r, pane: 1, priceLines: [30, 50, 70] }],
         markers: runStrategy(
           data,
           (i) => r[i - 1] != null && r[i] != null && (r[i - 1] as number) < 30 && (r[i] as number) >= 30,
@@ -181,7 +192,7 @@ function buildStrategy(data: OHLC[]): { lines: StratLine[]; markers: StratMarker
       const r = calcRSI(closes)
       const ma20 = calcSMA(closes, 20)
       return {
-        lines: [{ name: 'RSI(14)', color: '#ab47bc', values: r, pane: 1 }],
+        lines: [{ name: 'RSI(14)', color: '#ab47bc', values: r, pane: 1, priceLines: [30, 50, 70] }],
         markers: runStrategy(
           data,
           (i) => r[i - 1] != null && r[i] != null && (r[i - 1] as number) < 50 && (r[i] as number) >= 50 && ma20[i] != null && closes[i] > (ma20[i] as number),
@@ -193,7 +204,7 @@ function buildStrategy(data: OHLC[]): { lines: StratLine[]; markers: StratMarker
       const { k, d } = calcKDJ(data)
       return {
         lines: [
-          { name: 'K', color: '#1e5fd0', values: k, pane: 1 },
+          { name: 'K', color: '#1e5fd0', values: k, pane: 1, priceLines: [20, 80] },
           { name: 'D', color: '#f2b04b', values: d, pane: 1 }
         ],
         markers: runStrategy(
@@ -217,6 +228,49 @@ function buildStrategy(data: OHLC[]): { lines: StratLine[]; markers: StratMarker
         })
       }
       return { lines, markers: [] }
+    }
+    case 'sar': {
+      return {
+        lines: [{ name: 'SAR', color: '#7b1fa2', values: calcSAR(data) }],
+        markers: []
+      }
+    }
+    case 'obv': {
+      return {
+        lines: [{ name: 'OBV', color: '#1e5fd0', values: calcOBV(data), pane: 1 }],
+        markers: []
+      }
+    }
+    case 'vwap': {
+      return {
+        lines: [{ name: 'VWAP', color: '#e69138', values: calcVWAP(data) }],
+        markers: []
+      }
+    }
+    case 'ichimoku': {
+      const { conversion, base, leadingA, leadingB, lagging } = calcIchimoku(data)
+      return {
+        lines: [
+          { name: '转换线', color: '#1e5fd0', values: conversion },
+          { name: '基准线', color: '#ef5350', values: base },
+          { name: '先行带A', color: '#26a69a', values: leadingA },
+          { name: '先行带B', color: '#7b1fa2', values: leadingB },
+          { name: '迟行线', color: '#e69138', values: lagging }
+        ],
+        markers: []
+      }
+    }
+    case 'pivot-points': {
+      const { p, r1, s1 } = calcPivot(data)
+      const flat = (v: number): (number | null)[] => closes.map(() => Number(v.toFixed(2)))
+      return {
+        lines: [
+          { name: 'P', color: '#1e5fd0', values: flat(p) },
+          { name: 'R1', color: '#ef5350', values: flat(r1) },
+          { name: 'S1', color: '#26a69a', values: flat(s1) }
+        ],
+        markers: []
+      }
     }
     default:
       return { lines: props.lines, markers: props.markers }
@@ -347,6 +401,12 @@ onMounted(() => {
       })
   effectiveLines.value.forEach((line) => {
     const s = chart!.addSeries(LineSeries, { color: line.color, lineWidth: 2, paneIndex: line.pane ?? 0 })
+    // 指标窗格的参考线（如 RSI 的 30/50/70、KDJ 的 20/80）
+    if (line.priceLines?.length) {
+      line.priceLines.forEach((p) => {
+        s.createPriceLine({ price: p, color: 'rgba(128,128,128,0.7)', lineStyle: LineStyle.Dashed, lineWidth: 1, axisLabelVisible: false })
+      })
+    }
     lineSeries.push(s)
   })
   // v5: 买卖点标注用 createSeriesMarkers 插件
@@ -382,6 +442,13 @@ watch(
       <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>
     </button>
     <div v-if="title" class="demo-title">{{ title }}</div>
+    <div v-if="legendItems.length" class="chart-legend" aria-label="图例">
+      <span v-for="(it, idx) in legendItems" :key="idx" class="chart-legend-item">
+        <i v-if="it.glyph" class="chart-legend-glyph" :style="{ color: it.color }">{{ it.glyph }}</i>
+        <i v-else class="chart-legend-swatch" :style="{ background: it.color }"></i>
+        {{ it.label }}
+      </span>
+    </div>
     <div ref="containerRef" :style="{ height: chartHeight + 'px', width: '100%' }"></div>
     <div v-if="useEquity" ref="equityRef" style="width: 100%; height: 90px"></div>
     <div class="demo-controls">

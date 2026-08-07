@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
-import { createChart, CandlestickSeries, LineSeries, HistogramSeries, ColorType, type IChartApi, type ISeriesApi } from 'lightweight-charts'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { createChart, CandlestickSeries, LineSeries, HistogramSeries, ColorType, LineStyle, type IChartApi, type ISeriesApi } from 'lightweight-charts'
 import { genDemoData, calcSMA, calcEMA, calcRSI, calcMACD, calcBollinger, calcATR, calcKDJ, toSeries, type OHLC } from '../lib/indicators'
 import { toggleExpand } from '../lib/expand'
 
@@ -40,21 +40,56 @@ const period = ref(14)
 const overbought = ref(70)
 const oversold = ref(30)
 
+/** 有副图窗格（MACD/RSI/ATR/KDJ）时，整体加高给窗格留空间 */
+const hasPane = computed(() => ['macd', 'rsi', 'atr', 'kdj'].includes(indicator.value))
+const chartHeight = computed(() => props.height + (hasPane.value ? 130 : 0))
+
 const colors = ['#1e5fd0', '#e69138', '#7b1fa2']
+
+type LegendItem = { label: string; color: string; glyph?: string }
+/** 图上图例：与 renderOverlay/renderPane 实际画的线一一对应 */
+const legendItems = computed<LegendItem[]>(() => {
+  const items: LegendItem[] = []
+  const ind = props.indicator
+  if (ind === 'boll') {
+    items.push({ label: '上轨', color: 'rgba(30,95,208,0.5)' })
+    items.push({ label: '中轨', color: '#1e5fd0' })
+    items.push({ label: '下轨', color: 'rgba(30,95,208,0.5)' })
+  } else if (props.showOverlay && (ind === 'ma' || ind === 'ema' || ind === 'none')) {
+    props.maPeriods.forEach((p, i) => {
+      items.push({ label: `${ind === 'ema' ? 'EMA' : 'MA'}${p}`, color: colors[i % colors.length] })
+    })
+  }
+  if (ind === 'macd') {
+    items.push({ label: 'DIF', color: '#1e5fd0' })
+    items.push({ label: 'DEA', color: '#e69138' })
+    items.push({ label: 'MACD 柱（红负 / 绿正）', color: 'linear-gradient(90deg, #ef5350 50%, #26a69a 50%)' })
+  } else if (ind === 'rsi' || ind === 'atr') {
+    items.push({ label: `${ind.toUpperCase()}(${period.value})`, color: '#1e5fd0' })
+  } else if (ind === 'kdj') {
+    items.push({ label: 'K', color: '#1e5fd0' })
+    items.push({ label: 'D', color: '#e69138' })
+    items.push({ label: 'J', color: '#7b1fa2' })
+  }
+  return items
+})
 
 function renderOverlay() {
   if (!chart || !candleSeries) return
   overlaySeries.forEach((s) => chart?.removeSeries(s))
   overlaySeries = []
-  if (!props.showOverlay || props.indicator !== 'boll') {
-    const periods = props.maPeriods
-    periods.forEach((p, i) => {
-      const s = chart!.addSeries(LineSeries, { color: colors[i % colors.length], lineWidth: 2, priceLineVisible: false, lastValueVisible: false })
-      const vals = props.indicator === 'ema' ? calcEMA(closes.value, p) : calcSMA(closes.value, p)
-      s.setData(toSeries(times.value, vals))
-      overlaySeries.push(s)
-    })
-  }
+  // 布林带本身就是被讲解的指标，始终画在主图
+  if (props.indicator === 'boll') { renderBoll(); return }
+  // 主图 MA 叠加：仅 ma/ema/none 需要，且受 showOverlay 控制
+  if (!props.showOverlay) return
+  if (props.indicator !== 'ma' && props.indicator !== 'ema' && props.indicator !== 'none') return
+  const periods = props.maPeriods
+  periods.forEach((p, i) => {
+    const s = chart!.addSeries(LineSeries, { color: colors[i % colors.length], lineWidth: 2, priceLineVisible: false, lastValueVisible: false })
+    const vals = props.indicator === 'ema' ? calcEMA(closes.value, p) : calcSMA(closes.value, p)
+    s.setData(toSeries(times.value, vals))
+    overlaySeries.push(s)
+  })
 }
 
 function renderBoll() {
@@ -108,6 +143,7 @@ function renderPane() {
       k.setData(toSeries(times.value, kd.k))
       d.setData(toSeries(times.value, kd.d))
       j.setData(toSeries(times.value, kd.j))
+      ;[20, 80].forEach((p) => k.createPriceLine({ price: p, color: 'rgba(128,128,128,0.7)', lineStyle: LineStyle.Dashed, lineWidth: 1, axisLabelVisible: false }))
       paneSeries = [k, d, j]
       return
     } else {
@@ -115,13 +151,16 @@ function renderPane() {
     }
     const s = paneChart!.addSeries(LineSeries, { color: '#1e5fd0', lineWidth: 2, paneIndex: 1 })
     s.setData(toSeries(times.value, vals))
+    if (ind === 'rsi') {
+      // 超买 70 / 超卖 30 参考线（成熟行情软件的标配）
+      ;[30, 50, 70].forEach((p) => s.createPriceLine({ price: p, color: 'rgba(128,128,128,0.7)', lineStyle: LineStyle.Dashed, lineWidth: 1, axisLabelVisible: false }))
+    }
     paneSeries = [s]
   }
 }
 
 function renderAll() {
-  if (props.indicator === 'boll') renderBoll()
-  else renderOverlay()
+  renderOverlay()
   renderPane()
 }
 
@@ -167,7 +206,14 @@ watch(() => props.data, (nd) => {
       <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>
     </button>
     <div v-if="title" class="demo-title">{{ title }}</div>
-    <div ref="containerRef" :style="{ height: height + 'px', width: '100%' }"></div>
+    <div v-if="legendItems.length" class="chart-legend" aria-label="图例">
+      <span v-for="(it, idx) in legendItems" :key="idx" class="chart-legend-item">
+        <i v-if="it.glyph" class="chart-legend-glyph" :style="{ color: it.color }">{{ it.glyph }}</i>
+        <i v-else class="chart-legend-swatch" :style="{ background: it.color }"></i>
+        {{ it.label }}
+      </span>
+    </div>
+    <div ref="containerRef" :style="{ height: chartHeight + 'px', width: '100%' }"></div>
     <div class="demo-controls" v-if="['rsi','atr','kdj'].includes(indicator)">
       <label style="font-size:12px">周期
         <input type="number" v-model.number="period" min="2" max="60" style="width:60px;margin-left:6px" />
