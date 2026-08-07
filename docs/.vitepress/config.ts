@@ -1,4 +1,211 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig, type DefaultTheme } from 'vitepress'
+
+const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
+  { text: '指标大全', link: '/indicators/' },
+  {
+    text: '趋势指标',
+    collapsed: false,
+    items: [
+      { text: '移动平均线 MA', link: '/indicators/trend/ma' },
+      { text: 'MACD', link: '/indicators/trend/macd' },
+      { text: 'ADX', link: '/indicators/trend/adx' },
+      { text: '抛物线 SAR', link: '/indicators/trend/parabolic-sar' }
+    ]
+  },
+  {
+    text: '动量指标',
+    collapsed: false,
+    items: [
+      { text: 'RSI', link: '/indicators/momentum/rsi' },
+      { text: '随机指标 KD', link: '/indicators/momentum/stochastic' },
+      { text: 'CCI', link: '/indicators/momentum/cci' },
+      { text: '威廉指标', link: '/indicators/momentum/williams-r' }
+    ]
+  },
+  {
+    text: '波动率指标',
+    collapsed: false,
+    items: [
+      { text: '布林带', link: '/indicators/volatility/bollinger-bands' },
+      { text: 'ATR', link: '/indicators/volatility/atr' },
+      { text: '肯特纳通道', link: '/indicators/volatility/keltner-channels' }
+    ]
+  },
+  {
+    text: '成交量指标',
+    collapsed: false,
+    items: [
+      { text: 'OBV', link: '/indicators/volume/obv' },
+      { text: '成交量分布', link: '/indicators/volume/volume-profile' },
+      { text: 'MFI', link: '/indicators/volume/mfi' }
+    ]
+  },
+  {
+    text: '叠加指标',
+    collapsed: false,
+    items: [
+      { text: '一目均衡表', link: '/indicators/overlay/ichimoku' },
+      { text: '枢轴点', link: '/indicators/overlay/pivot-points' }
+    ]
+  }
+]
+
+const methodologySidebar: DefaultTheme.SidebarItem[] = [
+  { text: '方法论', link: '/methodology/' },
+  { text: '100 分评分模型', link: '/methodology/scoring-model' },
+  {
+    text: '形态识别库',
+    collapsed: false,
+    items: [
+      { text: '反转形态', link: '/methodology/pattern-library/reversal-patterns' },
+      { text: '中继形态', link: '/methodology/pattern-library/continuation-patterns' },
+      { text: 'K 线形态', link: '/methodology/pattern-library/candlestick-patterns' }
+    ]
+  },
+  {
+    text: '风险管理',
+    collapsed: false,
+    items: [
+      { text: '凯利公式', link: '/methodology/risk-management/kelly-criterion' },
+      { text: '仓位管理', link: '/methodology/risk-management/position-sizing' },
+      { text: '止损策略', link: '/methodology/risk-management/stop-loss' },
+      { text: '止盈策略', link: '/methodology/risk-management/take-profit' },
+      { text: '组合风险管理', link: '/methodology/risk-management/portfolio-risk' }
+    ]
+  },
+  {
+    text: '回测方法论',
+    collapsed: false,
+    items: [
+      { text: '回测的正确姿势', link: '/methodology/backtesting/how-to-backtest' },
+      { text: '常见陷阱', link: '/methodology/backtesting/common-pitfalls' },
+      { text: '绩效指标', link: '/methodology/backtesting/performance-metrics' },
+      { text: '样本外检验', link: '/methodology/backtesting/walk-forward' }
+    ]
+  },
+  {
+    text: '交易心理',
+    collapsed: false,
+    items: [
+      { text: '认知偏差', link: '/methodology/trading-psychology/cognitive-biases' },
+      { text: '纪律执行', link: '/methodology/trading-psychology/discipline' },
+      { text: '回撤期心理', link: '/methodology/trading-psychology/drawdown-psychology' }
+    ]
+  }
+]
+
+const strategiesSidebar: DefaultTheme.SidebarItem[] = [
+  { text: '策略库', link: '/strategies/' },
+  {
+    text: '趋势跟踪',
+    collapsed: false,
+    items: [
+      { text: '双均线交叉', link: '/strategies/trend-following/ma-crossover' },
+      { text: 'MACD 交易系统', link: '/strategies/trend-following/macd-strategy' },
+      { text: '海龟交易法则', link: '/strategies/trend-following/turtle-trading' },
+      { text: '通道突破', link: '/strategies/trend-following/channel-breakout' }
+    ]
+  },
+  {
+    text: '均值回归',
+    collapsed: false,
+    items: [
+      { text: '布林带回归', link: '/strategies/mean-reversion/bollinger-bounce' },
+      { text: 'RSI 反转', link: '/strategies/mean-reversion/rsi-reversal' },
+      { text: 'KD 超买超卖', link: '/strategies/mean-reversion/stochastic-strategy' },
+      { text: '配对交易', link: '/strategies/mean-reversion/pairs-trading' }
+    ]
+  },
+  {
+    text: '动量策略',
+    collapsed: false,
+    items: [
+      { text: '双动量轮动', link: '/strategies/momentum/dual-momentum' },
+      { text: 'RSI 动量', link: '/strategies/momentum/rsi-momentum' },
+      { text: '相对强弱排名', link: '/strategies/momentum/strength-ranking' }
+    ]
+  },
+  {
+    text: '形态交易',
+    collapsed: false,
+    items: [
+      { text: '双底突破', link: '/strategies/pattern-trading/double-bottom-trade' },
+      { text: '三角形突破', link: '/strategies/pattern-trading/triangle-breakout' },
+      { text: '头肩形态', link: '/strategies/pattern-trading/head-shoulders-trade' },
+      { text: '旗形交易', link: '/strategies/pattern-trading/flag-consolidation' }
+    ]
+  },
+  {
+    text: '量化进阶',
+    collapsed: false,
+    items: [
+      { text: '多因子模型', link: '/strategies/quantitative/factor-model' },
+      { text: '网格交易', link: '/strategies/quantitative/grid-trading' },
+      { text: '风险平价', link: '/strategies/quantitative/risk-parity' }
+    ]
+  }
+]
+
+const fundamentalsSidebar: DefaultTheme.SidebarItem[] = [
+  { text: '金融基础', link: '/fundamentals/' },
+  {
+    text: '资产类别',
+    collapsed: false,
+    items: [
+      { text: '股票', link: '/fundamentals/asset-classes/stocks' },
+      { text: 'ETF', link: '/fundamentals/asset-classes/etf' },
+      { text: '期货', link: '/fundamentals/asset-classes/futures' },
+      { text: '期权', link: '/fundamentals/asset-classes/options' },
+      { text: '外汇', link: '/fundamentals/asset-classes/forex' },
+      { text: '加密货币', link: '/fundamentals/asset-classes/crypto' }
+    ]
+  },
+  {
+    text: '基本面分析',
+    collapsed: false,
+    items: [
+      { text: '三张财务报表', link: '/fundamentals/fundamental-analysis/financial-statements' },
+      { text: '估值方法', link: '/fundamentals/fundamental-analysis/valuation' },
+      { text: '盈利能力', link: '/fundamentals/fundamental-analysis/profitability' },
+      { text: '成长与质量', link: '/fundamentals/fundamental-analysis/growth-quality' }
+    ]
+  },
+  {
+    text: '宏观经济',
+    collapsed: false,
+    items: [
+      { text: '货币政策', link: '/fundamentals/macroeconomics/monetary-policy' },
+      { text: '经济指标', link: '/fundamentals/macroeconomics/economic-indicators' },
+      { text: '市场周期', link: '/fundamentals/macroeconomics/market-cycles' },
+      { text: '地缘政治', link: '/fundamentals/macroeconomics/geopolitical' }
+    ]
+  },
+  {
+    text: '市场机制',
+    collapsed: false,
+    items: [
+      { text: '委托类型', link: '/fundamentals/market-mechanics/order-types' },
+      { text: '交易时间与结算', link: '/fundamentals/market-mechanics/trading-hours' },
+      { text: '市场微观结构', link: '/fundamentals/market-mechanics/market-microstructure' }
+    ]
+  }
+]
+
+const gettingStartedSidebar: DefaultTheme.SidebarItem[] = [
+  { text: '新手指南', link: '/getting-started/' },
+  { text: '什么是量化投资', link: '/getting-started/what-is-quant' },
+  { text: '市场基础', link: '/getting-started/market-basics' },
+  { text: 'K 线入门', link: '/getting-started/candlestick-101' },
+  { text: '时间框架', link: '/getting-started/timeframes' },
+  { text: '第一个策略', link: '/getting-started/first-strategy' }
+]
+
+const referenceSidebar: DefaultTheme.SidebarItem[] = [
+  { text: '参考', link: '/reference/' },
+  { text: '量化术语词典', link: '/reference/glossary' },
+  { text: '推荐书单与学习路线', link: '/reference/reading-list' },
+  { text: '关于本站', link: '/reference/about' }
+]
 
 export default defineConfig({
   title: '量化交易知识库',
@@ -15,7 +222,14 @@ export default defineConfig({
       { text: '策略库', link: '/strategies/' },
       { text: '方法论', link: '/methodology/' }
     ],
-    sidebar: {},
+    sidebar: {
+      '/getting-started/': gettingStartedSidebar,
+      '/fundamentals/': fundamentalsSidebar,
+      '/indicators/': indicatorsSidebar,
+      '/strategies/': strategiesSidebar,
+      '/methodology/': methodologySidebar,
+      '/reference/': referenceSidebar
+    },
     search: {
       provider: 'local'
     },
