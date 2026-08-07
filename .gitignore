@@ -17,8 +17,10 @@ pnpm-debug.log*
 .env.*
 !.env.example
 
-# Claude Code 本地设置（个人偏好，不入库；技能/命令等仍正常跟踪）
+# Claude Code 本地设置（个人偏好，不入库）
 .claude/settings.local.json
+# 个人技能库（全局设计类技能，与本站内容无关，不入库；如需真正的项目技能可放开并单独提交）
+.claude/skills/
 
 # 编辑器与 IDE
 .vscode/
