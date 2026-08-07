@@ -66,6 +66,8 @@ Markdown 页面，6 个板块（getting-started / fundamentals / indicators / st
 - **`genDemoData` 数据已优化**：默认数据 K 线实体应清晰可见（实体占价格范围 ~7%）。若改数据生成，务必验证实体比例，避免"看着像折线"。
 - **Mac 无影响，Windows 注意**：`check-links.mjs` 用 `path.posix` 处理路径，绝对链接用 `normalize` 而非 `join`（否则误报大量死链）。
 - **CalcDemo 的 MACD 模式**：用 45 天长期序列（`PRICES_LONG`），从第 26 天开始计算（EMA26 需种子）；`calcEMAperiod` 种子用 `min(period, len)` 个数据。
+- **Markdown 里传数组/对象 prop 必须用 `:` 动态绑定**：`leftPeriods="[5,20]"`（无冒号）会被 Vue 编译成字符串，组件内 `periods.forEach` 直接抛 `TypeError`；必须写成 `:leftPeriods="[5,20]"`。ComparePanel 曾因此报错，README 已更正。
+- **`autoSize: true` 的图表容器必须有固定高度**：容器 div 只写 `width:100%` 不给高度时，轻量图表 `autoSize` 会与内容高度形成正反馈，把容器撑到整页高。须仿照 KLinePlayback/IndicatorDemo 写 `:style="{ height: height + 'px', width: '100%' }"`。
 
 ## 可视化验证（必须真实截图）
 
