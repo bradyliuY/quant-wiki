@@ -1,6 +1,7 @@
 import DefaultTheme from 'vitepress/theme'
 import type { Theme } from 'vitepress'
 import './custom.css'
+import setupSidebarActive from './sidebar-active'
 
 // 动画与图表组件
 import KLinePlayback from './components/KLinePlayback.vue'
@@ -23,6 +24,7 @@ import IndicatorPicker from './components/IndicatorPicker.vue'
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
+    setupSidebarActive()
     app.component('KLinePlayback', KLinePlayback)
     app.component('IndicatorDemo', IndicatorDemo)
     app.component('ComparePanel', ComparePanel)

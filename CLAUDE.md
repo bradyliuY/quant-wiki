@@ -6,7 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **量化交易知识库** — 带动画的个人量化学习站点，基于 VitePress 构建，已上线 GitHub Pages（https://bradyliuy.github.io/quant-wiki/）。内容是纯静态 Markdown + 全局注册的 Vue 动画组件，无后端、无测试套件。
 
-架构设计文档在 `docs/plans/2026-08-07-quant-wiki-design.md`，实施状态在 `docs/plans/2026-08-07-project-status.md`。
+架构与实施文档都在 `docs/plans/`（2026-08-07 同日三份）：
+- `2026-08-07-quant-wiki-design.md` — 设计决策与组件规划
+- `2026-08-07-quant-wiki-phase1-3.md` — 前三阶段实施细节
+- `2026-08-07-project-status.md` — 状态收尾：**全站 103 页已完成并上线** GitHub Pages
+
+另有项目技能 `.claude/skills/`：其中 13 个目录是空占位（design-taste / imagegen-frontend-* / minimalist-ui 等，无内容，不可调用），**唯一可用的是 `feishu-wiki-downloader`**（Playwright 把飞书 Wiki 文档下载为 Markdown，`node .claude/skills/feishu-wiki-downloader/scripts/feishu-download.js "<链接>" "<输出.md>"`）。
 
 ## 常用命令
 
@@ -43,10 +48,12 @@ Markdown 页面，6 个板块（getting-started / fundamentals / indicators / st
 ### 2. 主题层（`docs/.vitepress/theme/`）
 
 - **`config.ts`**：`base: process.env.BASE_URL || '/'`（本地根路径，GitHub Pages 用 `/quant-wiki/`）、`ignoreDeadLinks: true`、`cleanUrls: true`、本地搜索
-- **`index.ts`**：全局注册 12 个组件（Markdown 直接 `<组件名 />` 调用）
-- **`components/*.vue`**：12 个可视化组件，分两类：
+- **`index.ts`**：全局注册 16 个组件（Markdown 直接 `<组件名 />` 调用）
+- **`sidebar-active.ts`**：客户端增强，按当前 URL 为侧边栏补上 `is-active`（VitePress 1.6.4 在本项目下该 class 不生效，详见文件头注释；`enhanceApp` 里调用）
+- **`components/*.vue`**：16 个可视化组件，分三类：
   - 图表类（lightweight-charts）：`KLinePlayback`（K线回放+买卖点）、`IndicatorDemo`（K线+指标窗格）、`ComparePanel`（双图同步对比）、`PatternGrowth`（形态生长）
   - 概念可视化类（SVG/交互）：`CalcDemo`（指标逐步计算）、`CalcExplorer`（公式计算器，GSAP 动画）、`SignalFlow`（信号流程图，GSAP）、`OptionPnl`（期权盈亏图）、`OrderExec`（委托执行动画）、`LeverageSim`（杠杆/做空模拟器）、`PESim`（PE 估值）、`ScoreMatrix`（雷达图评分）
+  - 板块总览交互类（SVG/向导）：`AssetMap`（资产定位散点）、`AssetPicker`（品种选择向导）、`StrategyFit`（策略×行情矩阵）、`IndicatorPicker`（场景→指标向导）
 - **`lib/`**：纯函数数据层
   - `indicators.ts`：指标计算 `calcSMA/calcEMA/calcRSI/calcMACD/calcBollinger/calcATR/calcKDJ/calcOBV`、`toSeries`、`genDemoData(n, seed)`（合成 OHLC，均值回归+单根波动使实体清晰）
   - `charts.ts`：`createKLineChart`、`addIndicatorPane`、`createIndicatorChart`、`createReplay`（时间推进回放控制器）

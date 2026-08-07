@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- 深蓝圆角底 -->
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#0f3d8c"/>
+  <!-- 顶部高光 -->
+  <rect x="0" y="0" width="64" height="30" rx="14" fill="#164a9e" opacity="0.55"/>
+  <!-- 金色K线：3根蜡烛 -->
+  <!-- 上涨（红→因背景蓝，用金色/亮色表示） -->
+  <rect x="12" y="26" width="6" height="16" rx="1" fill="#e8c46a"/>
+  <rect x="14" y="14" width="2" height="38" rx="1" fill="#d4a743"/>
+  <!-- 下跌（用更亮的金/白表示对比） -->
+  <rect x="27" y="20" width="6" height="18" rx="1" fill="#f5d98a"/>
+  <rect x="29" y="14" width="2" height="30" rx="1" fill="#d4a743"/>
+  <!-- 上涨 -->
+  <rect x="42" y="28" width="6" height="14" rx="1" fill="#e8c46a"/>
+  <rect x="44" y="16" width="2" height="36" rx="1" fill="#d4a743"/>
+</svg>

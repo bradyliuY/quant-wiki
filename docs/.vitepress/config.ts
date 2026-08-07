@@ -219,6 +219,25 @@ export default defineConfig({
   cleanUrls: true,
   ignoreDeadLinks: true,
   lastUpdated: true,
+  head: [
+    // 品牌 favicon
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    // 浏览器主题色（与深蓝品牌一致）
+    ['meta', { name: 'theme-color', content: '#0f3d8c' }],
+    // SEO
+    ['meta', { name: 'keywords', content: '量化交易,量化投资,技术指标,交易策略,回测,均线,MACD,RSI,K线,量化学习' }],
+    ['meta', { name: 'robots', content: 'index, follow' }],
+    // Open Graph 社交分享
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: '量化交易知识库' }],
+    ['meta', { property: 'og:description', content: '带动画的量化投资学习平台：从零基础入门到系统化的策略、指标与方法论' }],
+    ['meta', { property: 'og:locale', content: 'zh_CN' }],
+    ['meta', { property: 'og:image', content: '/og-image.png' }],
+    // Twitter Card
+    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { name: 'twitter:title', content: '量化交易知识库' }],
+    ['meta', { name: 'twitter:description', content: '带动画的量化投资学习平台' }]
+  ],
   themeConfig: {
     outline: {
       level: [2, 3],

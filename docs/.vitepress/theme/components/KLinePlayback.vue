@@ -3,6 +3,7 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { createChart, CandlestickSeries, LineSeries, ColorType, createSeriesMarkers, type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type Time } from 'lightweight-charts'
 import { genDemoData, type OHLC } from '../lib/indicators'
 import { createReplay } from '../lib/charts'
+import { toggleExpand } from '../lib/expand'
 
 /**
  * K 线回放组件
@@ -25,6 +26,8 @@ const props = withDefaults(
 const containerRef = ref<HTMLElement | null>(null)
 const equityRef = ref<HTMLElement | null>(null)
 const statusRef = ref('')
+const rootRef = ref<HTMLElement | null>(null)
+const expanded = ref(false)
 let chart: IChartApi | null = null
 let candleSeries: ISeriesApi<'Candlestick'> | null = null
 let lineSeries: ISeriesApi<'Line'>[] = []
@@ -169,7 +172,11 @@ watch(
 </script>
 
 <template>
-  <div class="chart-container">
+  <div class="chart-container" ref="rootRef">
+    <button class="chart-expand-btn" :title="expanded ? '收起' : '放大'" @click="toggleExpand(rootRef, (v) => (expanded = v))">
+      <svg v-if="!expanded" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+      <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>
+    </button>
     <div v-if="title" class="demo-title">{{ title }}</div>
     <div ref="containerRef" :style="{ height: height + 'px', width: '100%' }"></div>
     <div v-if="useEquity" ref="equityRef" style="width: 100%"></div>

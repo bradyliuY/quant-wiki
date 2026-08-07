@@ -138,8 +138,19 @@
 <IndicatorPicker title="场景 → 指标选择地图" />
 ```
 
+## 通用交互：图表放大
+
+所有图表类组件（`KLinePlayback` / `IndicatorDemo` / `ComparePanel` / `PatternGrowth`）自带**右上角放大按钮**：
+
+- 点击 → 图表容器提升为全屏覆盖层（`position: fixed`），遮罩变暗，lightweight-charts 的 `autoSize` 自动适配大尺寸
+- **Esc** 或点击遮罩 → 收起
+- 实现：`lib/expand.ts` 的 `toggleExpand(el, cb)`，给 `.chart-container` 加 `.expanded` 类 + 创建 `.expand-mask` 遮罩
+- 样式在 `custom.css`（`.chart-container.expanded` / `.expand-mask` / `.chart-expand-btn`）
+- 内容页使用无需传 props，放大是内置交互
+
 ## 注意
 
 1. 组件在 **客户端渲染**，SSR 只输出容器骨架——这是正常的。
 2. **不要修改** `docs/.vitepress/theme/components/*.vue` 和 `docs/.vitepress/theme/lib/*.ts`。
 3. 如需新的 props 能力，记录在内容页 TODO，不要自行改动组件。
+4. 新增能力（如图表放大）须在此记录并同步 `theme/index.ts` 全局注册。
