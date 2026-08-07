@@ -114,7 +114,7 @@
 .dark .VPHero::before {
   background:
     radial-gradient(ellipse 80% 60% at 50% -20%, rgba(56, 132, 255, 0.24), transparent 62%),
-    linear-gradient(180deg, #164a9e 0%, #0c2f6e 55%, #071d45 100%);
+    linear-gradient(180deg, #164a9e 0%, #0c2f6e 55%, var(--vp-c-bg) 100%);
 }
 /* hero 文字：浅色=实心深蓝（对齐默认），深色=白 */
 .VPHero .name {
@@ -221,10 +221,15 @@
 .VPFeature .icon {
   background: var(--vp-c-brand-soft);
   border-radius: 12px;
-  transition: background 0.22s ease;
+  color: var(--vp-c-brand-1);
+  transition: background 0.22s ease, color 0.22s ease;
+}
+.dark .VPFeature .icon {
+  color: var(--vp-c-brand-2);
 }
 .VPFeature:hover .icon {
   background: var(--qw-gold-soft);
+  color: var(--qw-gold);
 }
 .VPFeature h2 {
   font-weight: 700;
