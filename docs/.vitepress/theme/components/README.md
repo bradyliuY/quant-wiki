@@ -216,6 +216,30 @@
 - `type`：`setup`(观察) | `signal`(信号) | `entry`(入场) | `manage`(持仓) | `stop`(止损) | `exit`(止盈) | `review`(复盘)，决定标签/节点颜色
 - `result`：可选，末尾结果小结（虚线框）
 
+## LoopCycle — 闭环循环图
+
+用于**经典案例 / 策略循环视角**，节点绕椭圆排布、箭头逐环相连并回连成环，滚动触发逐节点点亮 + 回连箭头描边动画（与 `SignalFlow` 交互语言一致，只是从「线」变「环」）。
+
+```vue
+<LoopCycle
+  title="泡沫循环"
+  kind="danger"
+  backLabel="自我强化"
+  :nodes="[
+    { label: '叙事点燃', detail: '新故事出现，早期买者赚钱' },
+    { label: '赚钱效应', detail: '收益吸引场外资金' },
+    { label: '杠杆涌入', detail: '融资/配资放大购买力' },
+    { label: '价格加速', detail: '价格新高，越涨越信' },
+    { label: '边界到来', detail: '接盘者/杠杆耗尽' },
+    { label: '反转踩踏', detail: '去杠杆，循环反向' }
+  ]"
+/>
+```
+
+- `nodes`：循环节点数组 `{ label, detail? }[]`，3–6 个。**必须用 `:` 动态绑定**（`<LoopCycle :nodes="[...]" />`），否则编译成字符串
+- `kind`：`danger`(正反馈陷阱，红) | `neutral`(策略循环，蓝) | `positive`(纪律正循环，绿)
+- `title`：可选标题；`backLabel`：可选，回连箭头上的标注（默认"自我强化"）
+
 ## DifficultyBadge — 页面难度徽章
 
 用于**所有内容页**，自动在文档标题上方渲染"入门 / 进阶 / 挑战"难度徽章。**无需在正文写标签**，只需在页面 frontmatter 加一行：

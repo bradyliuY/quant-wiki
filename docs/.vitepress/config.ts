@@ -203,6 +203,14 @@ const gettingStartedSidebar: DefaultTheme.SidebarItem[] = [
   { text: '第一个策略', link: '/getting-started/first-strategy' }
 ]
 
+const casesSidebar: DefaultTheme.SidebarItem[] = [
+  { text: '经典案例与闭环', link: '/cases/' },
+  { text: '泡沫循环', link: '/cases/bubble-loop' },
+  { text: '强平螺旋', link: '/cases/margin-spiral' },
+  { text: '轧空闭环', link: '/cases/short-squeeze' },
+  { text: '追涨杀跌死循环', link: '/cases/chase-kill-loop' }
+]
+
 const referenceSidebar: DefaultTheme.SidebarItem[] = [
   { text: '参考', link: '/reference/' },
   { text: '量化术语词典', link: '/reference/glossary' },
@@ -253,7 +261,8 @@ export default defineConfig({
       { text: '金融基础', link: '/fundamentals/' },
       { text: '指标大全', link: '/indicators/' },
       { text: '策略库', link: '/strategies/' },
-      { text: '方法论', link: '/methodology/' }
+      { text: '方法论', link: '/methodology/' },
+      { text: '经典案例', link: '/cases/' }
     ],
     sidebar: {
       '/getting-started/': gettingStartedSidebar,
@@ -261,6 +270,7 @@ export default defineConfig({
       '/indicators/': indicatorsSidebar,
       '/strategies/': strategiesSidebar,
       '/methodology/': methodologySidebar,
+      '/cases/': casesSidebar,
       '/reference/': referenceSidebar
     },
     search: {
