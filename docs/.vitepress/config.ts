@@ -98,6 +98,7 @@ const methodologySidebar: DefaultTheme.SidebarItem[] = [
 const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   { text: '策略库', link: '/strategies/' },
   { text: '策略总览', link: '/strategies/overview' },
+  { text: '策略代码实现', link: '/strategies/code-examples' },
   {
     text: '趋势跟踪',
     collapsed: false,

@@ -36,3 +36,4 @@
 - 指标工具：[指标大全](../indicators/)
 - 系统方法：[方法论](../methodology/)
 - 新手入门：[新手指南](../getting-started/)
+- 动手实现：[策略代码实现（示意伪代码）](./code-examples)

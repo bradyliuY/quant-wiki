@@ -62,3 +62,4 @@ title: 策略总览
 - [指标大全](../indicators/)：策略信号的技术工具
 - [回测方法论](../methodology/backtesting/how-to-backtest)：验证策略假设是否成立
 - [风险管理](../methodology/risk-management/position-sizing)：仓位与止损
+- [策略代码实现](./code-examples)：每个策略的示意伪代码
