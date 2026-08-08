@@ -349,6 +349,16 @@ export function calcCMF(data: OHLC[], period = 20): (number | null)[] {
   return out
 }
 
+/** ROC：变动率指标（Rate of Change），N 期价格的百分比变化，值域无界、围绕 0 波动 */
+export function calcROC(closes: number[], period = 12): (number | null)[] {
+  const out: (number | null)[] = closes.map(() => null)
+  for (let i = period; i < closes.length; i++) {
+    const base = closes[i - period]
+    out[i] = base !== 0 ? ((closes[i] - base) / base) * 100 : null
+  }
+  return out
+}
+
 /** 将指标数组转为图表 series 数据（跳过 null） */
 export function toSeries(
   times: number[],

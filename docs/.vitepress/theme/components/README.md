@@ -45,6 +45,7 @@
 | `obv` | 子窗格 OBV | 无自动标注 |
 | `vwap` | 主图 VWAP 成交量重心 | 无自动标注 |
 | `cmf` | 子窗格 CMF（蔡金资金流），值域 ±1 | 无自动标注 |
+| `roc` | 子窗格 ROC(12)，带 0 轴参考线 | 无自动标注 |
 
 - `height`、`title`：可选
 - `variant`：可选，`'candle'`（默认，K 线）｜`'line'`（平滑净值/价差曲线）。组合净值、配对价差等单值序列页应传 `variant="line"`，不要用蜡烛图假象
@@ -323,4 +324,4 @@ difficulty: 进阶
 2. **不要修改** `docs/.vitepress/theme/components/*.vue` 和 `docs/.vitepress/theme/lib/*.ts`。
 3. 如需新的 props 能力，记录在内容页 TODO，不要自行改动组件。
 4. 新增能力（如图表放大、图上图例）须在此记录并同步 `theme/index.ts` 全局注册。
-5. 2026-08：`lib/indicators.ts` 新增 `calcSAR` / `calcIchimoku` / `calcPivot` / `calcVWAP` / `calcCMF`，供 KLinePlayback 的 `sar` / `ichimoku` / `pivot-points` / `vwap` / `cmf` 策略使用；obv 复用既有 `calcOBV`。
+5. 2026-08：`lib/indicators.ts` 新增 `calcSAR` / `calcIchimoku` / `calcPivot` / `calcVWAP` / `calcCMF` / `calcROC`，供 KLinePlayback 的 `sar` / `ichimoku` / `pivot-points` / `vwap` / `cmf` / `roc` 策略使用；obv 复用既有 `calcOBV`。
