@@ -178,8 +178,10 @@ export function runBacktest(
       const atr = atrFallback || bar.close * 0.03
       const stop = bar.open - 2 * atr
       const stopDist = (bar.open - stop) / bar.open
-      if (stopDist > 0) {
-        const posValue = (cash * params.riskPct) / 100 / stopDist
+      if (stopDist > 0 && cash > 0) {
+        // 单笔风险仓位：风险预算 = 总资金 × riskPct，仓位 = 风险预算 ÷ 止损距离（不超过全部资金）
+        const posValue = Math.min((cash * params.riskPct) / 100 / stopDist, cash)
+        cash -= posValue // 买入扣减现金
         position = {
           entryTime: bar.time,
           entryPrice: bar.open,
@@ -189,6 +191,7 @@ export function runBacktest(
         markers.push({ time: bar.time, side: 'buy' })
       }
     } else if (pending === 'sell' && position) {
+      cash += position.shares * bar.open // 平仓回笼现金
       closeTrade(trades, position, bar.open, bar.time)
       markers.push({ time: bar.time, side: 'sell' })
       position = null
@@ -197,6 +200,7 @@ export function runBacktest(
 
     // ② 日内止损：盘中触及止损价即离场
     if (position && bar.low <= position.stop) {
+      cash += position.shares * position.stop // 止损成交，回笼现金
       closeTrade(trades, position, position.stop, bar.time)
       markers.push({ time: bar.time, side: 'sell' })
       position = null
@@ -223,15 +227,15 @@ export function runBacktest(
       }
     }
 
-    // ④ 结算净值（mark-to-market）
+    // ④ 结算净值（mark-to-market）：现金 + 持仓市值
     if (i >= 1) {
-      equityByBar[i] =
-        cash + (position ? (position.shares * bar.close) / position.entryPrice : 0)
+      equityByBar[i] = cash + (position ? position.shares * bar.close : 0)
     }
   }
 
-  // 末根仍持仓则按收盘平仓收尾
+  // 末根仍持仓则按收盘平仓收尾（现金回笼后净值落在最终 cash 上）
   if (position) {
+    cash += position.shares * bars[bars.length - 1].close
     closeTrade(trades, position, bars[bars.length - 1].close, bars[bars.length - 1].time)
     markers.push({ time: bars[bars.length - 1].time, side: 'sell' })
   }
