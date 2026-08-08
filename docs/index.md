@@ -23,6 +23,11 @@ features:
     details: 零基础渐进式学习路径，从 K 线、时间框架到构建第一个策略
     link: /getting-started/
   - icon: |
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+    title: 金融基础
+    details: 资产类别、基本面分析、宏观经济与市场机制
+    link: /fundamentals/
+  - icon: |
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     title: 指标大全
     details: 趋势 / 动量 / 波动率 / 成交量 / 叠加五大类指标，每个配动态图表演示
@@ -38,10 +43,15 @@ features:
     details: 100 分评分模型、风险管理、回测方法论与交易心理
     link: /methodology/
   - icon: |
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
-    title: 金融基础
-    details: 资产类别、基本面分析、宏观经济与市场机制
-    link: /fundamentals/
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+    title: 实战
+    details: 回测实验室、Python 数据管道、模拟盘——把「看懂」变成「做出来」
+    link: /practice/
+  - icon: |
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+    title: 经典案例
+    details: 泡沫循环、强平螺旋、轧空闭环——用真实历史事件看懂看不见的力量
+    link: /cases/
   - icon: |
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
     title: 参考
@@ -49,13 +59,14 @@ features:
     link: /reference/
 ---
 
-## 三条入口路径
+## 四条入口路径
 
 | 我是谁 | 该走哪条路 | 从这里开始 |
 |--------|-----------|-----------|
 | **零基础新手** | 循序渐进打地基 | [新手指南](/getting-started/) |
-| **已有基础，想查工具** | 按类别浏览指标与策略 | [指标大全](/indicators/) · [策略库](/strategies/) |
-| **系统提升方法** | 深入学习框架与纪律 | [方法论](/methodology/) |
+| **想查工具** | 按类别浏览指标与策略 | [指标大全](/indicators/) · [策略库](/strategies/) |
+| **想系统化方法** | 学框架、练纪律 | [方法论](/methodology/) |
+| **想动手实践** | 把知识跑成真实结果 | [实战](/practice/) · [经典案例](/cases/) |
 
 ## 本站特色
 

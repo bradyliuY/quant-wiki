@@ -304,7 +304,8 @@ export default defineConfig({
       { text: '策略库', link: '/strategies/' },
       { text: '方法论', link: '/methodology/' },
       { text: '实战', link: '/practice/' },
-      { text: '经典案例', link: '/cases/' }
+      { text: '经典案例', link: '/cases/' },
+      { text: '参考', link: '/reference/' }
     ],
     sidebar: {
       '/getting-started/': gettingStartedSidebar,
