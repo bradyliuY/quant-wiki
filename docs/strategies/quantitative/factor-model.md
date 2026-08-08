@@ -85,6 +85,12 @@ difficulty: 挑战
 - <span class="qw-no">✕</span> 忽视 [过拟合](../../methodology/backtesting/common-pitfalls)：用历史数据反复调权重得到的"最优"参数，未来大概率失效。
 - <span class="qw-ok">✓</span> 做 [样本外检验](../../methodology/backtesting/walk-forward)：因子模型最容易自欺，必须用滚动样本外验证。
 
+## 经典文献
+
+| 文献 | 一句话 |
+|------|--------|
+| Fama & French (1993) | 三因子模型的奠基，价值与规模因子获得超额收益的经典证据 |
+
 ## 相关
 
 - [双动量轮动](../momentum/dual-momentum)

@@ -90,4 +90,5 @@ difficulty: 挑战
 - [多重检验](./multiple-testing)
 - [样本外验证](./out-of-sample)
 - [过拟合识别](./overfitting)
+- [研报批判性阅读](./reading-research-reports)
 - [最终研究报告模板](../capstone/final-report-template)

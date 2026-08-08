@@ -41,3 +41,4 @@
 - 指标工具：[指标大全](../indicators/)
 - 系统方法：[方法论](../methodology/)
 - 动手实现：[策略代码实现（示意伪代码）](./code-examples)
+- 策略证据库：[QuantPedia](https://quantpedia.com)（外部）— 查某个策略的学术文献与实证表现

@@ -13,6 +13,11 @@
 | [开源工具推荐](./open-source-tools) | 动手阶段不知道该用哪个库 / 想要工具清单时看 |
 | [关于本站](./about) | 回顾本站定位、技术栈与免责声明 |
 
+## 还想再深挖
+
+- [开源工具推荐](./open-source-tools) 的「学习资料」表是本站收录的外部资源索引
+- 想自己淘资料，从 [awesome-quant](https://github.com/wilsonfreitas/awesome-quant)（经典量化聚合清单）入手
+
 ## 相关
 
 - 想开始学习 → [新手指南](../getting-started/)

@@ -105,6 +105,12 @@ difficulty: 进阶
 - <span class="qw-no">✕</span> 忽略带宽形态：带宽收窄后的"张口突破"是趋势信号，此时应反向使用突破策略。
 - <span class="qw-ok">✓</span> 配合 [RSI](../../indicators/momentum/rsi) 与 K 线确认：触轨 + 超卖 + 反转 K 线三者共振，胜率显著高于单触轨信号。
 
+## 经典文献
+
+| 文献 | 一句话 |
+|------|--------|
+| 《布林线》John Bollinger (2002) | 布林带原作者对用法（带宽、%B、bandwidth）的权威说明 |
+
 ## 相关
 
 - [布林带指标](../../indicators/volatility/bollinger-bands)

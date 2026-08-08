@@ -89,6 +89,8 @@ Expected: 构建通过。此时页面尚未进 nav/sidebar，不跑死链。
 - Create: `docs/expert/research-methods/out-of-sample.md`
 - Create: `docs/expert/research-methods/overfitting.md`
 
+> **后记（2026-08-08 增补）**：MVP 之外新增 `docs/expert/research-methods/reading-research-reports.md`（研报批判性阅读）——教从券商研报里提炼假设、查证据、辨陷阱、判可复现，作为研究员路线的实战应用页，已接入 sidebar 与 research-methods 总览。
+
 ### Step 1: `research-methods/index.md`
 
 frontmatter: `title: 研究方法总览`、`difficulty: 挑战`

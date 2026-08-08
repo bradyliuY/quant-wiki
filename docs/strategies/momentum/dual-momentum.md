@@ -86,6 +86,13 @@ difficulty: 进阶
 - <span class="qw-no">✕</span> 频繁调仓追逐短线动量：双动量是低频策略，月度评估足够。
 - <span class="qw-ok">✓</span> 理解 [动量因子](../quantitative/factor-model) 的周期性：动量因子有回撤期，长期坚持才能获得风险溢价。
 
+## 经典文献
+
+| 文献 | 一句话 |
+|------|--------|
+| Jegadeesh & Titman (1993) | 动量效应的经典论文，"买赢家卖输家"的学术奠基 |
+| Faber (2007) | 双动量的雏形——绝对动量 + 相对动量、月度再平衡，策略源头 |
+
 ## 相关
 
 - [多因子模型](../quantitative/factor-model)

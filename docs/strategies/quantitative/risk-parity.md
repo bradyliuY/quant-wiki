@@ -85,6 +85,12 @@ difficulty: 挑战
 - <span class="qw-no">✕</span> 忽视相关性变化：正常市场低相关的资产，危机中可能同步下跌。
 - <span class="qw-ok">✓</span> 用 [波动率指标](../../indicators/volatility/atr) 动态监控组合风险，适时再平衡与降杠杆。
 
+## 经典文献
+
+| 文献 | 一句话 |
+|------|--------|
+| Qian (2005) | "Risk Parity Portfolios"，风险平价（按风险贡献等权）的提出 |
+
 ## 相关
 
 - [组合风险管理](../../methodology/risk-management/portfolio-risk)

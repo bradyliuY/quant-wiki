@@ -88,6 +88,12 @@ difficulty: 进阶
 - <span class="qw-no">✕</span> 把「超预期」当「必涨」：如果市场已提前反应，公告可能反而见光死。
 - <span class="qw-ok">✓</span> 严格[止损](../../methodology/risk-management/stop-loss)，财报事件方向错了必须快走。
 
+## 经典文献
+
+| 文献 | 一句话 |
+|------|--------|
+| Bernard & Thomas (1989) | "Post-Earnings-Announcement Drift"（财报后漂移）的经典实证 |
+
 ## 相关
 
 - [OBV 量能](../../indicators/volume/obv)：确认资金是否真的进场

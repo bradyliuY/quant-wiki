@@ -85,6 +85,12 @@ difficulty: 入门
 - <span class="qw-ok">✓</span> 先确认市场环境：用 [ADX](../../indicators/trend/adx) 判断趋势强弱，ADX > 25 时才启用交叉策略。
 - <span class="qw-ok">✓</span> 与 [RSI](../../indicators/momentum/rsi) 结合：趋势中 RSI 回踩 50 不破再金叉，信号质量更高。
 
+## 经典文献
+
+| 文献 | 一句话 |
+|------|--------|
+| Brock, Lakonishok & LeBaron (1992) | 早期用统计方法检验均线规则的经典实证；其结论在后续研究中未稳定复现，恰好说明样本外检验的必要性 |
+
 ## 相关
 
 - [移动平均线指标](../../indicators/trend/ma)

@@ -289,7 +289,8 @@ const expertSidebar: DefaultTheme.SidebarItem[] = [
       { text: '策略假设', link: '/expert/research-methods/strategy-hypothesis' },
       { text: '多重检验', link: '/expert/research-methods/multiple-testing' },
       { text: '样本外验证', link: '/expert/research-methods/out-of-sample' },
-      { text: '过拟合识别', link: '/expert/research-methods/overfitting' }
+      { text: '过拟合识别', link: '/expert/research-methods/overfitting' },
+      { text: '研报批判性阅读', link: '/expert/research-methods/reading-research-reports' }
     ]
   },
   {

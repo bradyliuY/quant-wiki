@@ -67,6 +67,9 @@ title: 开源工具推荐
 
 | 资料 | 一句话 |
 |------|--------|
+| [Quant Wiki 中文量化百科](https://quant-wiki.com) | 400+ 页开源中文量化百科，金融术语广度 + 券商研报精选，查词拓视野 |
+| [QuantPedia](https://quantpedia.com) | 策略百科全书，每个策略带学术文献与实证表现 |
+| [awesome-quant](https://github.com/wilsonfreitas/awesome-quant) | 经典量化资源聚合清单，想深挖时的索引 |
 | [QuantStart](https://www.quantstart.com) | 系统性教学文章，从回测到事件驱动一步步来 |
 | [Quantopian 课程存档](https://github.com/quantopian/research_public) | 平台已关，但当年免费课程讲稿仍是经典教材 |
 | [WorldQuant《101 Formulaic Alphas》](https://arxiv.org/abs/1601.00991) | 101 个可复现代数表达式因子，因子挖掘入门 |

@@ -85,6 +85,12 @@ difficulty: 挑战
 - <span class="qw-ok">✓</span> 用**协整**而非简单相关：协整检验能确认价差的长期均衡性，详见 [组合风险管理](../../methodology/risk-management/portfolio-risk)。
 - <span class="qw-ok">✓</span> 动态更新配对：定期重新检验相关性与均值稳定性，及时淘汰失效配对。
 
+## 经典文献
+
+| 文献 | 一句话 |
+|------|--------|
+| Gatev, Goetzmann & Rouwenhorst (2006) | 配对交易实证基准，用距离法选择配对的标准做法 |
+
 ## 相关
 
 - [组合风险管理](../../methodology/risk-management/portfolio-risk)

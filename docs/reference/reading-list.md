@@ -74,6 +74,8 @@ title: 推荐书单与学习路线
   [专家成长地图](../expert/) → [研究方法总览](../expert/research-methods/) → [最终研究报告模板](../expert/capstone/final-report-template)
 ```
 
+> 外部路线参考：[algorithmic-trading-learning-roadmap](https://github.com/rmcmillan34/algorithmic-trading-learning-roadmap) 按主题（金融 / 机器学习 / 算法交易）分别整理「书 + 课」，与本路线互补，可作为深挖索引。
+
 ## 学习建议
 
 1. **学一个指标就找一个历史行情复盘**，不要只看理论
