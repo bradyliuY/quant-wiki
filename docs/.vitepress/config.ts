@@ -219,18 +219,20 @@ const referenceSidebar: DefaultTheme.SidebarItem[] = [
   { text: '关于本站', link: '/reference/about' }
 ]
 
+// GitHub Pages 部署到子路径 /quant-wiki/；本地开发自动用根路径
+const base = process.env.BASE_URL || '/'
+
 export default defineConfig({
   title: '量化交易知识库',
   description: '带动画的量化投资学习平台',
   lang: 'zh-CN',
-  // GitHub Pages 部署到子路径 /quant-wiki/；本地开发自动用根路径
-  base: process.env.BASE_URL || '/',
+  base,
   cleanUrls: true,
   ignoreDeadLinks: true,
   lastUpdated: true,
   head: [
     // 品牌 favicon
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
     // 浏览器主题色（与深蓝品牌一致）
     ['meta', { name: 'theme-color', content: '#0f3d8c' }],
     // SEO
@@ -241,7 +243,7 @@ export default defineConfig({
     ['meta', { property: 'og:title', content: '量化交易知识库' }],
     ['meta', { property: 'og:description', content: '带动画的量化投资学习平台：从零基础入门到系统化的策略、指标与方法论' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
-    ['meta', { property: 'og:image', content: '/og-image.png' }],
+    ['meta', { property: 'og:image', content: `${base}og-image.png` }],
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary' }],
     ['meta', { name: 'twitter:title', content: '量化交易知识库' }],
