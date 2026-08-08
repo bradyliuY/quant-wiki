@@ -8,6 +8,7 @@ import setupSidebarActive from './sidebar-active'
 import KLinePlayback from './components/KLinePlayback.vue'
 import IndicatorDemo from './components/IndicatorDemo.vue'
 import ComparePanel from './components/ComparePanel.vue'
+import BacktestLab from './components/BacktestLab.vue'
 import CalcExplorer from './components/CalcExplorer.vue'
 import SignalFlow from './components/SignalFlow.vue'
 import PatternGrowth from './components/PatternGrowth.vue'
@@ -33,6 +34,7 @@ export default {
     app.component('KLinePlayback', KLinePlayback)
     app.component('IndicatorDemo', IndicatorDemo)
     app.component('ComparePanel', ComparePanel)
+    app.component('BacktestLab', BacktestLab)
     app.component('CalcExplorer', CalcExplorer)
     app.component('SignalFlow', SignalFlow)
     app.component('PatternGrowth', PatternGrowth)
