@@ -253,6 +253,7 @@ const practiceSidebar: DefaultTheme.SidebarItem[] = [
   { text: '实战', link: '/practice/' },
   { text: '回测实验室', link: '/practice/backtest-lab' },
   { text: 'Python 环境与数据获取', link: '/practice/python-setup' },
+  { text: 'pandas 数据处理与画图', link: '/practice/pandas-basics' },
   { text: '用回测框架跑通第一个策略', link: '/practice/first-backtest' },
   { text: '模拟盘实操', link: '/practice/paper-trading' }
 ]

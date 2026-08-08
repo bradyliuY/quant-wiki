@@ -32,6 +32,10 @@ difficulty: 进阶
 3. 先跑 2–4 周，记录每笔偏离预期的成交
 4. 只对比「策略净值」与「实际净值」的差距，别管单日盈亏
 
+## 实盘延伸（本站止步于此）
+
+模拟盘是本站工具链的**终点**。再往前是实盘执行：国际账户常用 **IB API**（Interactive Brokers）、加密市场常用 **CCXT**、国内市场常用 **vn.py**——涉及真实资金、API 密钥与平台合规，详见 [Python 环境与数据获取](./python-setup) 的「实盘延伸」。本站不提供实盘指引。
+
 ## 相关
 
 - [回测的正确流程](../methodology/backtesting/how-to-backtest)

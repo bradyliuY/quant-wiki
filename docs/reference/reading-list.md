@@ -14,7 +14,7 @@ title: 推荐书单与学习路线
 | **程序员路线** | 会编程，想学金融 | [金融基础](../fundamentals/) → [方法论](../methodology/) → 编程实践 |
 | **研究员路线** | 想做严谨量化研究 | [回测方法论](../methodology/backtesting/how-to-backtest) → [量化进阶](../strategies/quantitative/) |
 
-无论哪条路线，动手都从这里走：[实战板块](../practice/) → 回测实验室 → Python 环境与数据 → 第一个回测 → 模拟盘。
+无论哪条路线，动手都从这里走：[实战板块](../practice/) → 回测实验室 → Python 环境与数据 → pandas 数据处理 → 第一个回测 → 模拟盘。
 
 ## 经典书单
 
@@ -69,7 +69,7 @@ title: 推荐书单与学习路线
   回测方法论 → 风险管理 → 评分模型
   ↓
 第四阶段：实战（持续）
-  [回测实验室](../practice/backtest-lab) → [Python 环境与数据获取](../practice/python-setup) → [模拟盘实操](../practice/paper-trading)
+  [回测实验室](../practice/backtest-lab) → [Python 环境与数据获取](../practice/python-setup) → [pandas 数据处理与画图](../practice/pandas-basics) → [模拟盘实操](../practice/paper-trading)
 ```
 
 ## 学习建议

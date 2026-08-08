@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `2026-08-07-project-status.md` — 状态收尾
 - `2026-08-08-practice-layer-design.md` / `2026-08-08-practice-layer-plan.md` — 动手实践层（实战板块）
 
-全站 **127 页（8 板块）**已完成并上线 GitHub Pages。
+全站 **129 页（8 板块）**已完成并上线 GitHub Pages。
 
 另有项目技能 `.claude/skills/`：其中 13 个目录是空占位（design-taste / imagegen-frontend-* / minimalist-ui 等，无内容，不可调用），**唯一可用的是 `feishu-wiki-downloader`**（Playwright 把飞书 Wiki 文档下载为 Markdown，`node .claude/skills/feishu-wiki-downloader/scripts/feishu-download.js "<链接>" "<输出.md>"`）。
 
@@ -42,7 +42,7 @@ node scripts/check-links.mjs   # 全站死链扫描（构建后跑，应 0 死�
 
 Markdown 页面，8 个板块（getting-started / fundamentals / indicators / strategies / methodology / cases / practice / reference），每个板块一个 `index.md`。侧边栏在 `docs/.vitepress/config.ts` 中**手写维护**（新增页面必须同步加进对应板块的 sidebar 数组，否则不可达）。
 
-**实战板块（`practice/`）**是动手实践层，教"做出来"而非"看懂"：`backtest-lab.md` 用 `BacktestLab` 组件在浏览器内跑真实回测，另有 Python 环境/数据获取、回测框架走读、模拟盘 3 页，与 `reading-list.md` 学习路线第四阶段互链。方法论下另有「统计与概率基础」子板块（`methodology/statistics/`，期望值/波动回撤/相关性）。策略族现为 **7 个**（趋势跟踪/均值回归/动量/形态/量化进阶/价值低估/事件驱动）。
+**实战板块（`practice/`）**是动手实践层，教"做出来"而非"看懂"：`backtest-lab.md` 用 `BacktestLab` 组件在浏览器内跑真实回测，另有 Python 环境/数据获取、pandas 数据处理与画图、回测框架走读、模拟盘 4 页（工具链止于模拟盘），与 `reading-list.md` 学习路线第四阶段互链。方法论下另有「统计与概率基础」子板块（`methodology/statistics/`，期望值/波动回撤/相关性）。策略族现为 **7 个**（趋势跟踪/均值回归/动量/形态/量化进阶/价值低估/事件驱动）。
 
 页面模板标准：
 - **指标页**：一句话总结 → 公式 → 参数表 → `IndicatorDemo` → 信号解读 → 实战用法 → 常见误区 → 相关

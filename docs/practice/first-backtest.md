@@ -74,5 +74,6 @@ if __name__ == "__main__":
 ## 相关
 
 - 数据准备：[Python 环境与数据获取](./python-setup)
+- 数据处理：[pandas 数据处理与画图](./pandas-basics)（CSV 清洗、算指标、画净值图）
 - 回测规范：[回测的正确流程](../methodology/backtesting/how-to-backtest)
 - 下一步：[模拟盘实操](./paper-trading)
