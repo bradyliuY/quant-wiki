@@ -40,6 +40,14 @@ RSI = 100 − 100 / (1 + RS)
 | 50 线 | <span style="color:#8a8a8a">┄</span> | 强弱分界：> 50 偏强，< 50 偏弱 |
 | 30 线 | <span style="color:#8a8a8a">┄</span> | 超卖线：RSI < 30 视为跌幅透支 |
 
+## 参数关系对比
+
+RSI 周期越短越灵敏、越容易触发超买超卖；周期越长越平滑、信号更少但更可靠。对比 RSI(9) 与 RSI(21)：
+
+<ComparePanel title="RSI 周期对比（9 vs 21）" leftLabel="RSI(9) 灵敏" rightLabel="RSI(21) 平滑" leftMode="rsi" :leftPeriods="[9]" rightMode="rsi" :rightPeriods="[21]" />
+
+**图例**：副窗格蓝线为 RSI，灰虚线为 30/50/70 参考线。可见 RSI(9) 上下穿越频繁（信号多、噪声大），RSI(21) 更晚拐头（信号少、更稳）。短线用 9、波段用 21——没有"最优"，只有"匹配你的周期"。
+
 ## 计算演示：手把手算 RSI
 
 RSI 比 MA 多一步：先把每天的涨跌幅算出来，再比较平均涨幅与平均跌幅。用示例数据逐步展示：

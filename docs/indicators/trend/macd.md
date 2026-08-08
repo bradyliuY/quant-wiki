@@ -40,6 +40,14 @@ MACD 柱 = 2 × (DIF − DEA)        // 国内软件常乘 2
 | DEA | <span style="color:#e69138">━</span> | 信号线（DIF 的 9 日平滑），过滤噪声 |
 | MACD 柱 | <span style="color:#ef5350">▮</span><span style="color:#26a69a">▮</span> | 红柱 = DIF − DEA 为正（多头动能），绿柱 = 为负（空头动能） |
 
+## 参数关系对比
+
+快慢线参数决定灵敏度：周期越短，金叉死叉出现越早、也越频繁；周期越长，信号越滞后但越稳。对比标准 (12,26,9) 与灵敏 (8,21,5)：
+
+<ComparePanel title="MACD 参数对比（12/26/9 vs 8/21/5）" leftLabel="MACD(12,26,9) 标准" rightLabel="MACD(8,21,5) 灵敏" leftMode="macd" :leftPeriods="[12,26,9]" rightMode="macd" :rightPeriods="[8,21,5]" />
+
+**图例**：副窗格蓝线 DIF、橙线 DEA、红绿柱为 MACD 柱（红负绿正）。灵敏版金叉死叉更早，但震荡中假信号也更多；标准版更稳。默认 12/26/9 是经过广泛验证的起点，改参前先问自己"我要更早还是更稳"。
+
 ## 计算演示：手把手算 MACD
 
 MACD 是"两条均线的差再平滑一次"：先算 DIF（快线减慢线），再对 DIF 平滑出 DEA，两者之差就是柱。用示例数据逐步展示每一层：
