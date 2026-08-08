@@ -84,3 +84,4 @@ title: 推荐书单与学习路线
 
 - 从零开始：[新手指南](../getting-started/what-is-quant)
 - 回测规范：[回测方法论](../methodology/backtesting/how-to-backtest)
+- 工具清单：[开源工具推荐](./open-source-tools)（动手阶段用哪个库）

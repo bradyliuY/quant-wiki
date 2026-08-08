@@ -246,6 +246,7 @@ const referenceSidebar: DefaultTheme.SidebarItem[] = [
   { text: '参考', link: '/reference/' },
   { text: '量化术语词典', link: '/reference/glossary' },
   { text: '推荐书单与学习路线', link: '/reference/reading-list' },
+  { text: '开源工具推荐', link: '/reference/open-source-tools' },
   { text: '关于本站', link: '/reference/about' }
 ]
 
