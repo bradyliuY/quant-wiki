@@ -20,7 +20,8 @@ const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
       { text: 'RSI', link: '/indicators/momentum/rsi' },
       { text: '随机指标 KD', link: '/indicators/momentum/stochastic' },
       { text: 'CCI', link: '/indicators/momentum/cci' },
-      { text: '威廉指标', link: '/indicators/momentum/williams-r' }
+      { text: '威廉指标', link: '/indicators/momentum/williams-r' },
+      { text: 'ROC', link: '/indicators/momentum/roc' }
     ]
   },
   {

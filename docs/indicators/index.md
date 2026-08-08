@@ -23,6 +23,7 @@ title: 指标大全
 | [随机指标 KD](./momentum/stochastic) | 价格在区间内的位置 | 快慢线交叉找买卖点 |
 | [CCI](./momentum/cci) | 价格偏离统计均值程度 | 周期性转折探测器 |
 | [威廉指标](./momentum/williams-r) | 价格在高低点区间位置 | RSI 的"兄弟"指标 |
+| [ROC](./momentum/roc) | N 期涨跌百分比 | 动量的"速度表" |
 
 ### 波动率指标 —— "波动有多剧烈"
 | 指标 | 作用 | 一句话 |

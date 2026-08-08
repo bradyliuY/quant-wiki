@@ -12,14 +12,16 @@ title: 动量指标
 | [随机指标 KD](./stochastic) | <span class="dlv dlv-intermediate">进阶</span> | 价格在区间内的位置，快慢线交叉找买卖点 |
 | [CCI](./cci) | <span class="dlv dlv-intermediate">进阶</span> | 价格偏离统计均值的程度，周期转折探测器 |
 | [威廉指标](./williams-r) | <span class="dlv dlv-intermediate">进阶</span> | 价格在高低点区间的位置，RSI 的"兄弟" |
+| [ROC](./roc) | <span class="dlv dlv-beginner">入门</span> | 变动率，N 期涨跌百分比，动量"速度表" |
 
-> 难度：入门 → 进阶 → 挑战。本类全部为「进阶」——动量指标要在趋势框架下使用，建议先掌握趋势指标。
+> 难度：入门 → 进阶 → 挑战。本类大多为「进阶」——动量指标要在趋势框架下使用，建议先掌握趋势指标；ROC 是最简单的一款，适合作为动量的第一课。
 
 ## 怎么选？
 
 - 想抓超买超卖 / 背离：**RSI** 最通用
 - 做短线小波段：**KD** 与 **威廉指标**
 - 找周期性高低点：**CCI**
+- 想看最纯粹的动量速度：**ROC**
 
 ## 动态体验
 
