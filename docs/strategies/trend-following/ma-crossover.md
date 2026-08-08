@@ -92,3 +92,4 @@ difficulty: 入门
 - [ADX 趋势强度](../../indicators/trend/adx)
 - [RSI 相对强弱](../../indicators/momentum/rsi)
 - [止损策略](../../methodology/risk-management/stop-loss)
+- 代码实践：[用回测框架跑通第一个策略](../../practice/first-backtest)

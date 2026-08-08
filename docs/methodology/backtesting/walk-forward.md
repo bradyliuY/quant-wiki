@@ -105,3 +105,4 @@ difficulty: 挑战
 - [回测的正确流程](/methodology/backtesting/how-to-backtest)
 - [绩效指标](/methodology/backtesting/performance-metrics)
 - [凯利公式：用稳健的指标估计参数](/methodology/risk-management/kelly-criterion)
+- 动手理解：[回测实验室](/practice/backtest-lab)

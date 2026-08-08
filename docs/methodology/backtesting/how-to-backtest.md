@@ -90,3 +90,4 @@ difficulty: 进阶
 - [绩效指标](/methodology/backtesting/performance-metrics)
 - [样本外检验与滚动优化](/methodology/backtesting/walk-forward)
 - [仓位管理：上线后的资金管理](/methodology/risk-management/position-sizing)
+- 动手版：[回测实验室](/practice/backtest-lab) / [用回测框架跑通第一个策略](/practice/first-backtest)

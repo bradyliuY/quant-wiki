@@ -112,3 +112,4 @@ difficulty: 进阶
 - [KD 超买超卖策略](./stochastic-strategy)
 - [波动率 ATR](../../indicators/volatility/atr)
 - [止盈策略](../../methodology/risk-management/take-profit)
+- 代码实践：[用回测框架跑通第一个策略](../../practice/first-backtest)
