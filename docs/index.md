@@ -30,7 +30,7 @@ features:
   - icon: |
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
     title: 策略库
-    details: 趋势跟踪 / 均值回归 / 动量 / 形态 / 量化五大策略族，带行情回放
+    details: 趋势跟踪 / 均值回归 / 动量 / 形态 / 量化 / 价值 / 事件驱动七大策略族，带行情回放
     link: /strategies/
   - icon: |
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><line x1="7" x2="17" y1="16" y2="16"/></svg>

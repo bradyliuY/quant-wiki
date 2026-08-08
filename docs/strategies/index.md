@@ -11,6 +11,8 @@
 | [动量策略](./momentum/) | 强者恒强 | [双动量](./momentum/dual-momentum) · [RSI动量](./momentum/rsi-momentum) · [强弱排名](./momentum/strength-ranking) |
 | [形态交易](./pattern-trading/) | 形态突破 | [双底](./pattern-trading/double-bottom-trade) · [三角](./pattern-trading/triangle-breakout) · [头肩](./pattern-trading/head-shoulders-trade) · [旗形](./pattern-trading/flag-consolidation) |
 | [量化进阶](./quantitative/) | 系统工程 | [多因子](./quantitative/factor-model) · [网格](./quantitative/grid-trading) · [风险平价](./quantitative/risk-parity) |
+| [价值低估](./value/) | 便宜买好货 | [低估值筛选](./value/low-valuation) · [高股息收息](./value/dividend-yield) |
+| [事件驱动](./event-driven/) | 事件改变定价 | [财报后动量](./event-driven/earnings-drift) · [指数调仓博弈](./event-driven/index-rebalance) |
 
 ## 怎么选策略？
 
@@ -20,7 +22,9 @@
 ├─ "趋势会延续" → 趋势跟踪 / 动量
 ├─ "价格会回归均值" → 均值回归
 ├─ "形态会重演" → 形态交易
-└─ "组合比单个标的重要" → 量化进阶
+├─ "组合比单个标的重要" → 量化进阶
+├─ "便宜才是硬道理 / 想收息" → 价值低估
+└─ "有明确催化剂（财报/调仓）" → 事件驱动
 ```
 
 ## 策略组合建议

@@ -29,7 +29,8 @@ const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
     items: [
       { text: '布林带', link: '/indicators/volatility/bollinger-bands' },
       { text: 'ATR', link: '/indicators/volatility/atr' },
-      { text: '肯特纳通道', link: '/indicators/volatility/keltner-channels' }
+      { text: '肯特纳通道', link: '/indicators/volatility/keltner-channels' },
+      { text: '唐奇安通道', link: '/indicators/volatility/donchian' }
     ]
   },
   {
@@ -155,6 +156,22 @@ const strategiesSidebar: DefaultTheme.SidebarItem[] = [
       { text: '多因子模型', link: '/strategies/quantitative/factor-model' },
       { text: '网格交易', link: '/strategies/quantitative/grid-trading' },
       { text: '风险平价', link: '/strategies/quantitative/risk-parity' }
+    ]
+  },
+  {
+    text: '价值低估',
+    collapsed: false,
+    items: [
+      { text: '低估值筛选', link: '/strategies/value/low-valuation' },
+      { text: '高股息收息', link: '/strategies/value/dividend-yield' }
+    ]
+  },
+  {
+    text: '事件驱动',
+    collapsed: false,
+    items: [
+      { text: '财报后动量', link: '/strategies/event-driven/earnings-drift' },
+      { text: '指数调仓博弈', link: '/strategies/event-driven/index-rebalance' }
     ]
   }
 ]

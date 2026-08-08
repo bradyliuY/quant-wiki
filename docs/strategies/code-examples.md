@@ -245,6 +245,54 @@ rebalance(weights, every='month')            # 定期按目标权重再平衡
 # 用样本外协方差估计，避免极端权重（见 [组合风险管理](../methodology/risk-management/portfolio-risk)）
 ```
 
+## 价值低估
+
+### [低估值筛选](./value/low-valuation)
+
+```python
+for stock in universe:
+    pe, pb = PE(stock), PB(stock)                 # 估值指标
+    if pe < 15 and pb < 1.2 and roe(stock) > 10:  # 便宜 + 质量过滤
+        candidates.append(stock)                  # 入候选池
+buy_top(candidates, by='股息率', k=15)            # 等权买入前 15 只
+# 分批建仓：估值分位 <20% 时加仓，修复到历史中枢减仓；基本面恶化无条件清仓
+```
+
+### [高股息收息](./value/dividend-yield)
+
+```python
+for stock in universe:
+    y = dividend(stock) / price(stock)            # 股息率
+    ok = y > 0.04 and payouts < 0.7 and free_cf(stock) > 0   # 高息 + 可持续
+    if ok: portfolio.append(stock)
+rebalance(monthly, dividend_reinvest=True)        # 红利再投资
+# 股息率跌穿 3%（股价暴涨所致）→ 换到更高息标的；分红削减 → 清仓
+```
+
+## 事件驱动
+
+### [财报后动量](./event-driven/earnings-drift)
+
+```python
+if today == earnings_date(stock) and surprise(stock) > 0 and VOL > 1.5 * MA(vol, 20):
+    buy(risk=1.5%)                                # 超预期 + 放量，次日顺势入场
+elif has_position and (hold_days > 20 or close < entry - 0.5 * ATR(14)):
+    sell_all()                                    # 惯性衰减 / 跌破缺口止损
+# 不追公告当天的一字板；只做有足够流动性的标的
+```
+
+### [指数调仓博弈](./event-driven/index-rebalance)
+
+```python
+if index_added(stock) and announced:              # 指数预告纳入
+    inflow = estimate_passive_buy(stock)          # 估算被动资金
+    if inflow > 0.05 * avg_daily_turnover(stock): # 买盘足够大才值得埋伏
+        buy(risk=5%, on=effective_date - 3w)      # 提前 3 周埋伏
+if today >= effective_date:
+    sell_all()                                    # 生效日附近兑现，到期必走
+# 不追生效日当天的行情；公告取消/推迟立即离场
+```
+
 ## 相关
 
 - [第一个策略](../getting-started/first-strategy)：双均线策略的完整 Python 示例
