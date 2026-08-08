@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
-import { createChart, CandlestickSeries, LineSeries, ColorType, type IChartApi, type ISeriesApi } from 'lightweight-charts'
-import { genDemoData, calcSMA, calcEMA, calcRSI, type OHLC } from '../lib/indicators'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { createChart, CandlestickSeries, LineSeries, HistogramSeries, ColorType, LineStyle, type IChartApi, type ISeriesApi } from 'lightweight-charts'
+import { genDemoData, calcSMA, calcEMA, calcRSI, calcBollinger, calcMACD, toSeries, type OHLC } from '../lib/indicators'
 import { toggleExpand } from '../lib/expand'
 
 /**
@@ -15,8 +15,8 @@ const props = withDefaults(
     rightLabel?: string
     leftSeries?: { name: string; color: string; values: (number | null)[] }[]
     rightSeries?: { name: string; color: string; values: (number | null)[] }[]
-    leftMode?: 'sma' | 'ema' | 'none'
-    rightMode?: 'sma' | 'ema' | 'none'
+    leftMode?: 'sma' | 'ema' | 'bollinger' | 'rsi' | 'macd' | 'none'
+    rightMode?: 'sma' | 'ema' | 'bollinger' | 'rsi' | 'macd' | 'none'
     leftPeriods?: number[]
     rightPeriods?: number[]
     height?: number
@@ -24,6 +24,10 @@ const props = withDefaults(
   }>(),
   { data: undefined, leftLabel: '方案 A', rightLabel: '方案 B', leftSeries: () => [], rightSeries: () => [], leftMode: 'sma', rightMode: 'sma', leftPeriods: () => [5, 20], rightPeriods: () => [10, 50], height: 300, title: '对比' }
 )
+
+/** rsi / macd 需要副窗格，整体加高 130px 给窗格留空间 */
+const needsPane = (mode: string) => mode === 'rsi' || mode === 'macd'
+const chartHeight = computed(() => props.height + (needsPane(props.leftMode) || needsPane(props.rightMode) ? 130 : 0))
 
 const leftRef = ref<HTMLElement | null>(null)
 const rightRef = ref<HTMLElement | null>(null)
@@ -39,7 +43,7 @@ const closes = ref(allData.value.map((d) => d.close))
 
 function buildChart(el: HTMLElement) {
   const chart = createChart(el, {
-    height: props.height,
+    height: chartHeight.value,
     layout: { background: { type: ColorType.Solid, color: 'transparent' }, textColor: '#999' },
     grid: { vertLines: { color: 'rgba(0,0,0,0.05)' }, horzLines: { color: 'rgba(0,0,0,0.05)' } },
     autoSize: true,
@@ -68,6 +72,35 @@ function renderSide(
       const vals = mode === 'ema' ? calcEMA(closes.value, p) : calcSMA(closes.value, p)
       line.setData(vals.map((v, i) => ({ time: allData.value[i].time as never, value: v ?? 0 })))
     })
+  } else if (mode === 'bollinger') {
+    // 参数约定：[周期, 标准差倍数]，默认 (20, 2)
+    const period = periods[0] ?? 20
+    const mult = periods[1] ?? 2
+    const b = calcBollinger(closes.value, period, mult)
+    const times = allData.value.map((d) => d.time)
+    const upper = chart.addSeries(LineSeries, { color: 'rgba(30,95,208,0.5)', lineWidth: 1, priceLineVisible: false, lastValueVisible: false })
+    const mid = chart.addSeries(LineSeries, { color: '#1e5fd0', lineWidth: 2, priceLineVisible: false, lastValueVisible: false })
+    const lower = chart.addSeries(LineSeries, { color: 'rgba(30,95,208,0.5)', lineWidth: 1, priceLineVisible: false, lastValueVisible: false })
+    upper.setData(toSeries(times, b.upper))
+    mid.setData(toSeries(times, b.mid))
+    lower.setData(toSeries(times, b.lower))
+  } else if (mode === 'rsi') {
+    // 参数约定：[周期]，默认 14；副窗格画 RSI + 30/50/70 参考线
+    const period = periods[0] ?? 14
+    const line = chart.addSeries(LineSeries, { color: '#1e5fd0', lineWidth: 2, paneIndex: 1, priceLineVisible: false, lastValueVisible: false })
+    line.setData(toSeries(allData.value.map((d) => d.time), calcRSI(closes.value, period)))
+    ;[30, 50, 70].forEach((p) => line.createPriceLine({ price: p, color: 'rgba(128,128,128,0.7)', lineStyle: LineStyle.Dashed, lineWidth: 1, axisLabelVisible: false }))
+  } else if (mode === 'macd') {
+    // 参数约定：[快线, 慢线, 信号]，默认 (12, 26, 9)；副窗格画 DIF/DEA + MACD 柱
+    const [fast = 12, slow = 26, signal = 9] = periods
+    const m = calcMACD(closes.value, fast, slow, signal)
+    const times = allData.value.map((d) => d.time)
+    const dif = chart.addSeries(LineSeries, { color: '#1e5fd0', lineWidth: 2, paneIndex: 1, priceLineVisible: false, lastValueVisible: false })
+    const dea = chart.addSeries(LineSeries, { color: '#e69138', lineWidth: 2, paneIndex: 1, priceLineVisible: false, lastValueVisible: false })
+    dif.setData(toSeries(times, m.dif))
+    dea.setData(toSeries(times, m.dea))
+    const hist = chart.addSeries(HistogramSeries, { paneIndex: 1, priceFormat: { type: 'price' } })
+    hist.setData(times.map((t, i) => ({ time: t, value: m.hist[i] ?? 0, color: (m.hist[i] ?? 0) >= 0 ? 'rgba(38,166,154,0.6)' : 'rgba(239,83,80,0.6)' })))
   }
 }
 
@@ -114,11 +147,11 @@ watch(() => props.data, (nd) => {
     <div class="compare-grid">
       <div class="compare-item">
         <div class="compare-label">{{ leftLabel }}</div>
-        <div ref="leftRef" :style="{ height: height + 'px', width: '100%' }"></div>
+        <div ref="leftRef" :style="{ height: chartHeight + 'px', width: '100%' }"></div>
       </div>
       <div class="compare-item">
         <div class="compare-label">{{ rightLabel }}</div>
-        <div ref="rightRef" :style="{ height: height + 'px', width: '100%' }"></div>
+        <div ref="rightRef" :style="{ height: chartHeight + 'px', width: '100%' }"></div>
       </div>
     </div>
   </div>

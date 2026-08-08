@@ -91,10 +91,19 @@
   leftLabel="SMA 5/20" rightLabel="EMA 5/20"
   leftMode="sma" :leftPeriods="[5,20]" rightMode="ema" :rightPeriods="[5,20]"
 />
+<!-- RSI 周期对比 -->
+<ComparePanel leftLabel="RSI(9)" rightLabel="RSI(21)" leftMode="rsi" :leftPeriods="[9]" rightMode="rsi" :rightPeriods="[21]" title="RSI 周期对比" />
 ```
 
-- `leftMode/rightMode`：`sma` | `ema` | `none`
+- `leftMode/rightMode`：`sma` | `ema` | `bollinger` | `rsi` | `macd` | `none`
 - `leftPeriods/rightPeriods`：数组，必须用 `:` 动态绑定传数组字面量 `:leftPeriods="[5,20]"`（不要写成 `leftPeriods="[5,20]"`，那会被编译成字符串，触发 `periods.forEach is not a function`）
+- **参数约定**（`leftPeriods/rightPeriods`）：
+  - `sma` / `ema`：周期数组，如 `[5,20]`
+  - `bollinger`：`[周期, 标准差倍数]`，如 `[20,2]`
+  - `rsi`：`[周期]`，如 `[14]`
+  - `macd`：`[快线, 慢线, 信号]`，如 `[12,26,9]`
+- `rsi` / `macd` 模式自动在 K 线下方追加副窗格（整体高度 +130px），内容页无需处理
+- 颜色沿用图例颜色约定：RSI / DIF / 中轨 `#1e5fd0`，DEA `#e69138`，布林上/下轨 `rgba(30,95,208,0.5)`，MACD 柱红负绿正
 
 ## CalcExplorer — 交互式计算器
 
