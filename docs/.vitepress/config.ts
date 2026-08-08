@@ -39,7 +39,9 @@ const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
     items: [
       { text: 'OBV', link: '/indicators/volume/obv' },
       { text: '成交量分布', link: '/indicators/volume/volume-profile' },
-      { text: 'MFI', link: '/indicators/volume/mfi' }
+      { text: 'MFI', link: '/indicators/volume/mfi' },
+      { text: 'VWAP', link: '/indicators/volume/vwap' },
+      { text: 'CMF', link: '/indicators/volume/cmf' }
     ]
   },
   {

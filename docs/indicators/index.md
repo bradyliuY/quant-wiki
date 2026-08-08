@@ -38,6 +38,8 @@ title: 指标大全
 | [OBV](./volume/obv) | 量能累计能量潮 | 量在价先 |
 | [成交量分布](./volume/volume-profile) | 价位上的成交量堆积 | 哪里交易最密集 |
 | [MFI](./volume/mfi) | 量价结合的 RSI | 有钱才能推动 |
+| [VWAP](./volume/vwap) | 成交量加权均价 | 日内资金的平均成本 |
+| [CMF](./volume/cmf) | 蔡金资金流 | 资金流入还是流出 |
 
 ### 叠加指标 —— "画在 K 线上的复合工具"
 | 指标 | 作用 | 一句话 |

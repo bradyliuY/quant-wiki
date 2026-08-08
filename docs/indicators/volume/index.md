@@ -11,6 +11,8 @@ title: 成交量指标
 | [OBV](./obv) | <span class="dlv dlv-beginner">入门</span> | 量能累计能量潮，"量在价先" |
 | [成交量分布](./volume-profile) | <span class="dlv dlv-advanced">挑战</span> | 价位上的成交量堆积，钱堆在哪 |
 | [MFI](./mfi) | <span class="dlv dlv-beginner">入门</span> | 量价结合的 RSI，有钱才能推动 |
+| [VWAP](./vwap) | <span class="dlv dlv-beginner">入门</span> | 成交量加权均价，日内资金成本线 |
+| [CMF](./cmf) | <span class="dlv dlv-intermediate">进阶</span> | 蔡金资金流，量价资金进出强弱 |
 
 > 难度：入门 → 进阶 → 挑战。新手从 OBV、MFI 起步，成交量分布放到掌握量价关系之后。
 
@@ -19,6 +21,8 @@ title: 成交量指标
 - 想看资金进出方向：**OBV**
 - 想找支撑阻力 / 公允价：**成交量分布**
 - 想看量价动能 / 背离：**MFI**
+- 想做日内交易锚 / 看资金成本：**VWAP**
+- 想看资金流入流出强度：**CMF**
 
 ## 动态体验
 
