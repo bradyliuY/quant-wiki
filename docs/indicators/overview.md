@@ -24,6 +24,19 @@ title: 指标总览与选择
 
 <IndicatorPicker title="场景 → 指标选择地图" />
 
+## 新手先看这 4 个
+
+指标有 16 个，新手先掌握 4 个就够搭建第一个策略：
+
+| 指标 | 解决什么问题 | 难度 |
+|------|------------|------|
+| [MA](../indicators/trend/ma) | 趋势方向 | <span class="dlv dlv-beginner">入门</span> |
+| [RSI](../indicators/momentum/rsi) | 涨跌动能、超买超卖 | <span class="dlv dlv-intermediate">进阶</span> |
+| [布林带](../indicators/volatility/bollinger-bands) | 波动放大/收窄 | <span class="dlv dlv-intermediate">进阶</span> |
+| [ATR](../indicators/volatility/atr) | 设止损的距离 | <span class="dlv dlv-beginner">入门</span> |
+
+这 4 个恰好对应"定方向 → 找买点 → 识波动 → 设止损"的完整交易闭环，学完就能读懂本站大部分策略页。
+
 ## 指标组合原则
 
 单指标会骗人（震荡市里 MACD 假金叉、强趋势里 RSI 超买不回调），**多指标共振**才可靠。推荐的组合套路：
