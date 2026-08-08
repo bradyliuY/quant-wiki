@@ -49,3 +49,28 @@ for (const f of mdFiles) {
   }
 }
 console.log(`\n扫描 ${mdFiles.length} 个文件，死链 ${dead} 个`)
+
+// 导航可达性：每个内容页必须能从 config.ts 的 nav 或 sidebar 到达
+// 防止目录结构漂移 → 新页面建了却忘了接入导航
+// 注意：link: '...' 分散在各 const xxxSidebar 数组与 nav 里，sidebar: 块内只有路径映射 key，
+// 因此从整个 config.ts 提取（nav + sidebar 合起来才是完整的可达性来源）
+const configText = fs.readFileSync(path.resolve('docs/.vitepress/config.ts'), 'utf8')
+// 统一规范化：去尾斜杠、去 /index 后缀，使 '/foo/' 与 '/foo/index' 等价
+const canon = (s) => s.replace(/\/+$/, '').replace(/\/index$/, '')
+const linkRe2 = /link:\s*'([^']+)'/g
+const navLinks = new Set()
+let mm
+while ((mm = linkRe2.exec(configText))) navLinks.add(canon(mm[1]))
+
+let unlinked = 0
+for (const f of mdFiles) {
+  const rel = f.slice(ROOT.length + 1).replace(/\\/g, '/').replace(/\.md$/, '')
+  const canonical = canon('/' + rel)
+  if (!navLinks.has(canonical)) {
+    console.log(`UNLINKED  ${rel}  （未接入 config.ts 导航/侧边栏）`)
+    unlinked++
+  }
+}
+console.log(`导航可达性：${mdFiles.length} 个内容页，${unlinked} 个未接入`)
+
+

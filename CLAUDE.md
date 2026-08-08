@@ -11,8 +11,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `2026-08-07-quant-wiki-phase1-3.md` — 前三阶段实施细节
 - `2026-08-07-project-status.md` — 状态收尾
 - `2026-08-08-practice-layer-design.md` / `2026-08-08-practice-layer-plan.md` — 动手实践层（实战板块）
+- `2026-08-08-expert-upgrade-design.md` / `2026-08-08-expert-upgrade-plan.md` — 专家进阶板块（MVP 设计/实施）
 
-全站 **129 页（8 板块）**已完成并上线 GitHub Pages。
+全站 **140 个 Markdown 页面（9 板块）**已完成并上线 GitHub Pages。
 
 另有项目技能 `.claude/skills/`：其中 13 个目录是空占位（design-taste / imagegen-frontend-* / minimalist-ui 等，无内容，不可调用），**唯一可用的是 `feishu-wiki-downloader`**（Playwright 把飞书 Wiki 文档下载为 Markdown，`node .claude/skills/feishu-wiki-downloader/scripts/feishu-download.js "<链接>" "<输出.md>"`）。
 
@@ -22,10 +23,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run docs:dev       # 开发服务器 http://localhost:5173
 npm run docs:build     # 构建静态站点到 docs/.vitepress/dist
 npm run docs:preview   # 预览构建产物（默认 4173 端口）
-node scripts/check-links.mjs   # 全站死链扫描（构建后跑，应 0 死链）
+node scripts/check-links.mjs   # 死链扫描 + 导航可达性校验（构建后跑，应 0 死链 / 0 未接入）
 ```
 
-**验证流程**：每次改完组件/内容 → `npm run docs:build`（确认通过）→ `node scripts/check-links.mjs`（确认 0 死链）→ 浏览器实测改动页（见下方"可视化验证"）。
+**验证流程**：每次改完组件/内容 → `npm run docs:build`（确认通过）→ `node scripts/check-links.mjs`（确认 0 死链、0 未接入导航）→ 浏览器实测改动页（见下方"可视化验证"）。
 
 ## 技术栈与关键约束
 
@@ -40,15 +41,24 @@ node scripts/check-links.mjs   # 全站死链扫描（构建后跑，应 0 死�
 
 ### 1. 内容层（`docs/`）
 
-Markdown 页面，8 个板块（getting-started / fundamentals / indicators / strategies / methodology / cases / practice / reference），每个板块一个 `index.md`。侧边栏在 `docs/.vitepress/config.ts` 中**手写维护**（新增页面必须同步加进对应板块的 sidebar 数组，否则不可达）。
+Markdown 页面，9 个板块（getting-started / fundamentals / indicators / strategies / methodology / cases / practice / expert / reference），每个板块一个 `index.md`。侧边栏在 `docs/.vitepress/config.ts` 中**手写维护**（新增页面必须同步加进对应板块的 sidebar 数组，否则不可达）。
 
 **实战板块（`practice/`）**是动手实践层，教"做出来"而非"看懂"：`backtest-lab.md` 用 `BacktestLab` 组件在浏览器内跑真实回测，另有 Python 环境/数据获取、pandas 数据处理与画图、回测框架走读、模拟盘 4 页（工具链止于模拟盘），与 `reading-list.md` 学习路线第四阶段互链。方法论下另有「统计与概率基础」子板块（`methodology/statistics/`，期望值/波动回撤/相关性）。策略族现为 **7 个**（趋势跟踪/均值回归/动量/形态/量化进阶/价值低估/事件驱动）。
+
+**专家进阶板块（`expert/`）**是从"会跑回测"到"会做研究"的升级层，教"怎么判断结果可靠"：`research-methods/`（策略假设/多重检验/样本外/过拟合）、`system-trading/`（交易成本）、`capstone/`（研究报告模板）。机器学习规划为该板块后续专题，顺序先研究纪律后 ML。第一批为纯内容 + 复用现有组件，不新增 .vue。
 
 页面模板标准：
 - **指标页**：一句话总结 → 公式 → 参数表 → `IndicatorDemo` → 信号解读 → 实战用法 → 常见误区 → 相关
 - **策略页**：概述 → `SignalFlow` 流程图 → `KLinePlayback` 回放 → 入场/出场/止损规则 → 回测参考表（标注"示意数据"）→ 相关
 
 **内容规范**：所有演示数据均为**教学用合成数据**，禁止编造真实股票价格/行情。回测表须标注"示意数据"。站点定位明确排除"具体股票推荐/实时行情"。
+
+**目录架构纪律**：
+- **目录 = 导航 = URL 三合一**：`docs/` 的目录结构必须与 `config.ts` 的 nav/sidebar 一一对应，新增页面必须同步进对应板块的 sidebar，否则不可达
+- **最深三层**：`板块/分类/页面`（如 `fundamentals/asset-classes/stocks`），不超过三层
+- **每个分类目录必须有 `index.md`**（分类 landing 页），并在 sidebar 中作为该分组标题的 `link` 可达（分组标题加 `link: '/path/'`）
+- **`plans/` 随站发布**：设计文档是站点的一部分，按 `YYYY-MM-DD-<topic>-design.md` / `-plan.md` 命名，不加进 sidebar（经 nav 外的 URL 可达）
+- **`check-links.mjs` 同时校验死链与导航可达性**：新增页面后跑一遍，需 `死链 0` 且 `导航可达性 0 未接入`
 
 ### 2. 主题层（`docs/.vitepress/theme/`）
 

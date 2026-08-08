@@ -5,6 +5,7 @@ const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
   { text: '指标总览与选择', link: '/indicators/overview' },
   {
     text: '趋势指标',
+    link: '/indicators/trend/',
     collapsed: false,
     items: [
       { text: '移动平均线 MA', link: '/indicators/trend/ma' },
@@ -15,6 +16,7 @@ const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '动量指标',
+    link: '/indicators/momentum/',
     collapsed: false,
     items: [
       { text: 'RSI', link: '/indicators/momentum/rsi' },
@@ -26,6 +28,7 @@ const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '波动率指标',
+    link: '/indicators/volatility/',
     collapsed: false,
     items: [
       { text: '布林带', link: '/indicators/volatility/bollinger-bands' },
@@ -36,6 +39,7 @@ const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '成交量指标',
+    link: '/indicators/volume/',
     collapsed: false,
     items: [
       { text: 'OBV', link: '/indicators/volume/obv' },
@@ -47,6 +51,7 @@ const indicatorsSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '叠加指标',
+    link: '/indicators/overlay/',
     collapsed: false,
     items: [
       { text: '一目均衡表', link: '/indicators/overlay/ichimoku' },
@@ -60,6 +65,7 @@ const methodologySidebar: DefaultTheme.SidebarItem[] = [
   { text: '100 分评分模型', link: '/methodology/scoring-model' },
   {
     text: '形态识别库',
+    link: '/methodology/pattern-library/',
     collapsed: false,
     items: [
       { text: '反转形态', link: '/methodology/pattern-library/reversal-patterns' },
@@ -69,6 +75,7 @@ const methodologySidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '风险管理',
+    link: '/methodology/risk-management/',
     collapsed: false,
     items: [
       { text: '凯利公式', link: '/methodology/risk-management/kelly-criterion' },
@@ -80,6 +87,7 @@ const methodologySidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '回测方法论',
+    link: '/methodology/backtesting/',
     collapsed: false,
     items: [
       { text: '回测的正确姿势', link: '/methodology/backtesting/how-to-backtest' },
@@ -100,6 +108,7 @@ const methodologySidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '交易心理',
+    link: '/methodology/trading-psychology/',
     collapsed: false,
     items: [
       { text: '认知偏差', link: '/methodology/trading-psychology/cognitive-biases' },
@@ -115,6 +124,7 @@ const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   { text: '策略代码实现', link: '/strategies/code-examples' },
   {
     text: '趋势跟踪',
+    link: '/strategies/trend-following/',
     collapsed: false,
     items: [
       { text: '双均线交叉', link: '/strategies/trend-following/ma-crossover' },
@@ -125,6 +135,7 @@ const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '均值回归',
+    link: '/strategies/mean-reversion/',
     collapsed: false,
     items: [
       { text: '布林带回归', link: '/strategies/mean-reversion/bollinger-bounce' },
@@ -135,6 +146,7 @@ const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '动量策略',
+    link: '/strategies/momentum/',
     collapsed: false,
     items: [
       { text: '双动量轮动', link: '/strategies/momentum/dual-momentum' },
@@ -144,6 +156,7 @@ const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '形态交易',
+    link: '/strategies/pattern-trading/',
     collapsed: false,
     items: [
       { text: '双底突破', link: '/strategies/pattern-trading/double-bottom-trade' },
@@ -154,6 +167,7 @@ const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '量化进阶',
+    link: '/strategies/quantitative/',
     collapsed: false,
     items: [
       { text: '多因子模型', link: '/strategies/quantitative/factor-model' },
@@ -163,6 +177,7 @@ const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '价值低估',
+    link: '/strategies/value/',
     collapsed: false,
     items: [
       { text: '低估值筛选', link: '/strategies/value/low-valuation' },
@@ -171,6 +186,7 @@ const strategiesSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '事件驱动',
+    link: '/strategies/event-driven/',
     collapsed: false,
     items: [
       { text: '财报后动量', link: '/strategies/event-driven/earnings-drift' },
@@ -183,6 +199,7 @@ const fundamentalsSidebar: DefaultTheme.SidebarItem[] = [
   { text: '金融基础', link: '/fundamentals/' },
   {
     text: '资产类别',
+    link: '/fundamentals/asset-classes/',
     collapsed: false,
     items: [
       { text: '资产类别总览', link: '/fundamentals/asset-classes/overview' },
@@ -196,6 +213,7 @@ const fundamentalsSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '基本面分析',
+    link: '/fundamentals/fundamental-analysis/',
     collapsed: false,
     items: [
       { text: '三张财务报表', link: '/fundamentals/fundamental-analysis/financial-statements' },
@@ -206,6 +224,7 @@ const fundamentalsSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '宏观经济',
+    link: '/fundamentals/macroeconomics/',
     collapsed: false,
     items: [
       { text: '货币政策', link: '/fundamentals/macroeconomics/monetary-policy' },
@@ -216,6 +235,7 @@ const fundamentalsSidebar: DefaultTheme.SidebarItem[] = [
   },
   {
     text: '市场机制',
+    link: '/fundamentals/market-mechanics/',
     collapsed: false,
     items: [
       { text: '委托类型', link: '/fundamentals/market-mechanics/order-types' },
@@ -275,12 +295,18 @@ const expertSidebar: DefaultTheme.SidebarItem[] = [
   {
     text: '系统化交易者路线',
     collapsed: false,
-    items: [{ text: '交易成本', link: '/expert/system-trading/trading-costs' }]
+    items: [
+      { text: '系统化交易者总览', link: '/expert/system-trading/' },
+      { text: '交易成本', link: '/expert/system-trading/trading-costs' }
+    ]
   },
   {
     text: '毕业项目',
     collapsed: false,
-    items: [{ text: '最终研究报告模板', link: '/expert/capstone/final-report-template' }]
+    items: [
+      { text: '毕业项目总览', link: '/expert/capstone/' },
+      { text: '最终研究报告模板', link: '/expert/capstone/final-report-template' }
+    ]
   }
 ]
 
