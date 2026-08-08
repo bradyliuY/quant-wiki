@@ -85,6 +85,16 @@ const methodologySidebar: DefaultTheme.SidebarItem[] = [
     ]
   },
   {
+    text: '统计与概率基础',
+    collapsed: false,
+    items: [
+      { text: '统计基础总览', link: '/methodology/statistics/' },
+      { text: '期望值', link: '/methodology/statistics/expected-value' },
+      { text: '波动与最大回撤', link: '/methodology/statistics/variance-drawdown' },
+      { text: '相关性', link: '/methodology/statistics/correlation' }
+    ]
+  },
+  {
     text: '交易心理',
     collapsed: false,
     items: [
@@ -219,6 +229,14 @@ const referenceSidebar: DefaultTheme.SidebarItem[] = [
   { text: '关于本站', link: '/reference/about' }
 ]
 
+const practiceSidebar: DefaultTheme.SidebarItem[] = [
+  { text: '实战', link: '/practice/' },
+  { text: '回测实验室', link: '/practice/backtest-lab' },
+  { text: 'Python 环境与数据获取', link: '/practice/python-setup' },
+  { text: '用回测框架跑通第一个策略', link: '/practice/first-backtest' },
+  { text: '模拟盘实操', link: '/practice/paper-trading' }
+]
+
 // GitHub Pages 部署到子路径 /quant-wiki/；本地开发自动用根路径
 const base = process.env.BASE_URL || '/'
 
@@ -265,6 +283,7 @@ export default defineConfig({
       { text: '指标大全', link: '/indicators/' },
       { text: '策略库', link: '/strategies/' },
       { text: '方法论', link: '/methodology/' },
+      { text: '实战', link: '/practice/' },
       { text: '经典案例', link: '/cases/' }
     ],
     sidebar: {
@@ -274,6 +293,7 @@ export default defineConfig({
       '/strategies/': strategiesSidebar,
       '/methodology/': methodologySidebar,
       '/cases/': casesSidebar,
+      '/practice/': practiceSidebar,
       '/reference/': referenceSidebar
     },
     search: {
