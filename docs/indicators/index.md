@@ -30,6 +30,7 @@ title: 指标大全
 | [布林带](./volatility/bollinger-bands) | 标准差通道 | 波动放大/收窄的"温度计" |
 | [ATR](./volatility/atr) | 平均真实波幅 | 设定止损的科学依据 |
 | [肯特纳通道](./volatility/keltner-channels) | ATR 版通道 | 布林带的"表亲" |
+| [唐奇安通道](./volatility/donchian) | 周期高低点极值通道 | 海龟交易的核心通道 |
 
 ### 成交量指标 —— "谁在推动价格"
 | 指标 | 作用 | 一句话 |

@@ -11,6 +11,7 @@ title: 波动率指标
 | [布林带](./bollinger-bands) | <span class="dlv dlv-intermediate">进阶</span> | 标准差通道，波动放大/收窄的"温度计" |
 | [ATR](./atr) | <span class="dlv dlv-beginner">入门</span> | 平均真实波幅，设止损、定仓位的科学依据 |
 | [肯特纳通道](./keltner-channels) | <span class="dlv dlv-beginner">入门</span> | ATR 版通道，布林带的"表亲" |
+| [唐奇安通道](./donchian) | <span class="dlv dlv-beginner">入门</span> | 周期高低点极值通道，突破交易的地图 |
 
 > 难度：入门 → 进阶 → 挑战。新手从 ATR 起步——它是设止损、定仓位的通用标尺。
 
@@ -19,6 +20,7 @@ title: 波动率指标
 - 想看通道 / 波动收窄：**布林带**
 - 想科学设止损 / 定仓位：**ATR**
 - 想与布林带组合做"双挤压"突破：**肯特纳通道**
+- 想做突破 / 画趋势通道：**唐奇安通道**
 
 ## 动态体验
 
