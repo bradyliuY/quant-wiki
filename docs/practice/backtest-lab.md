@@ -56,3 +56,4 @@ for bar in data:
 
 - 理论版：[回测的正确流程](../methodology/backtesting/how-to-backtest)
 - 动手版：[Python 环境与数据获取](./python-setup)
+- 专家进阶：[多重检验](../expert/research-methods/multiple-testing) 与 [过拟合识别](../expert/research-methods/overfitting)

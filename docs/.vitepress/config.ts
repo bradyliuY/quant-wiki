@@ -259,6 +259,31 @@ const practiceSidebar: DefaultTheme.SidebarItem[] = [
   { text: '模拟盘实操', link: '/practice/paper-trading' }
 ]
 
+const expertSidebar: DefaultTheme.SidebarItem[] = [
+  { text: '专家成长地图', link: '/expert/' },
+  {
+    text: '研究员路线',
+    collapsed: false,
+    items: [
+      { text: '研究方法总览', link: '/expert/research-methods/' },
+      { text: '策略假设', link: '/expert/research-methods/strategy-hypothesis' },
+      { text: '多重检验', link: '/expert/research-methods/multiple-testing' },
+      { text: '样本外验证', link: '/expert/research-methods/out-of-sample' },
+      { text: '过拟合识别', link: '/expert/research-methods/overfitting' }
+    ]
+  },
+  {
+    text: '系统化交易者路线',
+    collapsed: false,
+    items: [{ text: '交易成本', link: '/expert/system-trading/trading-costs' }]
+  },
+  {
+    text: '毕业项目',
+    collapsed: false,
+    items: [{ text: '最终研究报告模板', link: '/expert/capstone/final-report-template' }]
+  }
+]
+
 // GitHub Pages 部署到子路径 /quant-wiki/；本地开发自动用根路径
 const base = process.env.BASE_URL || '/'
 
@@ -306,6 +331,7 @@ export default defineConfig({
       { text: '策略库', link: '/strategies/' },
       { text: '方法论', link: '/methodology/' },
       { text: '实战', link: '/practice/' },
+      { text: '专家进阶', link: '/expert/' },
       { text: '经典案例', link: '/cases/' },
       { text: '参考', link: '/reference/' }
     ],
@@ -317,6 +343,7 @@ export default defineConfig({
       '/methodology/': methodologySidebar,
       '/cases/': casesSidebar,
       '/practice/': practiceSidebar,
+      '/expert/': expertSidebar,
       '/reference/': referenceSidebar
     },
     search: {

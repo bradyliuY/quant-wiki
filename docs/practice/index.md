@@ -30,3 +30,4 @@ title: 实战
 
 - 理论版：[回测的正确流程](../methodology/backtesting/how-to-backtest)
 - 规则版：[构建第一个策略](../getting-started/first-strategy)
+- 进阶路线：[专家进阶](../expert/) —— 学会样本外、过拟合、成本和研究报告

@@ -70,6 +70,8 @@ title: 推荐书单与学习路线
   ↓
 第四阶段：实战（持续）
   [回测实验室](../practice/backtest-lab) → [Python 环境与数据获取](../practice/python-setup) → [pandas 数据处理与画图](../practice/pandas-basics) → [模拟盘实操](../practice/paper-trading)
+第五阶段：专家进阶（持续）
+  [专家成长地图](../expert/) → [研究方法总览](../expert/research-methods/) → [最终研究报告模板](../expert/capstone/final-report-template)
 ```
 
 ## 学习建议
@@ -79,6 +81,7 @@ title: 推荐书单与学习路线
 3. **交易日志比读书更重要**——记录每笔决策，复盘改进
 4. **先小后大**：先小资金验证，别一上来就重仓
 5. **坚持纪律**：方法再好，不执行等于零
+6. **每个策略都写研究报告**：先问假设，再看样本外和成本，不要只看收益曲线
 
 ## 相关
 
