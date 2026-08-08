@@ -40,7 +40,7 @@ df = ak.stock_zh_a_hist(
 df.to_csv("data.csv", index=False)
 ```
 
-拿到 CSV 后就能喂给下一步的回测脚本。
+拿到 CSV 后，下一步（[pandas 数据处理与画图](./pandas-basics)）会把它加工成能喂回测脚本的格式。
 
 ## 四、合规提醒
 

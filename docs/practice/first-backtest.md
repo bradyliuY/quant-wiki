@@ -16,7 +16,17 @@ difficulty: 进阶
 | backtrader | 老牌、功能全、文档多 | 想深入学回测细节 |
 | vectorbt | 快、向量化、更"量化" | 会 pandas、想批量实验 |
 
-本页用 **backtrader** 走读（概念最直白）。安装：`pip install backtrader`
+本页用 **backtrader** 走读（概念最直白）。安装：`pip install backtrader`——注意它自 2020 年后基本停更，若在新版 Python 上安装/运行报错，退回 Python 3.10 即可，或改用 vectorbt。更多框架对比见 [开源工具推荐](../reference/open-source-tools)。
+
+先准备数据：backtrader 默认按 `datetime, open, high, low, close, volume` 的顺序逐列读取 CSV。若你手上还是 [pandas 数据处理与画图](./pandas-basics) 那页之前的 AkShare 原始 CSV（中文列名），先转成它认得的格式（若你已跑过 pandas 那页第七节、`data.csv` 已是英文列名，这段会自动跳过）：
+
+```python
+import pandas as pd
+df = pd.read_csv('data.csv')
+# 兼容两种来源：AkShare 原始中文列名，或 pandas 那页已导出的英文列名
+df = df.rename(columns={'日期':'date','开盘':'open','最高':'high','最低':'low','收盘':'close','成交量':'volume'})
+df[['date','open','high','low','close','volume']].rename(columns={'date':'datetime'}).to_csv('data.csv', index=False)
+```
 
 ## 完整脚本（双均线，本地可跑）
 

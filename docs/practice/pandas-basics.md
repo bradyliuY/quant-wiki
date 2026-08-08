@@ -123,12 +123,16 @@ plt.show()
 
 ```python
 df = pd.read_csv('data.csv')
-df['date'] = pd.to_datetime(df['date'])          # AkShare 的日期列
+# AkShare 的列名是中文（日期/开盘/最高/最低/收盘/成交量），先统一改成英文，后面代码才认
+df = df.rename(columns={'日期':'date','开盘':'open','最高':'high','最低':'low','收盘':'close','成交量':'volume'})
+df['date'] = pd.to_datetime(df['date'])          # 字符串 → 时间类型
 df = df.sort_values('date').reset_index(drop=True)
-# 只用 close 列；CSV 里其余列（open/high/low/volume…）暂时用不上
+
+# （可选）导出给回测脚本用：backtrader 默认按 datetime/open/high/low/close/volume 的顺序逐列读取
+df[['date','open','high','low','close','volume']].rename(columns={'date':'datetime'}).to_csv('data.csv', index=False)
 ```
 
-后面三到六节的代码一行都不用改——这就是「数据层与策略层解耦」的雏形：回测脚本只认 `date + close` 两列，谁喂的都行。
+后面三到六节的代码一行都不用改——这就是「数据层与策略层解耦」的雏形：回测脚本只认 `date + close`（导出时带上 OHLC 还能画 K 线），谁喂的都行。
 
 ## 常见坑
 

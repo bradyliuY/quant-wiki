@@ -147,6 +147,7 @@ onBeforeUnmount(() => {
 })
 
 const fmtPct = (v: number) => `${v >= 0 ? '+' : ''}${(v * 100).toFixed(1)}%`
+const fmtWin = (v: number) => `${(v * 100).toFixed(1)}%` // 胜率恒正，不加正负号
 const fmtPF = (v: number) => (v === Infinity ? '∞' : Number.isFinite(v) ? v.toFixed(2) : '—')
 const ts = (t: number) => new Date(t * 1000).toISOString().slice(0, 10)
 function bestHint(p: BacktestParams): string {
@@ -201,7 +202,7 @@ function bestHint(p: BacktestParams): string {
       </div>
       <div class="bl-metric">
         <span>胜率</span>
-        <b>{{ fmtPct(m.winRate) }}</b>
+        <b>{{ fmtWin(m.winRate) }}</b>
       </div>
       <div class="bl-metric">
         <span>盈亏比</span>
