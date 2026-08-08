@@ -278,6 +278,49 @@
 }
 
 /* ------------------------------------------------------------
+   难度标签（index 一览表用，配色与 DifficultyBadge 完全一致）
+   ------------------------------------------------------------ */
+.dlv {
+  display: inline-block;
+  font-size: 0.82em;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.34em 0.62em;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.dlv-beginner {
+  color: #157347;
+  background: rgba(26, 127, 55, 0.10);
+  border: 1px solid rgba(26, 127, 55, 0.28);
+}
+.dlv-intermediate {
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  border: 1px solid var(--vp-c-brand-1);
+}
+.dlv-advanced {
+  color: var(--qw-gold);
+  background: var(--qw-gold-soft);
+  border: 1px solid var(--qw-gold);
+}
+.dark .dlv-beginner {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+  border-color: rgba(74, 222, 128, 0.32);
+}
+.dark .dlv-intermediate {
+  color: var(--vp-c-brand-2);
+  background: var(--vp-c-brand-soft);
+  border-color: var(--vp-c-brand-2);
+}
+.dark .dlv-advanced {
+  color: var(--qw-gold-bright);
+  background: var(--qw-gold-soft);
+  border-color: var(--qw-gold-bright);
+}
+
+/* ------------------------------------------------------------
    6. 内容排版：字重 / 行高 / 层级
    ------------------------------------------------------------ */
 .vp-doc {

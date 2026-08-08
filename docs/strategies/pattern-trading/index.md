@@ -4,12 +4,14 @@
 
 ## 策略一览
 
-| 策略 | 核心思想 | 适合市场 |
-|------|----------|----------|
-| [双底突破](./double-bottom-trade) | W 底颈线突破做多 | 下跌转上涨 |
-| [三角形突破](./triangle-breakout) | 三角收敛后突破方向 | 盘整转趋势 |
-| [头肩形态](./head-shoulders-trade) | 头肩顶/底反转 | 趋势末端 |
-| [旗形交易](./flag-consolidation) | 旗形中继后顺势延续 | 强趋势中途 |
+| 策略 | 难度 | 核心思想 | 适合市场 |
+|------|------|----------|----------|
+| [双底突破](./double-bottom-trade) | <span class="dlv dlv-intermediate">进阶</span> | W 底颈线突破做多 | 下跌转上涨 |
+| [三角形突破](./triangle-breakout) | <span class="dlv dlv-intermediate">进阶</span> | 三角收敛后突破方向 | 盘整转趋势 |
+| [头肩形态](./head-shoulders-trade) | <span class="dlv dlv-intermediate">进阶</span> | 头肩顶/底反转 | 趋势末端 |
+| [旗形交易](./flag-consolidation) | <span class="dlv dlv-intermediate">进阶</span> | 旗形中继后顺势延续 | 强趋势中途 |
+
+> 难度：入门 → 进阶 → 挑战。本族全部为「进阶」——识别形态 + 等待突破确认，比纯规则策略更吃盘感。
 
 ## 共性特征
 

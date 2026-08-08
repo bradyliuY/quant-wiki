@@ -4,12 +4,14 @@
 
 ## 策略一览
 
-| 策略 | 核心思想 | 适合市场 |
-|------|----------|----------|
-| [布林带回归](./bollinger-bounce) | 触碰上下轨反向操作 | 震荡市 |
-| [RSI 反转](./rsi-reversal) | RSI 超买超卖反转 | 震荡市 |
-| [KD 超买超卖](./stochastic-strategy) | KD 金叉死叉 + 区间位置 | 震荡市 |
-| [配对交易](./pairs-trading) | 两个相关资产价差回归 | 任意市场 |
+| 策略 | 难度 | 核心思想 | 适合市场 |
+|------|------|----------|----------|
+| [布林带回归](./bollinger-bounce) | <span class="dlv dlv-intermediate">进阶</span> | 触碰上下轨反向操作 | 震荡市 |
+| [RSI 反转](./rsi-reversal) | <span class="dlv dlv-intermediate">进阶</span> | RSI 超买超卖反转 | 震荡市 |
+| [KD 超买超卖](./stochastic-strategy) | <span class="dlv dlv-intermediate">进阶</span> | KD 金叉死叉 + 区间位置 | 震荡市 |
+| [配对交易](./pairs-trading) | <span class="dlv dlv-advanced">挑战</span> | 两个相关资产价差回归 | 任意市场 |
+
+> 难度：入门 → 进阶 → 挑战。本族普遍比趋势策略多一步「确认震荡环境」，建议先掌握趋势策略再学。
 
 ## 共性特征
 

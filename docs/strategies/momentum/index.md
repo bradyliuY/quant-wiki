@@ -4,11 +4,13 @@
 
 ## 策略一览
 
-| 策略 | 核心思想 | 适合市场 |
-|------|----------|----------|
-| [双动量轮动](./dual-momentum) | 绝对动量 + 相对动量双重过滤 | 多资产配置 |
-| [RSI 动量](./rsi-momentum) | RSI 50 上方运行代表趋势延续 | 趋势+动量 |
-| [相对强弱排名](./strength-ranking) | 定期买入排名靠前的资产 | 多品种轮动 |
+| 策略 | 难度 | 核心思想 | 适合市场 |
+|------|------|----------|----------|
+| [双动量轮动](./dual-momentum) | <span class="dlv dlv-intermediate">进阶</span> | 绝对动量 + 相对动量双重过滤 | 多资产配置 |
+| [RSI 动量](./rsi-momentum) | <span class="dlv dlv-intermediate">进阶</span> | RSI 50 上方运行代表趋势延续 | 趋势+动量 |
+| [相对强弱排名](./strength-ranking) | <span class="dlv dlv-intermediate">进阶</span> | 定期买入排名靠前的资产 | 多品种轮动 |
+
+> 难度：入门 → 进阶 → 挑战。本族全部为「进阶」——比入门策略多一道定期再平衡纪律。
 
 ## 共性特征
 

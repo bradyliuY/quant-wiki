@@ -6,12 +6,14 @@ title: 趋势指标
 
 趋势指标回答"价格往哪走"。平滑或刻画价格的结构，帮助判断趋势方向、强度与是否值得跟随。
 
-| 指标 | 一句话 |
-|------|--------|
-| [移动平均线 MA](./ma) | 价格的平均水平线，趋势方向的基础 |
-| [MACD](./macd) | 双均线差，金叉死叉与背离的核心工具 |
-| [ADX](./adx) | 趋势的"力气"，只判强度不判方向 |
-| [抛物线 SAR](./parabolic-sar) | 跟随价格的追踪止损点 |
+| 指标 | 难度 | 一句话 |
+|------|------|--------|
+| [移动平均线 MA](./ma) | <span class="dlv dlv-beginner">入门</span> | 价格的平均水平线，趋势方向的基础 |
+| [MACD](./macd) | <span class="dlv dlv-intermediate">进阶</span> | 双均线差，金叉死叉与背离的核心工具 |
+| [ADX](./adx) | <span class="dlv dlv-beginner">入门</span> | 趋势的"力气"，只判强度不判方向 |
+| [抛物线 SAR](./parabolic-sar) | <span class="dlv dlv-beginner">入门</span> | 跟随价格的追踪止损点 |
+
+> 难度：入门 → 进阶 → 挑战。新手从 MA、ADX 起步，MACD 放到掌握均线之后。
 
 ## 怎么选？
 

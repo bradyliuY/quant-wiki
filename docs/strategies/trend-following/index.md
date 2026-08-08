@@ -4,12 +4,14 @@
 
 ## 策略一览
 
-| 策略 | 核心思想 | 适合市场 |
-|------|----------|----------|
-| [双均线交叉](./ma-crossover) | 快慢均线金叉买、死叉卖 | 强趋势 |
-| [MACD 交易系统](./macd-strategy) | MACD 金叉死叉 + 零轴过滤 | 趋势+波段 |
-| [海龟交易法则](./turtle-trading) | 唐奇安通道突破 + ATR 仓位 | 大级别趋势 |
-| [通道突破](./channel-breakout) | 布林带/肯特纳突破追入 | 波动放大启动 |
+| 策略 | 难度 | 核心思想 | 适合市场 |
+|------|------|----------|----------|
+| [双均线交叉](./ma-crossover) | <span class="dlv dlv-beginner">入门</span> | 快慢均线金叉买、死叉卖 | 强趋势 |
+| [MACD 交易系统](./macd-strategy) | <span class="dlv dlv-beginner">入门</span> | MACD 金叉死叉 + 零轴过滤 | 趋势+波段 |
+| [海龟交易法则](./turtle-trading) | <span class="dlv dlv-intermediate">进阶</span> | 唐奇安通道突破 + ATR 仓位 | 大级别趋势 |
+| [通道突破](./channel-breakout) | <span class="dlv dlv-beginner">入门</span> | 布林带/肯特纳突破追入 | 波动放大启动 |
+
+> 难度：入门 → 进阶 → 挑战。新手从「入门」策略起步，先建立完整交易体感再升级。
 
 ## 共性特征
 
