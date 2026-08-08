@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { createChart, CandlestickSeries, LineSeries, ColorType, LineStyle, createSeriesMarkers, type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type Time } from 'lightweight-charts'
-import { genDemoData, calcSMA, calcRSI, calcMACD, calcKDJ, calcBollinger, calcOBV, calcSAR, calcIchimoku, calcPivot, calcVWAP, type OHLC } from '../lib/indicators'
+import { genDemoData, calcSMA, calcRSI, calcMACD, calcKDJ, calcBollinger, calcOBV, calcSAR, calcIchimoku, calcPivot, calcVWAP, calcCMF, type OHLC } from '../lib/indicators'
 import { createReplay } from '../lib/charts'
 import { toggleExpand } from '../lib/expand'
 
@@ -18,7 +18,7 @@ const props = withDefaults(
     /** 指标线：{ name, color, values: (number|null)[] } */
     lines?: { name: string; color: string; values: (number | null)[] }[]
     /** 策略模式：自动生成指标线 + 买卖点叠加（缺省走 lines/markers） */
-    strategy?: 'bollinger' | 'ma-cross' | 'channel' | 'turtle' | 'macd' | 'rsi-reversal' | 'rsi-momentum' | 'kdj' | 'grid' | 'sar' | 'ichimoku' | 'pivot-points' | 'obv' | 'vwap'
+    strategy?: 'bollinger' | 'ma-cross' | 'channel' | 'turtle' | 'macd' | 'rsi-reversal' | 'rsi-momentum' | 'kdj' | 'grid' | 'sar' | 'ichimoku' | 'pivot-points' | 'obv' | 'vwap' | 'cmf'
     /** 渲染形态：line 用于净值/价差等单值序列（组合/配对页），candle 用 K 线 */
     variant?: 'candle' | 'line'
     height?: number
@@ -244,6 +244,12 @@ function buildStrategy(data: OHLC[]): { lines: StratLine[]; markers: StratMarker
     case 'vwap': {
       return {
         lines: [{ name: 'VWAP', color: '#e69138', values: calcVWAP(data) }],
+        markers: []
+      }
+    }
+    case 'cmf': {
+      return {
+        lines: [{ name: 'CMF', color: '#1e5fd0', values: calcCMF(data), pane: 1 }],
         markers: []
       }
     }

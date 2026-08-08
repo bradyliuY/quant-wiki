@@ -323,6 +323,32 @@ export function calcVWAP(data: OHLC[]): (number | null)[] {
   return out
 }
 
+/** CMF：蔡金资金流（Chaikin Money Flow），量价综合的强弱振荡指标，值域约 [-1, 1] */
+export function calcCMF(data: OHLC[], period = 20): (number | null)[] {
+  const out: (number | null)[] = data.map(() => null)
+  let sumMFV = 0
+  let sumVol = 0
+  for (let i = 0; i < data.length; i++) {
+    const { high, low, close } = data[i]
+    const vol = data[i].volume ?? 0
+    const range = high - low
+    // 无量 / 无振幅时 MFM 记 0（既非流入也非流出）
+    const mfm = range > 0 ? (close - low - (high - close)) / range : 0
+    sumMFV += mfm * vol
+    sumVol += vol
+    if (i >= period - 1) {
+      out[i] = sumVol > 0 ? sumMFV / sumVol : 0
+      // 滑出窗口最旧一根
+      const j = i - period + 1
+      const r0 = data[j].high - data[j].low
+      const mfm0 = r0 > 0 ? (data[j].close - data[j].low - (data[j].high - data[j].close)) / r0 : 0
+      sumMFV -= mfm0 * (data[j].volume ?? 0)
+      sumVol -= data[j].volume ?? 0
+    }
+  }
+  return out
+}
+
 /** 将指标数组转为图表 series 数据（跳过 null） */
 export function toSeries(
   times: number[],
