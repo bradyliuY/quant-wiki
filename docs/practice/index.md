@@ -10,11 +10,13 @@ title: 实战
 
 ## 三阶段路线
 
-| 阶段 | 做什么 | 入口 | 难度 |
-|------|--------|------|------|
-| ① 先玩 | 浏览器里跑回测，拧参数看指标变 | [回测实验室](./backtest-lab) | 入门 |
-| ② 接真数据 | 装 Python、拉行情、清洗数据、跑真实回测框架 | [Python 环境与数据获取](./python-setup) → [pandas 数据处理与画图](./pandas-basics) → [第一个回测](./first-backtest) | 进阶 |
-| ③ 上模拟盘 | 虚拟资金验证，感受滑点与心理 | [模拟盘实操](./paper-trading) | 进阶 |
+| 阶段 | 做什么 | 工具链 | 入口 | 难度 |
+|------|--------|--------|------|------|
+| ① 先玩 | 浏览器里跑回测，拧参数看指标变 | 无（浏览器即可） | [回测实验室](./backtest-lab) | 入门 |
+| ② 接真数据 | 装 Python、拉行情、清洗数据、跑真实回测框架 | `AkShare` → `pandas`/`matplotlib` → `backtrader` | [Python 环境与数据获取](./python-setup) → [pandas 数据处理与画图](./pandas-basics) → [第一个回测](./first-backtest) | 进阶 |
+| ③ 上模拟盘 | 虚拟资金验证，感受滑点与心理 | 平台模拟盘（券商 / IB / TradingView） | [模拟盘实操](./paper-trading) | 进阶 |
+
+> 这套工具链是本站教的 **Python 主线**。想换口味时，每个环节都有平替（数据层 Tushare/yfinance、回测 vectorbt）；还有几条**自成体系**的路不走 Python：**TradingView** Pine Script、**MT5** MQL5（外汇/期货常用）、聚宽/米筐云端平台——完整选型见 [参考 → 开源工具推荐](../reference/open-source-tools)，它按同一阶段排序，想深入时再挑一条。
 
 ## 为什么"看懂"不等于"做出来"
 
